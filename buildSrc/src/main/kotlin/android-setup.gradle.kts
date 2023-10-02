@@ -7,11 +7,14 @@ android {
 
     defaultConfig {
         minSdk = 24
-        targetSdk = 34
     }
 
     buildFeatures{
         compose= true
+    }
+
+    composeOptions{
+        kotlinCompilerExtensionVersion = "1.5.3"
     }
 
     compileOptions {

@@ -50,23 +50,33 @@ object Dependencies {
 
     object Android {
         const val gradlePlugin = "com.android.tools.build:gradle:7.4.2"
+
+        object Compose {
+            private const val version = "1.5.1"
+            const val runtime = "androidx.compose.runtime:runtime:$version"
+            const val ui = "androidx.compose.ui:ui:$version"
+            const val material = "androidx.compose.material:material:$version"
+            const val tooling = "androidx.compose.ui:ui-tooling:$version"
+            const val icons = "androidx.compose.material:material-icons-core:$version"
+            const val iconsExtended = "androidx.compose.material:material-icons-extended:$version"
+        }
     }
 
     object Resources{
         object Libres{
             private const val version = "1.1.8"
-            const val libresCompose = "io.github.skeptick.libres:libres-compose"
+            const val libresCompose = "io.github.skeptick.libres:libres-compose:$version"
             const val gradlePlugin = "io.github.skeptick.libres:gradle-plugin:$version"
         }
 
         object Image{
             private const val version = "1.6.7"
-            const val composeImageLoader = "io.github.qdsfdhvh:image-loader"
+            const val composeImageLoader = "io.github.qdsfdhvh:image-loader:$version"
         }
 
         object ComposeIcons{
             private const val version ="1.1.0"
-            const val composeIconsFeatherIcons = "br.com.devsrsouza.compose.icons:feather"
+            const val composeIconsFeatherIcons = "br.com.devsrsouza.compose.icons:feather:$version"
         }
     }
 
@@ -80,8 +90,9 @@ object Dependencies {
 
     object Persistence{
         object Settings {
-            const val core = "com.russhwolf:multiplatform-settings:1.0.0"
-            const val noargs = "com.russhwolf:multiplatform-settings-no-arg:1.0.0"
+            private const val version = "1.0.0"
+            const val core = "com.russhwolf:multiplatform-settings:$version"
+            const val noargs = "com.russhwolf:multiplatform-settings-no-arg:$version"
         }
 
         object SqlDelight {
