@@ -6,7 +6,7 @@ import java.awt.Dimension
 
 fun main() = application {
     Window(
-        title = "RadoComposeApp",
+        title = "Rado",
         state = rememberWindowState(width = 800.dp, height = 600.dp),
         onCloseRequest = ::exitApplication,
     ) {

@@ -17,25 +17,16 @@ kotlin{
 
     jvm("desktop")
 
-    js {
+    js(IR) {
         browser()
-        binaries.executable()
     }
 
-    listOf(
-        iosX64(),
-        iosArm64(),
-        iosSimulatorArm64()
-    ).forEach {
-        it.binaries.framework {
-            baseName = "ComposeApp"
-            isStatic = true
-        }
-    }
+    ios()
 
     sourceSets {
         named("commonMain") {
             dependencies {
+                implementation(compose.ui)
                 implementation(compose.runtime)
                 implementation(compose.material3)
                 implementation(compose.foundation)
@@ -48,14 +39,10 @@ kotlin{
             }
         }
 
-        named("jsMain"){
+        named("jsMain") {
             dependencies {
                 implementation(compose.html.core)
             }
-        }
-
-        named("iosMain"){
-
         }
 
         named("androidMain") {

@@ -13,6 +13,9 @@ fun TestGreeting() {
     Surface(modifier = Modifier.fillMaxSize()) {
         Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
             Text(text = "Hello World", color = Color.Black)
+            Text(text = "Hello World", color = Color.Black)
+            Text(text = "Hello World", color = Color.Black)
+            Text(text = "Hello World", color = Color.Black)
         }
     }
 }

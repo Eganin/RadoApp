@@ -1,4 +1,3 @@
-import org.jetbrains.compose.compose
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
 plugins {
@@ -12,15 +11,9 @@ kotlin {
     }
 
     sourceSets {
-        commonMain {
-            dependencies {
-                implementation(project(":common:core"))
-
-            }
-        }
-
         named("jvmMain") {
             dependencies {
+                implementation(project(":common:core"))
                 implementation(compose.desktop.currentOs)
             }
         }

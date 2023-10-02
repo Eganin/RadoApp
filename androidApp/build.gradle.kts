@@ -36,13 +36,5 @@ android {
 
 dependencies {
     implementation(project(":common:core"))
-//    implementation(Dependencies.Compose.AndroidXAppCompat.androidxAppCompat)
     implementation(Dependencies.Compose.Activity.activityCompose)
-//    implementation(Dependencies.Compose.UiTooling.composeUiTooling)
-//    implementation("androidx.compose.ui:ui:1.5.1")
-//    implementation("androidx.compose.ui:ui-tooling:1.4.3")
-//    implementation("androidx.compose.ui:ui-tooling-preview:1.4.3")
-//    implementation("androidx.compose.foundation:foundation:1.5.1")
-//    implementation("androidx.compose.material:material:1.5.1")
-//    implementation("androidx.activity:activity-compose:1.7.1")
 }
