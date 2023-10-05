@@ -13,6 +13,7 @@ kotlin {
         named("jsMain")  {
             dependencies {
                 implementation(project(":common:core"))
+                implementation(project(":common:umbrella-core"))
             }
         }
     }
