@@ -53,6 +53,8 @@ kotlin {
             dependencies {
                 implementation(Dependencies.Ktor.js)
                 implementation(Dependencies.Persistence.SqlDelight.jsDriver)
+                implementation(npm("sql.js", "1.6.2"))
+                implementation(devNpm("copy-webpack-plugin", "9.1.0"))
             }
         }
     }
@@ -64,6 +66,7 @@ sqldelight {
             packageName.set("org.company.rado")
             schemaOutputDirectory.set(file("src/commonMain/sqldelight/databases/schema"))
             migrationOutputDirectory.set(file("src/commonMain/sqldelight/databases/migrations"))
+            generateAsync.set(true)
         }
     }
 }
