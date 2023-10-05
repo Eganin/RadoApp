@@ -66,7 +66,6 @@ sqldelight {
             packageName.set("org.company.rado")
             schemaOutputDirectory.set(file("src/commonMain/sqldelight/databases/schema"))
             migrationOutputDirectory.set(file("src/commonMain/sqldelight/databases/migrations"))
-            generateAsync.set(true)
         }
     }
 }
