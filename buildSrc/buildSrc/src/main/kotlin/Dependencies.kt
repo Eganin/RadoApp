@@ -6,13 +6,17 @@ object Dependencies {
         object Serialization {
             private const val version = "1.6.0"
             const val gradlePlugin = "org.jetbrains.kotlin:kotlin-serialization:$version"
-            const val serialization = "org.jetbrains.kotlinx:kotlinx-serialization-core:$kotlinVersion"
+            const val serialization = "org.jetbrains.kotlinx:kotlinx-serialization-core:$version"
         }
 
         object Coroutines {
             private const val version = "1.7.3"
             const val core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$version"
         }
+    }
+
+    object Kodein {
+        const val core = "org.kodein.di:kodein-di:7.20.2"
     }
 
     object Ktor {
@@ -26,25 +30,26 @@ object Dependencies {
         const val logging = "io.ktor:ktor-client-logging:$version"
         const val android = "io.ktor:ktor-client-android:$version"
         const val okhttp = "io.ktor:ktor-client-okhttp:$version"
+        const val js = "io.ktor:ktor-client-js:$version"
     }
 
     object Compose {
         private const val version = "1.5.1"
         const val gradlePlugin = "org.jetbrains.compose:compose-gradle-plugin:$version"
 
-        object AndroidXAppCompat{
+        object AndroidXAppCompat {
             private const val version = "1.6.1"
-            const val androidxAppCompat ="androidx.appcompat:appcompat:$version"
+            const val androidxAppCompat = "androidx.appcompat:appcompat:$version"
         }
 
-        object Activity{
+        object Activity {
             private const val version = "1.7.2"
             const val activityCompose = "androidx.activity:activity-compose:$version"
         }
 
-        object UiTooling{
+        object UiTooling {
             private const val version = "1.5.1"
-            const val composeUiTooling ="androidx.compose.ui:ui-tooling:$version"
+            const val composeUiTooling = "androidx.compose.ui:ui-tooling:$version"
         }
     }
 
@@ -62,33 +67,33 @@ object Dependencies {
         }
     }
 
-    object Resources{
-        object Libres{
+    object Resources {
+        object Libres {
             private const val version = "1.1.8"
             const val libresCompose = "io.github.skeptick.libres:libres-compose:$version"
             const val gradlePlugin = "io.github.skeptick.libres:gradle-plugin:$version"
         }
 
-        object Image{
+        object Image {
             private const val version = "1.6.7"
             const val composeImageLoader = "io.github.qdsfdhvh:image-loader:$version"
         }
 
-        object ComposeIcons{
-            private const val version ="1.1.0"
+        object ComposeIcons {
+            private const val version = "1.1.0"
             const val composeIconsFeatherIcons = "br.com.devsrsouza.compose.icons:feather:$version"
         }
     }
 
-    object Collections{
+    object Collections {
 
-        object Immutable{
+        object Immutable {
             private const val version = "0.3.5"
             const val core = "org.jetbrains.kotlinx:kotlinx-collections-immutable:$version"
         }
     }
 
-    object Persistence{
+    object Persistence {
         object Settings {
             private const val version = "1.0.0"
             const val core = "com.russhwolf:multiplatform-settings:$version"
@@ -100,14 +105,21 @@ object Dependencies {
 
             const val gradlePlugin = "app.cash.sqldelight:gradle-plugin:$version"
 
+            //desktop
             const val sqliteDriver = "app.cash.sqldelight:sqlite-driver:$version"
+
+            //android
             const val androidDriver = "app.cash.sqldelight:android-driver:$version"
+
+            //ios
             const val nativeDriver = "app.cash.sqldelight:native-driver:$version"
+
+            //web
             const val jsDriver = "app.cash.sqldelight:web-worker-driver:$version"
         }
     }
 
-    object Navigation{
+    object Navigation {
         object ViewModel {
             private const val version = "0.14"
             const val core = "com.adeo:kviewmodel:$version"
@@ -122,10 +134,10 @@ object Dependencies {
         }
     }
 
-    object Other{
-        object Napier{
-            private const val  version = "2.6.1"
-            const val napier = "io.github.aakira:napier"
+    object Other {
+        object Napier {
+            private const val version = "2.6.1"
+            const val napier = "io.github.aakira:napier:$version"
         }
     }
 }

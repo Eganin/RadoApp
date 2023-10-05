@@ -36,5 +36,6 @@ android {
 
 dependencies {
     implementation(project(":common:core"))
+    implementation(project(":common:umbrella-core"))
     implementation(Dependencies.Compose.Activity.activityCompose)
 }
