@@ -30,6 +30,7 @@ kotlin{
                 implementation(compose.runtime)
                 implementation(compose.material3)
                 implementation(compose.foundation)
+                implementation(Dependencies.Other.Napier.napier)
             }
         }
 
