@@ -13,12 +13,9 @@ kotlin {
                 implementation(project(":common:core-utils"))
 
 
-                implementation(Dependencies.Navigation.ViewModel.core)
-                implementation(Dependencies.Navigation.ViewModel.compose)
-                implementation(Dependencies.Navigation.ViewModel.odyssey)
+                implementation(Dependencies.Navigation.MokoMVVM.core)
 
-                implementation(Dependencies.Navigation.Odyssey.compose)
-                implementation(Dependencies.Navigation.Odyssey.core)
+                implementation(Dependencies.Navigation.Voyager.navigator)
             }
         }
 

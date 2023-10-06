@@ -120,17 +120,14 @@ object Dependencies {
     }
 
     object Navigation {
-        object ViewModel {
-            private const val version = "0.14"
-            const val core = "com.adeo:kviewmodel:$version"
-            const val compose = "com.adeo:kviewmodel-compose:$version"
-            const val odyssey = "com.adeo:kviewmodel-odyssey:$version"
+        object Voyager{
+            private const val version ="1.0.0-rc07"
+            const val navigator ="cafe.adriel.voyager:voyager-navigator:$version"
         }
 
-        object Odyssey {
-            private const val version = "1.3.20"
-            const val core = "io.github.alexgladkov:odyssey-core:$version"
-            const val compose = "io.github.alexgladkov:odyssey-compose:$version"
+        object MokoMVVM{
+            private const val version ="0.16.1"
+            const val core ="dev.icerock.moko:mvvm-compose:$version"
         }
     }
 
