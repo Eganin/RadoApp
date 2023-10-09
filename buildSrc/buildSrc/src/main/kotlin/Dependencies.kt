@@ -12,6 +12,7 @@ object Dependencies {
         object Coroutines {
             private const val version = "1.7.3"
             const val core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$version"
+            const val android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:$version"
         }
     }
 
@@ -120,17 +121,19 @@ object Dependencies {
     }
 
     object Navigation {
-        object ViewModel {
-            private const val version = "0.14"
-            const val core = "com.adeo:kviewmodel:$version"
-            const val compose = "com.adeo:kviewmodel-compose:$version"
-            const val odyssey = "com.adeo:kviewmodel-odyssey:$version"
+        object Voyager{
+            private const val version ="1.0.0-rc07"
+            const val navigator ="cafe.adriel.voyager:voyager-navigator:$version"
+            const val kodeinIntegration = "cafe.adriel.voyager:voyager-kodein:$version"
+            const val bottomSheetNavigator = "cafe.adriel.voyager:voyager-bottom-sheet-navigator:$version"
+            const val tabNavigator = "cafe.adriel.voyager:voyager-tab-navigator:$version"
+            const val transitions = "cafe.adriel.voyager:voyager-transitions:$version"
         }
 
-        object Navigation {
-            private const val version = "1.3.20"
-            const val core = "io.github.alexgladkov:odyssey-core:$version"
-            const val compose = "io.github.alexgladkov:odyssey-compose:$version"
+        object MokoMVVM{
+            private const val version ="0.16.1"
+            const val core ="dev.icerock.moko:mvvm-compose:$version"
+            const val flow = "dev.icerock.moko:mvvm-flow-compose:$version"
         }
     }
 
