@@ -36,6 +36,7 @@ android {
 
 dependencies {
     implementation(project(":common:core"))
-    implementation(project(":common:umbrella-core"))
+    implementation(project(":common:umbrella-compose"))
     implementation(Dependencies.Compose.Activity.activityCompose)
+    implementation(Dependencies.Navigation.Voyager.navigator)
 }

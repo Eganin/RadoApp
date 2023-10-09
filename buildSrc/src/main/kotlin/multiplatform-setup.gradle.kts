@@ -31,6 +31,7 @@ kotlin{
                 implementation(compose.material3)
                 implementation(compose.foundation)
                 implementation(Dependencies.Other.Napier.napier)
+                implementation(Dependencies.Kotlin.Coroutines.core)
             }
         }
 
@@ -51,6 +52,7 @@ kotlin{
                 implementation(Dependencies.Android.Compose.ui)
                 implementation(Dependencies.Android.Compose.material)
                 implementation(Dependencies.Android.Compose.tooling)
+                implementation(Dependencies.Kotlin.Coroutines.android)
             }
         }
     }
