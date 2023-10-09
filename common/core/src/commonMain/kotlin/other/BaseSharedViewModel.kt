@@ -8,6 +8,9 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 abstract class BaseSharedViewModel<State : Any, Action, Event>(initialState: State) : ViewModel() {
+
+    abstract fun obtainEvent(viewEvent: Event)
+
     private val _viewStates: MutableStateFlow<State> = MutableStateFlow(initialState)
 
     protected var viewState: State
