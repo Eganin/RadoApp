@@ -5,7 +5,7 @@ import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import ktor.models.KtorRegisterOrLoginRequest
-import models.LoginResponse
+import models.LoginInfoResponse
 import models.UserIdResponse
 
 class KtorAuthRemoteDataSource(
@@ -21,7 +21,7 @@ class KtorAuthRemoteDataSource(
         }.body()
     }
 
-    suspend fun performLogin(request: KtorRegisterOrLoginRequest): LoginResponse {
+    suspend fun performLogin(request: KtorRegisterOrLoginRequest): LoginInfoResponse {
         return httpClient.post {
             url {
                 path("login")

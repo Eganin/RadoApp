@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class LoginResponse(
+data class LoginInfoResponse(
     @SerialName("position")
     val position: String,
     @SerialName("fullName")

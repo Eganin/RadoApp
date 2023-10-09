@@ -48,6 +48,6 @@ class SettingsAuthDataSource(
         const val FULL_NAME_KEY = "FULL_NAME_KEY_ZA_WARUDO"
         const val PHONE_NAME_KEY = "PHONE_NAME_KEY_ZA_WARUDO"
         const val STRING_DEFAULT_VALUE = ""
-        const val ID_DEFAULT_VALUE = -1
+        const val ID_DEFAULT_VALUE = Int.MIN_VALUE
     }
 }
