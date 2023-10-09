@@ -7,7 +7,7 @@ data class AuthViewState(
 )
 
 enum class Position(
-    val position: String
+    val positionName: String
 ) {
     DRIVER("Водитель"),
     MECHANIC("Механик"),
