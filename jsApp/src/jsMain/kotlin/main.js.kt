@@ -1,8 +1,10 @@
 import androidx.compose.ui.window.Window
 import cafe.adriel.voyager.navigator.Navigator
-import navigation.HomeScreen
+import navigation.SplashScreen
 import org.jetbrains.skiko.wasm.onWasmReady
+import platform.Platform
 import platform.PlatformConfiguration
+import theme.AppTheme
 
 fun main() {
     onWasmReady {
@@ -10,7 +12,9 @@ fun main() {
             PlatformSDK.init(
                 platformConfiguration= PlatformConfiguration()
             )
-            Navigator(HomeScreen)
+            AppTheme{
+                Navigator(SplashScreen(platform = Platform.Web))
+            }
         }
     }
 }

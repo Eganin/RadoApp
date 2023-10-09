@@ -8,10 +8,11 @@ kotlin {
         commonMain {
             dependencies {
                 implementation(project(":common:core"))
-                implementation(project(":common:core-compose"))
+                api(project(":common:core-compose"))
                 api(project(":common:umbrella-core"))
                 implementation(project(":common:core-utils"))
 
+                implementation(project(":common:auth:compose"))
 
                 implementation(Dependencies.Navigation.MokoMVVM.core)
                 implementation(Dependencies.Navigation.MokoMVVM.flow)

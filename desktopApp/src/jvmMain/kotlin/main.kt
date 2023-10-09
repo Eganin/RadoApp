@@ -3,13 +3,15 @@ import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import cafe.adriel.voyager.navigator.Navigator
-import navigation.HomeScreen
+import navigation.SplashScreen
+import platform.Platform
 import platform.PlatformConfiguration
+import theme.AppTheme
 import java.awt.Dimension
 
 fun main() = application {
     PlatformSDK.init(
-        platformConfiguration= PlatformConfiguration()
+        platformConfiguration = PlatformConfiguration()
     )
     Window(
         title = "Rado",
@@ -17,6 +19,8 @@ fun main() = application {
         onCloseRequest = ::exitApplication,
     ) {
         window.minimumSize = Dimension(350, 600)
-        Navigator(HomeScreen)
+        AppTheme{
+            Navigator(SplashScreen(platform=Platform.Desktop))
+        }
     }
 }
