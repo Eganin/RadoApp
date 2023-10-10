@@ -12,7 +12,7 @@ import other.observeAsState
 
 object AuthScreen : Screen {
 
-    val viewModel = viewModelFactory { AuthViewModel() }.createViewModel()
+    private val viewModel = viewModelFactory { AuthViewModel() }.createViewModel()
 
     @Composable
     override fun Content() {
@@ -40,6 +40,7 @@ object AuthScreen : Screen {
                     snackBarHostState.showSnackbar(message = snackBarAction.message)
                 }
             }
+
             null -> {}
         }
     }
