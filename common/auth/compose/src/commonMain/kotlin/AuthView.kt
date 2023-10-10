@@ -129,9 +129,15 @@ fun AuthView(
         Button(
             onClick = { eventHandler.invoke(AuthEvent.RegisterClick) },
             modifier = Modifier.fillMaxWidth(),
+            colors = ButtonDefaults.buttonColors(containerColor = Theme.colors.primaryAction),
             shape = RoundedCornerShape(size = 16.dp)
         ) {
-            Text(text = MainRes.string.sign_in_button_title, fontSize = 24.sp, color = Theme.colors.secondaryTextColor)
+            Text(
+                text = MainRes.string.sign_in_button_title,
+                fontSize = 24.sp,
+                color = Theme.colors.secondaryTextColor,
+                modifier = Modifier.padding(8.dp)
+            )
         }
     }
 }

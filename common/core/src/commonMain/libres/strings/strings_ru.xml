@@ -9,10 +9,10 @@
     <string name="name_title">Имя</string>
     <string name="family_title">Фамилия</string>
     <string name="patronymic_title">Отчество</string>
-    <string name="phone_title">Номер телефона</string>
+    <string name="phone_title">Номер телефона +7 (xxx)-xxx-xx-xx</string>
     <string name="name_error">Имя введено неверно</string>
     <string name="family_error">Фамилия введена неверно</string>
     <string name="patronymic_error">Отчество введено неверно</string>
     <string name="sign_in_title">Вход в систему</string>
-    <string name="sign_in_button_title">Вход в систему</string>
+    <string name="sign_in_button_title">Вход</string>
 </resources>

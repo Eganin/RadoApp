@@ -58,6 +58,9 @@ class AuthViewModel : BaseSharedViewModel<AuthViewState, AuthAction, AuthEvent>(
 
             phoneIsValid.successful && fullNameIsValid.successful -> {
                 coroutineScope.launch {
+                    log(tag=TAG) { viewState.position.positionName }
+                    log(tag=TAG) { viewState.firstName + " " + viewState.secondName + " " + viewState.thirdName }
+                    log(tag=TAG) { viewState.phone }
                     val userIdItem = authRepository.register(
                         position = viewState.position.positionName,
                         fullName = viewState.firstName + " " + viewState.secondName + " " + viewState.thirdName,
@@ -101,6 +104,7 @@ class AuthViewModel : BaseSharedViewModel<AuthViewState, AuthAction, AuthEvent>(
 
     private fun checkUserLoggedIn() {
         coroutineScope.launch {
+            log(tag = TAG) { "Check User logged in" }
             val loginInfoItem = authRepository.isUserLoggedIn()
             if (loginInfoItem is LoginInfoItem.Success) {
                 log(tag = TAG) { "User logged in" }
@@ -111,21 +115,21 @@ class AuthViewModel : BaseSharedViewModel<AuthViewState, AuthAction, AuthEvent>(
 
     private fun obtainFirstNameChanged(firstName: String) {
         viewState = viewState.copy(
-            firstName = firstName
+            firstName = firstName.trim()
         )
         log(tag = TAG) { "First name has been changed" }
     }
 
     private fun obtainSecondNameChanged(secondName: String) {
         viewState = viewState.copy(
-            secondName = secondName
+            secondName = secondName.trim()
         )
         log(tag = TAG) { "Second name has been changed" }
     }
 
     private fun obtainThirdNameChanged(thirdName: String) {
         viewState = viewState.copy(
-            thirdName = thirdName
+            thirdName = thirdName.trim()
         )
         log(tag = TAG) { "Third name has been changed" }
     }
@@ -139,7 +143,7 @@ class AuthViewModel : BaseSharedViewModel<AuthViewState, AuthAction, AuthEvent>(
 
     private fun obtainPhoneChanged(phone: String) {
         viewState = viewState.copy(
-            phone = phone
+            phone = phone.trim()
         )
         log(tag = TAG) { "Position has been changed" }
     }
