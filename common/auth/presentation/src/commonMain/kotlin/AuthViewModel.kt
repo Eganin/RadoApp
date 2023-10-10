@@ -58,9 +58,9 @@ class AuthViewModel : BaseSharedViewModel<AuthViewState, AuthAction, AuthEvent>(
 
             phoneIsValid.successful && fullNameIsValid.successful -> {
                 coroutineScope.launch {
-                    log(tag=TAG) { viewState.position.positionName }
-                    log(tag=TAG) { viewState.firstName + " " + viewState.secondName + " " + viewState.thirdName }
-                    log(tag=TAG) { viewState.phone }
+                    log(tag = TAG) { viewState.position.positionName }
+                    log(tag = TAG) { viewState.firstName + " " + viewState.secondName + " " + viewState.thirdName }
+                    log(tag = TAG) { viewState.phone }
                     val userIdItem = authRepository.register(
                         position = viewState.position.positionName,
                         fullName = viewState.firstName + " " + viewState.secondName + " " + viewState.thirdName,
@@ -68,7 +68,7 @@ class AuthViewModel : BaseSharedViewModel<AuthViewState, AuthAction, AuthEvent>(
                     )
                     if (userIdItem is UserIdItem.Success) {
                         log(tag = TAG) { "User logged in" }
-                        viewAction = AuthAction.OpenMainFlow
+                        viewAction = AuthAction.OpenMainFlow(position = viewState.position)
                     } else if (userIdItem is UserIdItem.Error) {
                         log(tag = TAG) { "User not logged in" }
                         viewAction = AuthAction.ShowErrorSnackBar(message = userIdItem.message)
@@ -108,7 +108,7 @@ class AuthViewModel : BaseSharedViewModel<AuthViewState, AuthAction, AuthEvent>(
             val loginInfoItem = authRepository.isUserLoggedIn()
             if (loginInfoItem is LoginInfoItem.Success) {
                 log(tag = TAG) { "User logged in" }
-                viewAction = AuthAction.OpenMainFlow
+                viewAction = AuthAction.OpenMainFlow(position = viewState.position)
             }
         }
     }

@@ -1,7 +1,6 @@
 package models
 
 import androidx.compose.ui.geometry.Size
-import org.company.rado.core.MainRes
 
 data class AuthViewState(
     val position: Position = Position.DRIVER,

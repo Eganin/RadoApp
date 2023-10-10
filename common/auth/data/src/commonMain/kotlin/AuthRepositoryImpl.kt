@@ -1,3 +1,4 @@
+import io.github.aakira.napier.log
 import ktor.KtorAuthRemoteDataSource
 import ktor.models.KtorRegisterOrLoginRequest
 import models.LoginInfoItem
@@ -42,6 +43,7 @@ class AuthRepositoryImpl(
     override suspend fun isUserLoggedIn(): LoginInfoItem {
         val loginInfoItem = try {
             val userInfoFromLocal = localDataSource.fetchLoginUserInfo()
+            log(tag=TAG) { userInfoFromLocal.toString() }
             val response = remoteDataSource.performLogin(
                 request = KtorRegisterOrLoginRequest(
                     position = userInfoFromLocal.position,
@@ -54,5 +56,9 @@ class AuthRepositoryImpl(
             LoginInfoItem.Error(message = MainRes.string.base_error_message)
         }
         return loginInfoItem
+    }
+
+    private companion object{
+        const val TAG ="AuthRepository"
     }
 }
