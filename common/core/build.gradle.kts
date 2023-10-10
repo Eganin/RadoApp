@@ -23,6 +23,9 @@ kotlin {
                 implementation(Dependencies.Persistence.Settings.core)
                 implementation(Dependencies.Persistence.Settings.noargs)
 
+                implementation(Dependencies.Navigation.MokoMVVM.core)
+                implementation(Dependencies.Navigation.MokoMVVM.flow)
+
                 api(Dependencies.Kodein.core)
             }
         }

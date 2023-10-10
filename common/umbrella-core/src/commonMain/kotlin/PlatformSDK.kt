@@ -23,7 +23,8 @@ object PlatformSDK {
         Inject.createDependencies(tree = DI {
             importAll(
                 platformModule,
-                coreModule
+                coreModule,
+                authModule
             )
         }.direct)
 
