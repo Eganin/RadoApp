@@ -26,3 +26,11 @@ enum class Position(
     MECHANIC("Механик"),
     OBSERVER("Наблюдатель")
 }
+
+fun String.fromPositionNameToPosition(): Position {
+    return when (this) {
+        Position.DRIVER.positionName -> Position.DRIVER
+        Position.MECHANIC.positionName -> Position.MECHANIC
+        else -> Position.OBSERVER
+    }
+}

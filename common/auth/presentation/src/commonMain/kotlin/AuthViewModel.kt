@@ -108,6 +108,7 @@ class AuthViewModel : BaseSharedViewModel<AuthViewState, AuthAction, AuthEvent>(
             val loginInfoItem = authRepository.isUserLoggedIn()
             if (loginInfoItem is LoginInfoItem.Success) {
                 log(tag = TAG) { "User logged in" }
+                viewState = viewState.copy(position = loginInfoItem.position.fromPositionNameToPosition())
                 viewAction = AuthAction.OpenMainFlow(position = viewState.position)
             }
         }

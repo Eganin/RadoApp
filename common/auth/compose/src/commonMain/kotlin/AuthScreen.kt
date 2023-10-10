@@ -46,17 +46,14 @@ object AuthScreen : Screen {
                 when(authAction.position){
                     Position.DRIVER->{
                         val mainDriverScreen = rememberScreen(MainDriverSharedScreen.Main)
-                        navigator.pop()
                         navigator.push(mainDriverScreen)
                     }
                     Position.MECHANIC->{
                         val mainMechanicScreen = rememberScreen(MainMechanicSharedScreen.Main)
-                        navigator.pop()
                         navigator.push(mainMechanicScreen)
                     }
                     Position.OBSERVER->{
                         val mainObserverScreen = rememberScreen(MainObserverSharedScreen.Main)
-                        navigator.pop()
                         navigator.push(mainObserverScreen)
                     }
                 }
