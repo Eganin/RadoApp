@@ -13,4 +13,6 @@
     <string name="name_error">Имя введено неверно</string>
     <string name="family_error">Фамилия введена неверно</string>
     <string name="patronymic_error">Отчество введено неверно</string>
+    <string name="sign_in_title">Вход в систему</string>
+    <string name="sign_in_button_title">Вход в систему</string>
 </resources>
