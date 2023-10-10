@@ -1,4 +1,4 @@
-package usecases
+package other
 
 data class ValidationResult(
     val successful: Boolean,

@@ -1,19 +1,22 @@
 package models
 
 import androidx.compose.ui.geometry.Size
+import org.company.rado.core.MainRes
 
 data class AuthViewState(
     val position: Position = Position.DRIVER,
-    val fullName: String = "",
+    val firstName: String = "",
+    val secondName: String = "",
+    val thirdName: String = "",
     val phone: String = "",
     val exposedMenuValue: String = "",
     val exposedMenuIsEnabled: Boolean = false,
     val exposedMenuSize: Size = Size.Zero,
     val exposedMenuSelectedIndex: Int = -1,
-    val itemsExposedMenu: List<String> = listOf(
-        Position.DRIVER.positionName,
-        Position.MECHANIC.positionName,
-        Position.OBSERVER.positionName
+    val itemsExposedMenu: List<Position> = listOf(
+        Position.DRIVER,
+        Position.MECHANIC,
+        Position.OBSERVER
     )
 )
 

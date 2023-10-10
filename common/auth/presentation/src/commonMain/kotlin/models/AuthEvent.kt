@@ -6,7 +6,11 @@ sealed class AuthEvent {
 
     data class PositionChanged(val value: Position) : AuthEvent()
 
-    data class FullNameChanged(val value: String) : AuthEvent()
+    data class FirstNameChanged(val value: String) : AuthEvent()
+
+    data class SecondNameChanged(val value: String) : AuthEvent()
+
+    data class ThirdNameChanged(val value: String) : AuthEvent()
 
     data class PhoneChanged(val value: String) : AuthEvent()
 

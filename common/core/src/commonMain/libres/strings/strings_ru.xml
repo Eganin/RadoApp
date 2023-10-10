@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="application_name">Rado</string>
-    <string name="user_is_not_register">Пользователь не был зарегистрирован</string>
+    <string name="user_is_not_register">Пользователь не зарегистрирован</string>
+    <string name="user_is_not_login">Пользователь не вошел в систему</string>
+    <string name="base_error_message">Произошла ошибка</string>
+    <string name="choose_position">Выберите вашу должность</string>
+    <string name="position_title">Должность</string>
+    <string name="name_title">Имя</string>
+    <string name="family_title">Фамилия</string>
+    <string name="patronymic_title">Отчество</string>
+    <string name="phone_title">Номер телефона</string>
+    <string name="name_error">Имя введено неверно</string>
+    <string name="family_error">Фамилия введена неверно</string>
+    <string name="patronymic_error">Отчество введено неверно</string>
 </resources>

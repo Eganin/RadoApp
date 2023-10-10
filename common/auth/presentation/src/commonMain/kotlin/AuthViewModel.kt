@@ -26,7 +26,9 @@ class AuthViewModel : BaseSharedViewModel<AuthViewState, AuthAction, AuthEvent>(
 
     override fun obtainEvent(viewEvent: AuthEvent) {
         when (viewEvent) {
-            is AuthEvent.FullNameChanged -> obtainFullNameChanged(fullName = viewEvent.value)
+            is AuthEvent.FirstNameChanged -> obtainFirstNameChanged(firstName = viewEvent.value)
+            is AuthEvent.SecondNameChanged -> obtainSecondNameChanged(secondName = viewEvent.value)
+            is AuthEvent.ThirdNameChanged -> obtainThirdNameChanged(thirdName = viewEvent.value)
             is AuthEvent.PositionChanged -> obtainPositionChanged(position = viewEvent.value)
             is AuthEvent.PhoneChanged -> obtainPhoneChanged(phone = viewEvent.value)
             is AuthEvent.RegisterClick -> sendLogin()
@@ -38,7 +40,11 @@ class AuthViewModel : BaseSharedViewModel<AuthViewState, AuthAction, AuthEvent>(
 
     private fun sendLogin() {
         val phoneIsValid = validatePhone.invoke(phone = viewState.phone)
-        val fullNameIsValid = validateFullName.invoke(fullName = viewState.fullName)
+        val fullNameIsValid = validateFullName.invoke(
+            firstname = viewState.firstName,
+            secondName = viewState.secondName,
+            thirdName = viewState.thirdName
+        )
         when {
             !phoneIsValid.successful -> {
                 log(tag = TAG) { "Phone is not valid" }
@@ -54,7 +60,7 @@ class AuthViewModel : BaseSharedViewModel<AuthViewState, AuthAction, AuthEvent>(
                 coroutineScope.launch {
                     val userIdItem = authRepository.register(
                         position = viewState.position.positionName,
-                        fullName = viewState.fullName,
+                        fullName = viewState.firstName + " " + viewState.secondName + " " + viewState.thirdName,
                         phone = viewState.phone
                     )
                     if (userIdItem is UserIdItem.Success) {
@@ -71,19 +77,26 @@ class AuthViewModel : BaseSharedViewModel<AuthViewState, AuthAction, AuthEvent>(
 
     private fun obtainExposedMenuIndexChange(index: Int) {
         viewState =
-            viewState.copy(exposedMenuSelectedIndex = index, exposedMenuValue = viewState.itemsExposedMenu[index])
+            viewState.copy(
+                exposedMenuSelectedIndex = index,
+                exposedMenuValue = viewState.itemsExposedMenu[index].positionName,
+                position = viewState.itemsExposedMenu[index]
+            )
+        log(tag = TAG) { "Changed position in exposed menu" }
     }
 
     private fun obtainExposedMenuSizeChange(size: Size) {
         viewState = viewState.copy(
             exposedMenuSize = size
         )
+        log(tag = TAG) { "Changed size exposed menu for position" }
     }
 
     private fun obtainExposedMenuIsEnabledChange(enabled: Boolean) {
         viewState = viewState.copy(
             exposedMenuIsEnabled = enabled
         )
+        log(tag = TAG) { "Changed visibility exposed menu for position" }
     }
 
     private fun checkUserLoggedIn() {
@@ -96,11 +109,25 @@ class AuthViewModel : BaseSharedViewModel<AuthViewState, AuthAction, AuthEvent>(
         }
     }
 
-    private fun obtainFullNameChanged(fullName: String) {
+    private fun obtainFirstNameChanged(firstName: String) {
         viewState = viewState.copy(
-            fullName = fullName
+            firstName = firstName
         )
-        log(tag = TAG) { "Full name has been changed" }
+        log(tag = TAG) { "First name has been changed" }
+    }
+
+    private fun obtainSecondNameChanged(secondName: String) {
+        viewState = viewState.copy(
+            secondName = secondName
+        )
+        log(tag = TAG) { "Second name has been changed" }
+    }
+
+    private fun obtainThirdNameChanged(thirdName: String) {
+        viewState = viewState.copy(
+            thirdName = thirdName
+        )
+        log(tag = TAG) { "Third name has been changed" }
     }
 
     private fun obtainPositionChanged(position: Position) {

@@ -4,6 +4,7 @@ import models.LoginInfoItem
 import models.LoginInfoResponse
 import models.UserIdItem
 import models.UserIdResponse
+import org.company.rado.core.MainRes
 import other.Mapper
 import settings.SettingsAuthDataSource
 
@@ -33,7 +34,7 @@ class AuthRepositoryImpl(
             }
             userIdItem
         } catch (e: Exception) {
-            UserIdItem.Error(message = "Произошла ошибка")
+            UserIdItem.Error(message = MainRes.string.base_error_message)
         }
         return userIdItem
     }
@@ -50,7 +51,7 @@ class AuthRepositoryImpl(
             )
             loginInfoMapper.map(source = response)
         } catch (e: Exception) {
-            LoginInfoItem.Error(message = "Произошла ошибка")
+            LoginInfoItem.Error(message = MainRes.string.base_error_message)
         }
         return loginInfoItem
     }

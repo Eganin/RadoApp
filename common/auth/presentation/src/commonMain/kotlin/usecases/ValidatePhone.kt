@@ -1,5 +1,7 @@
 package usecases
 
+import other.ValidationResult
+
 class ValidatePhone {
 
     operator fun invoke(phone: String): ValidationResult {
