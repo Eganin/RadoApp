@@ -1,3 +1,4 @@
+import androidx.compose.ui.geometry.Size
 import di.Inject
 import io.github.aakira.napier.log
 import kotlinx.coroutines.*
@@ -29,6 +30,9 @@ class AuthViewModel : BaseSharedViewModel<AuthViewState, AuthAction, AuthEvent>(
             is AuthEvent.PositionChanged -> obtainPositionChanged(position = viewEvent.value)
             is AuthEvent.PhoneChanged -> obtainPhoneChanged(phone = viewEvent.value)
             is AuthEvent.RegisterClick -> sendLogin()
+            is AuthEvent.ExposedMenuEnableChanged -> obtainExposedMenuIsEnabledChange(enabled = viewEvent.value)
+            is AuthEvent.ExposedMenuSizeChanged -> obtainExposedMenuSizeChange(size = viewEvent.value)
+            is AuthEvent.ExposedMenuIndexChanged -> obtainExposedMenuIndexChange(index = viewEvent.value)
         }
     }
 
@@ -43,7 +47,8 @@ class AuthViewModel : BaseSharedViewModel<AuthViewState, AuthAction, AuthEvent>(
 
             !fullNameIsValid.successful -> {
                 log(tag = TAG) { "FullName is not valid" }
-                viewAction = AuthAction.ShowErrorSnackBar(message = fullNameIsValid.errorMessage ?: "Произошла ошибка")}
+                viewAction = AuthAction.ShowErrorSnackBar(message = fullNameIsValid.errorMessage ?: "Произошла ошибка")
+            }
 
             phoneIsValid.successful && fullNameIsValid.successful -> {
                 coroutineScope.launch {
@@ -62,6 +67,23 @@ class AuthViewModel : BaseSharedViewModel<AuthViewState, AuthAction, AuthEvent>(
                 }
             }
         }
+    }
+
+    private fun obtainExposedMenuIndexChange(index: Int) {
+        viewState =
+            viewState.copy(exposedMenuSelectedIndex = index, exposedMenuValue = viewState.itemsExposedMenu[index])
+    }
+
+    private fun obtainExposedMenuSizeChange(size: Size) {
+        viewState = viewState.copy(
+            exposedMenuSize = size
+        )
+    }
+
+    private fun obtainExposedMenuIsEnabledChange(enabled: Boolean) {
+        viewState = viewState.copy(
+            exposedMenuIsEnabled = enabled
+        )
     }
 
     private fun checkUserLoggedIn() {
