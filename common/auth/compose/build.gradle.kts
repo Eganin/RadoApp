@@ -9,11 +9,9 @@ kotlin{
             dependencies {
                 implementation(project(":common:core-compose"))
                 implementation(project(":common:core-utils"))
-
-                implementation(Dependencies.Navigation.MokoMVVM.core)
-                implementation(Dependencies.Navigation.MokoMVVM.flow)
-
+                implementation(project(":common:auth:presentation"))
                 implementation(Dependencies.Navigation.Voyager.navigator)
+                implementation(Dependencies.Navigation.MokoMVVM.core)
             }
         }
     }
