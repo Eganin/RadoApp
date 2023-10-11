@@ -10,7 +10,7 @@ import compose.icons.FeatherIcons
 import compose.icons.feathericons.X
 import theme.Theme
 
-object RejectedTab : Tab {
+object RequestsTabForMechanic : Tab {
 
     override val options: TabOptions
         @Composable
@@ -20,7 +20,7 @@ object RejectedTab : Tab {
 
             return remember {
                 TabOptions(
-                    index = 2u,
+                    index = 0u,
                     title = title,
                     icon = icon
                 )
@@ -29,6 +29,6 @@ object RejectedTab : Tab {
 
     @Composable
     override fun Content() {
-        Text(text = "Rejected request for Driver", color = Theme.colors.primaryTextColor)
+        Text(text = "Unconfirmed requests for Mechanic", color = Theme.colors.primaryTextColor)
     }
 }

@@ -7,20 +7,20 @@ import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import compose.icons.FeatherIcons
-import compose.icons.feathericons.Clock
+import compose.icons.feathericons.X
 import theme.Theme
 
-object ArchiveTab : Tab {
+object RejectedTabForDriver : Tab {
 
     override val options: TabOptions
         @Composable
         get() {
-            val title = "Archive"
-            val icon = rememberVectorPainter(FeatherIcons.Clock)
+            val title = "Rejected"
+            val icon = rememberVectorPainter(FeatherIcons.X)
 
             return remember {
                 TabOptions(
-                    index = 1u,
+                    index = 2u,
                     title = title,
                     icon = icon
                 )
@@ -29,6 +29,6 @@ object ArchiveTab : Tab {
 
     @Composable
     override fun Content() {
-        Text(text = "Archive request for Driver", color = Theme.colors.primaryTextColor)
+        Text(text = "Rejected request for Driver", color = Theme.colors.primaryTextColor)
     }
 }

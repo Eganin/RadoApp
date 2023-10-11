@@ -10,7 +10,7 @@ import compose.icons.FeatherIcons
 import compose.icons.feathericons.Check
 import theme.Theme
 
-object ActiveTab : Tab {
+object ActiveTabForMechanic : Tab {
 
     override val options: TabOptions
         @Composable
@@ -20,7 +20,7 @@ object ActiveTab : Tab {
 
             return remember {
                 TabOptions(
-                    index = 0u,
+                    index = 1u,
                     title = title,
                     icon = icon
                 )
@@ -29,6 +29,6 @@ object ActiveTab : Tab {
 
     @Composable
     override fun Content() {
-        Text(text = "Active request for Driver", color = Theme.colors.primaryTextColor)
+        Text(text = "Active request for Mechanic", color = Theme.colors.primaryTextColor)
     }
 }
