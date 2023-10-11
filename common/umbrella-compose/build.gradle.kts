@@ -13,6 +13,7 @@ kotlin {
                 implementation(project(":common:core-utils"))
 
                 implementation(project(":common:auth:compose"))
+                implementation(project(":common:driver:active:compose"))
 
                 implementation(Dependencies.Navigation.MokoMVVM.core)
                 implementation(Dependencies.Navigation.MokoMVVM.flow)

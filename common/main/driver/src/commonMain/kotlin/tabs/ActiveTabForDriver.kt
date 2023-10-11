@@ -1,14 +1,16 @@
 package tabs
 
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import cafe.adriel.voyager.core.registry.rememberScreen
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.Check
-import theme.Theme
+import navigation.ActiveRequestsForDriverSharedScreen
 
 object ActiveTabForDriver : Tab {
 
@@ -29,6 +31,8 @@ object ActiveTabForDriver : Tab {
 
     @Composable
     override fun Content() {
-        Text(text = "Active request for Driver", color = Theme.colors.primaryTextColor)
+        val navigator = LocalNavigator.currentOrThrow
+        val activeRequestForDriverScreen = rememberScreen(ActiveRequestsForDriverSharedScreen.ActiveRequests)
+        navigator.push(activeRequestForDriverScreen)
     }
 }

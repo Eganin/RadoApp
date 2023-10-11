@@ -1,8 +1,5 @@
 package navigation
 
-import DriverMainScreen
-import MechanicMainScreen
-import ObserverMainScreen
 import androidx.compose.runtime.Composable
 import cafe.adriel.voyager.core.registry.ScreenRegistry
 import cafe.adriel.voyager.core.registry.rememberScreen
@@ -18,9 +15,12 @@ class HomeScreen(private val platform: Platform) : Screen {
 
         ScreenRegistry {
             featureAuthScreenModule()
+
             mainDriverScreenModule()
             mainMechanicScreenModule()
             mainObserverScreenModule()
+
+            featureActiveRequestsForDriverScreenModule()
         }
 
         //navigate to auth screen in the auth module

@@ -13,5 +13,4 @@ class SplashScreen(private val platform: Platform) : Screen {
         val navigator = LocalNavigator.currentOrThrow
         navigator.push(HomeScreen(platform=platform))
     }
-
 }
