@@ -53,6 +53,11 @@ fun AuthView(
         //Dropdown menu
         Box(modifier = Modifier.fillMaxWidth()) {
             OutlinedTextField(
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedTextColor = Theme.colors.primaryTextColor,
+                    unfocusedTextColor = Theme.colors.primaryTextColor,
+                    disabledTextColor = Theme.colors.primaryTextColor,
+                ),
                 value = state.exposedMenuValue,
                 onValueChange = {},
                 label = { Text(text = MainRes.string.position_title, color = Theme.colors.primaryTextColor) },
@@ -71,7 +76,8 @@ fun AuthView(
             )
 
             DropdownMenu(
-                modifier = Modifier.width(with(LocalDensity.current) { state.exposedMenuSize.width.toDp() }),
+                modifier = Modifier.background(color = Theme.colors.primaryAction)
+                    .width(with(LocalDensity.current) { state.exposedMenuSize.width.toDp() }),
                 expanded = state.exposedMenuIsEnabled,
                 onDismissRequest = { eventHandler.invoke(AuthEvent.ExposedMenuEnableChanged(value = false)) }) {
                 state.itemsExposedMenu.forEachIndexed { index, position ->
@@ -80,7 +86,8 @@ fun AuthView(
                         onClick = {
                             eventHandler.invoke(AuthEvent.ExposedMenuIndexChanged(value = index))
                             eventHandler.invoke(AuthEvent.ExposedMenuEnableChanged(value = false))
-                        })
+                        }
+                    )
                 }
             }
         }
@@ -98,14 +105,25 @@ fun AuthView(
             Spacer(modifier = Modifier.height(8.dp))
 
             OutlinedTextField(
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedTextColor = Theme.colors.primaryTextColor,
+                    unfocusedTextColor = Theme.colors.primaryTextColor,
+                    disabledTextColor = Theme.colors.primaryTextColor,
+                ),
                 value = value,
                 onValueChange = {
-                    if (title == MainRes.string.name_title) {
-                        eventHandler.invoke(AuthEvent.FirstNameChanged(value = it))
-                    } else if (title == MainRes.string.family_title) {
-                        eventHandler.invoke(AuthEvent.SecondNameChanged(value = it))
-                    } else {
-                        eventHandler.invoke(AuthEvent.ThirdNameChanged(value = it))
+                    when (title) {
+                        MainRes.string.name_title -> {
+                            eventHandler.invoke(AuthEvent.FirstNameChanged(value = it))
+                        }
+
+                        MainRes.string.family_title -> {
+                            eventHandler.invoke(AuthEvent.SecondNameChanged(value = it))
+                        }
+
+                        else -> {
+                            eventHandler.invoke(AuthEvent.ThirdNameChanged(value = it))
+                        }
                     }
                 },
                 label = { Text(text = title, color = Theme.colors.primaryTextColor) },
@@ -116,12 +134,27 @@ fun AuthView(
         Spacer(modifier = Modifier.height(8.dp))
 
         OutlinedTextField(
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedTextColor = Theme.colors.primaryTextColor,
+                unfocusedTextColor = Theme.colors.primaryTextColor,
+                disabledTextColor = Theme.colors.primaryTextColor,
+            ),
             value = state.phone,
             onValueChange = { eventHandler.invoke(AuthEvent.PhoneChanged(value = it)) },
             label = { Text(text = MainRes.string.phone_title, color = Theme.colors.primaryTextColor) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
             modifier = Modifier.fillMaxWidth()
         )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Row(modifier = Modifier.fillMaxWidth()) {
+            Checkbox(
+                checked = state.isFirstSignIn,
+                onCheckedChange = { eventHandler.invoke(AuthEvent.IsFirstSignUpChanged(value = !state.isFirstSignIn)) })
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(text = MainRes.string.is_first_sign_in, fontSize = 16.sp, color = Theme.colors.primaryTextColor)
+        }
 
         //register/login button
         Spacer(modifier = Modifier.height(64.dp))

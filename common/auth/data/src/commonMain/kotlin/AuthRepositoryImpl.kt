@@ -1,3 +1,4 @@
+import io.github.aakira.napier.log
 import ktor.KtorAuthRemoteDataSource
 import ktor.models.KtorRegisterOrLoginRequest
 import models.LoginInfoItem
@@ -34,14 +35,31 @@ class AuthRepositoryImpl(
             }
             userIdItem
         } catch (e: Exception) {
-            UserIdItem.Error(message = MainRes.string.base_error_message)
+            UserIdItem.Error(message = MainRes.string.sign_in_error)
         }
         return userIdItem
+    }
+
+    override suspend fun login(position: String, fullName: String, phone: String): LoginInfoItem {
+        val loginInfoItem = try {
+            val response = remoteDataSource.performLogin(
+                request = KtorRegisterOrLoginRequest(
+                    position = position,
+                    fullName = fullName,
+                    phone = phone
+                )
+            )
+            loginInfoMapper.map(source = response)
+        } catch (e: Exception) {
+            LoginInfoItem.Error(message = MainRes.string.sign_in_error)
+        }
+        return loginInfoItem
     }
 
     override suspend fun isUserLoggedIn(): LoginInfoItem {
         val loginInfoItem = try {
             val userInfoFromLocal = localDataSource.fetchLoginUserInfo()
+            log(tag=TAG) { userInfoFromLocal.toString() }
             val response = remoteDataSource.performLogin(
                 request = KtorRegisterOrLoginRequest(
                     position = userInfoFromLocal.position,
@@ -54,5 +72,9 @@ class AuthRepositoryImpl(
             LoginInfoItem.Error(message = MainRes.string.base_error_message)
         }
         return loginInfoItem
+    }
+
+    private companion object{
+        const val TAG ="AuthRepository"
     }
 }

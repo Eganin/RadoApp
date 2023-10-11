@@ -1,7 +1,6 @@
 package models
 
 import androidx.compose.ui.geometry.Size
-import org.company.rado.core.MainRes
 
 data class AuthViewState(
     val position: Position = Position.DRIVER,
@@ -9,6 +8,7 @@ data class AuthViewState(
     val secondName: String = "",
     val thirdName: String = "",
     val phone: String = "",
+    val isFirstSignIn : Boolean=true,
     val exposedMenuValue: String = Position.DRIVER.positionName,
     val exposedMenuIsEnabled: Boolean = false,
     val exposedMenuSize: Size = Size.Zero,
@@ -26,4 +26,12 @@ enum class Position(
     DRIVER("Водитель"),
     MECHANIC("Механик"),
     OBSERVER("Наблюдатель")
+}
+
+fun String.fromPositionNameToPosition(): Position {
+    return when (this) {
+        Position.DRIVER.positionName -> Position.DRIVER
+        Position.MECHANIC.positionName -> Position.MECHANIC
+        else -> Position.OBSERVER
+    }
 }

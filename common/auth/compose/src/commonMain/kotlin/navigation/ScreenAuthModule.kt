@@ -1,3 +1,6 @@
+package navigation
+
+import AuthScreen
 import cafe.adriel.voyager.core.registry.ScreenProvider
 import cafe.adriel.voyager.core.registry.screenModule
 
