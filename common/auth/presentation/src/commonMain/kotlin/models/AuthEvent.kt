@@ -20,5 +20,7 @@ sealed class AuthEvent {
 
     data class ExposedMenuIndexChanged(val value : Int): AuthEvent()
 
+    data class IsFirstSignUpChanged(val value: Boolean): AuthEvent()
+
     data object RegisterClick : AuthEvent()
 }

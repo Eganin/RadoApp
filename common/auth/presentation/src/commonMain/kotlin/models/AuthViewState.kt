@@ -8,6 +8,7 @@ data class AuthViewState(
     val secondName: String = "",
     val thirdName: String = "",
     val phone: String = "",
+    val isFirstSignIn : Boolean=true,
     val exposedMenuValue: String = Position.DRIVER.positionName,
     val exposedMenuIsEnabled: Boolean = false,
     val exposedMenuSize: Size = Size.Zero,

@@ -76,7 +76,8 @@ fun AuthView(
             )
 
             DropdownMenu(
-                modifier = Modifier.background(color = Theme.colors.primaryAction).width(with(LocalDensity.current) { state.exposedMenuSize.width.toDp() }),
+                modifier = Modifier.background(color = Theme.colors.primaryAction)
+                    .width(with(LocalDensity.current) { state.exposedMenuSize.width.toDp() }),
                 expanded = state.exposedMenuIsEnabled,
                 onDismissRequest = { eventHandler.invoke(AuthEvent.ExposedMenuEnableChanged(value = false)) }) {
                 state.itemsExposedMenu.forEachIndexed { index, position ->
@@ -115,9 +116,11 @@ fun AuthView(
                         MainRes.string.name_title -> {
                             eventHandler.invoke(AuthEvent.FirstNameChanged(value = it))
                         }
+
                         MainRes.string.family_title -> {
                             eventHandler.invoke(AuthEvent.SecondNameChanged(value = it))
                         }
+
                         else -> {
                             eventHandler.invoke(AuthEvent.ThirdNameChanged(value = it))
                         }
@@ -142,6 +145,16 @@ fun AuthView(
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
             modifier = Modifier.fillMaxWidth()
         )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Row(modifier = Modifier.fillMaxWidth()) {
+            Checkbox(
+                checked = state.isFirstSignIn,
+                onCheckedChange = { eventHandler.invoke(AuthEvent.IsFirstSignUpChanged(value = !state.isFirstSignIn)) })
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(text = MainRes.string.is_first_sign_in, fontSize = 16.sp, color = Theme.colors.primaryTextColor)
+        }
 
         //register/login button
         Spacer(modifier = Modifier.height(64.dp))

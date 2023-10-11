@@ -7,7 +7,7 @@ import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import compose.icons.FeatherIcons
-import compose.icons.feathericons.X
+import compose.icons.feathericons.List
 import theme.Theme
 
 object RequestsTabForMechanic : Tab {
@@ -16,7 +16,7 @@ object RequestsTabForMechanic : Tab {
         @Composable
         get() {
             val title = "Rejected"
-            val icon = rememberVectorPainter(FeatherIcons.X)
+            val icon = rememberVectorPainter(FeatherIcons.List)
 
             return remember {
                 TabOptions(
