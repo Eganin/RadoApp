@@ -81,7 +81,6 @@ fun AuthView(
                 onDismissRequest = { eventHandler.invoke(AuthEvent.ExposedMenuEnableChanged(value = false)) }) {
                 state.itemsExposedMenu.forEachIndexed { index, position ->
                     DropdownMenuItem(
-                        //modifier = Modifier.background(color = Theme.colors.primaryAction),
                         text = { Text(text = position.positionName, color = Theme.colors.primaryTextColor) },
                         onClick = {
                             eventHandler.invoke(AuthEvent.ExposedMenuIndexChanged(value = index))
