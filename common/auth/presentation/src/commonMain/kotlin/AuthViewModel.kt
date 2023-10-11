@@ -35,6 +35,7 @@ class AuthViewModel : BaseSharedViewModel<AuthViewState, AuthAction, AuthEvent>(
             is AuthEvent.ExposedMenuEnableChanged -> obtainExposedMenuIsEnabledChange(enabled = viewEvent.value)
             is AuthEvent.ExposedMenuSizeChanged -> obtainExposedMenuSizeChange(size = viewEvent.value)
             is AuthEvent.ExposedMenuIndexChanged -> obtainExposedMenuIndexChange(index = viewEvent.value)
+            is AuthEvent.IsFirstSignUpChanged -> obtainIsFirstSignInChange(isFirstSignIn = viewEvent.value)
         }
     }
 
@@ -58,24 +59,46 @@ class AuthViewModel : BaseSharedViewModel<AuthViewState, AuthAction, AuthEvent>(
 
             phoneIsValid.successful && fullNameIsValid.successful -> {
                 coroutineScope.launch {
-                    log(tag=TAG) { viewState.position.positionName }
-                    log(tag=TAG) { viewState.firstName + " " + viewState.secondName + " " + viewState.thirdName }
-                    log(tag=TAG) { viewState.phone }
-                    val userIdItem = authRepository.register(
-                        position = viewState.position.positionName,
-                        fullName = viewState.firstName + " " + viewState.secondName + " " + viewState.thirdName,
-                        phone = viewState.phone
-                    )
-                    if (userIdItem is UserIdItem.Success) {
-                        log(tag = TAG) { "User logged in" }
-                        viewAction = AuthAction.OpenMainFlow
-                    } else if (userIdItem is UserIdItem.Error) {
-                        log(tag = TAG) { "User not logged in" }
-                        viewAction = AuthAction.ShowErrorSnackBar(message = userIdItem.message)
+                    log(tag = TAG) { viewState.position.positionName }
+                    log(tag = TAG) { viewState.firstName + " " + viewState.secondName + " " + viewState.thirdName }
+                    log(tag = TAG) { viewState.phone }
+                    if (viewState.isFirstSignIn) {
+                        log(tag = TAG){"Register"}
+                        val userIdItem = authRepository.register(
+                            position = viewState.position.positionName,
+                            fullName = viewState.firstName + " " + viewState.secondName + " " + viewState.thirdName,
+                            phone = viewState.phone
+                        )
+                        if (userIdItem is UserIdItem.Success) {
+                            log(tag = TAG) { "User logged in" }
+                            viewAction = AuthAction.OpenMainFlow(position = viewState.position)
+                        } else if (userIdItem is UserIdItem.Error) {
+                            log(tag = TAG) { "User is not logged in" }
+                            viewAction = AuthAction.ShowErrorSnackBar(message = userIdItem.message)
+                        }
+                    } else {
+                        log(tag = TAG){"Login"}
+                        val loginInfoItem = authRepository.login(
+                            position = viewState.position.positionName,
+                            fullName = viewState.firstName + " " + viewState.secondName + " " + viewState.thirdName,
+                            phone = viewState.phone
+                        )
+                        if (loginInfoItem is LoginInfoItem.Success) {
+                            log(tag = TAG) { "User logged in" }
+                            viewState = viewState.copy(position = loginInfoItem.position.fromPositionNameToPosition())
+                            viewAction = AuthAction.OpenMainFlow(position = viewState.position)
+                        }else if(loginInfoItem is LoginInfoItem.Error){
+                            log(tag = TAG) { "User is not logged in" }
+                            viewAction = AuthAction.ShowErrorSnackBar(message = loginInfoItem.message)
+                        }
                     }
                 }
             }
         }
+    }
+
+    private fun obtainIsFirstSignInChange(isFirstSignIn: Boolean) {
+        viewState = viewState.copy(isFirstSignIn = isFirstSignIn)
     }
 
     private fun obtainExposedMenuIndexChange(index: Int) {
@@ -108,7 +131,8 @@ class AuthViewModel : BaseSharedViewModel<AuthViewState, AuthAction, AuthEvent>(
             val loginInfoItem = authRepository.isUserLoggedIn()
             if (loginInfoItem is LoginInfoItem.Success) {
                 log(tag = TAG) { "User logged in" }
-                viewAction = AuthAction.OpenMainFlow
+                viewState = viewState.copy(position = loginInfoItem.position.fromPositionNameToPosition())
+                viewAction = AuthAction.OpenMainFlow(position = viewState.position)
             }
         }
     }

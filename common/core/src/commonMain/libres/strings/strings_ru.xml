@@ -15,4 +15,6 @@
     <string name="patronymic_error">Отчество введено неверно</string>
     <string name="sign_in_title">Вход в систему</string>
     <string name="sign_in_button_title">Вход</string>
+    <string name="is_first_sign_in">Отметье, если это первый вход в систему</string>
+    <string name="sign_in_error">Не удалось войти</string>
 </resources>

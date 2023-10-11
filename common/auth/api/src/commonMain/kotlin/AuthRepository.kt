@@ -1,10 +1,11 @@
 import models.LoginInfoItem
 import models.UserIdItem
-import models.UserIdResponse
 
 interface AuthRepository {
 
-    suspend fun register(position: String,fullName:String,phone:String): UserIdItem
+    suspend fun register(position: String, fullName: String, phone: String): UserIdItem
+
+    suspend fun login(position: String, fullName: String, phone: String): LoginInfoItem
 
     suspend fun isUserLoggedIn(): LoginInfoItem
 }

@@ -4,5 +4,5 @@ sealed class AuthAction {
 
     data class ShowErrorSnackBar(val message: String): AuthAction()
 
-    data object OpenMainFlow: AuthAction()
+    data class OpenMainFlow(val position: Position): AuthAction()
 }
