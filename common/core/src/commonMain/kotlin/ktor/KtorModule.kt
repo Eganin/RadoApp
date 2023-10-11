@@ -32,7 +32,11 @@ internal val ktorModule = DI.Module(name = "ktorModule") {
 
             defaultRequest {
                 url("https://eganinrado.serveo.net")
+                //url("http://127.0.0.1:8080")
                 header("Content-Type", "application/json; charset=UTF-8")
+                header("Access-Control-Allow-Origin","*")
+                header("Access-Control-Allow-Methods","*")
+                header("Access-Control-Allow-Headers","*")
             }
         }
     }

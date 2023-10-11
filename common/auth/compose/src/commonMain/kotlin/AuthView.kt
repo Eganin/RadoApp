@@ -111,12 +111,16 @@ fun AuthView(
                 ),
                 value = value,
                 onValueChange = {
-                    if (title == MainRes.string.name_title) {
-                        eventHandler.invoke(AuthEvent.FirstNameChanged(value = it))
-                    } else if (title == MainRes.string.family_title) {
-                        eventHandler.invoke(AuthEvent.SecondNameChanged(value = it))
-                    } else {
-                        eventHandler.invoke(AuthEvent.ThirdNameChanged(value = it))
+                    when (title) {
+                        MainRes.string.name_title -> {
+                            eventHandler.invoke(AuthEvent.FirstNameChanged(value = it))
+                        }
+                        MainRes.string.family_title -> {
+                            eventHandler.invoke(AuthEvent.SecondNameChanged(value = it))
+                        }
+                        else -> {
+                            eventHandler.invoke(AuthEvent.ThirdNameChanged(value = it))
+                        }
                     }
                 },
                 label = { Text(text = title, color = Theme.colors.primaryTextColor) },
