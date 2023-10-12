@@ -25,13 +25,12 @@ fun ActiveRequestsForDriverView(modifier: Modifier = Modifier) {
                 .aspectRatio(1.3f)
         )
         NewCalendarView(
-            onDayClick = { day ->
+            submitInfo = { date ->
 
             },
             modifier = Modifier
                 .padding(10.dp)
                 .fillMaxWidth()
-                //.aspectRatio(1.3f)
         )
     }
 }

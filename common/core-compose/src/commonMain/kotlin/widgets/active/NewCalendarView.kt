@@ -1,6 +1,7 @@
 package widgets.active
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -12,13 +13,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import io.github.aakira.napier.log
 import theme.Theme
 import time.convertDateTime
+import time.convertDayMonthYearToDateAndTimeToDateAnswer
 
 @Composable
 fun NewCalendarView(
     modifier: Modifier = Modifier,
-    onDayClick: (Int) -> Unit,
+    //Pair - date , time
+    submitInfo: (String) -> Unit,
     strokeWidth: Float = 15f
 ) {
     val datetime by remember {
@@ -37,11 +41,11 @@ fun NewCalendarView(
         mutableStateOf(datetime.third)
     }
 
-    val calendarInput by remember {
-        mutableStateOf(createCalendarList(daysInMonth = daysInMonth))
-    }
-
     val scope = rememberCoroutineScope()
+
+    var counterDays by remember {
+        mutableStateOf(0)
+    }
 
     Column(
         modifier = modifier,
@@ -54,10 +58,25 @@ fun NewCalendarView(
             fontSize = 30.sp
         )
         Column(modifier = Modifier.fillMaxWidth()) {
-            (1..5).forEach { row ->
+            ROWS_COUNT_IN_CALENDAR.forEach { row ->
                 Row(modifier = Modifier.fillMaxWidth()) {
-                    (1..7).forEach { column ->
-                        DayCell()
+                    COLUMNS_COUNT_IN_CALENDAR.forEach { column ->
+                        counterDays++
+                        if (counterDays <= daysInMonth) {
+                            DayCells(text = counterDays.toString()) { day ->
+                                submitInfo.invoke(
+                                    convertDayMonthYearToDateAndTimeToDateAnswer(
+                                        year = year,
+                                        month = month,
+                                        day = day
+                                    ).also {
+                                        log(tag = TAG) { it }
+                                    }
+                                )
+                            }
+                        } else {
+                            DayCells()
+                        }
                     }
                 }
             }
@@ -66,9 +85,11 @@ fun NewCalendarView(
 }
 
 @Composable
-private fun RowScope.DayCell() {
+private fun RowScope.DayCells(text: String = "", onDayClick: (Int) -> Unit = {}) {
     Card(
-        modifier = Modifier.aspectRatio(1f).weight(1f).padding(2.dp),
+        modifier = Modifier.aspectRatio(1f).weight(1f).padding(2.dp).clickable {
+            onDayClick.invoke(text.toInt())
+        },
         shape = RoundedCornerShape(4.dp),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 2.dp,
@@ -78,7 +99,7 @@ private fun RowScope.DayCell() {
         border = BorderStroke(2.dp, Theme.colors.highlightColor)
     ) {
         Text(
-            text = "1",
+            text = text,
             fontWeight = FontWeight.SemiBold,
             color = Theme.colors.primaryTextColor,
             fontSize = 16.sp,
@@ -87,3 +108,7 @@ private fun RowScope.DayCell() {
         )
     }
 }
+
+private val ROWS_COUNT_IN_CALENDAR = (1..5)
+private val COLUMNS_COUNT_IN_CALENDAR = (1..7)
+private const val TAG = "CalendarView"
