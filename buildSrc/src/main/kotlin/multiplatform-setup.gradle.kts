@@ -32,7 +32,7 @@ kotlin{
                 implementation(compose.foundation)
                 implementation(Dependencies.Other.Napier.napier)
                 implementation(Dependencies.Kotlin.Coroutines.core)
-                implementation("org.jetbrains.skiko:skiko:0.7.81")
+                implementation(Dependencies.Other.DateTime.kotlinxDatetime)
             }
         }
 

@@ -13,7 +13,7 @@ object Theme {
 @Composable
 fun AppTheme(content: @Composable () -> Unit) {
     CompositionLocalProvider(
-        LocalColorProvider provides if (!isSystemInDarkTheme()) lightPalette else darkPalette,
+        LocalColorProvider provides lightPalette,
         content = content
     )
 }

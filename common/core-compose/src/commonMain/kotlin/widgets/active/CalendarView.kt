@@ -27,15 +27,29 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
 import theme.Theme
+import time.convertDateTime
 
 @Composable
 fun CalendarView(
     modifier: Modifier = Modifier,
-    calendarInput: List<CalendarInput>,
     onDayClick: (Int) -> Unit,
-    strokeWidth: Float = 15f,
-    month: String
+    strokeWidth: Float = 15f
 ) {
+    val datetime by remember {
+        mutableStateOf(convertDateTime())
+    }
+
+    val month by remember {
+        mutableStateOf(datetime.second)
+    }
+
+    val year by remember {
+        mutableStateOf(datetime.first)
+    }
+
+    val daysInMonth by remember {
+        mutableStateOf(datetime.third)
+    }
 
     var canvasSize by remember {
         mutableStateOf(Size.Zero)
@@ -48,6 +62,10 @@ fun CalendarView(
         mutableStateOf(0f)
     }
 
+    val calendarInput by remember {
+        mutableStateOf(createCalendarList(daysInMonth = daysInMonth))
+    }
+
     val scope = rememberCoroutineScope()
 
     val textMeasurer = rememberTextMeasurer()
@@ -57,10 +75,10 @@ fun CalendarView(
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         Text(
-            text = month,
+            text = month + " "+ year,
             fontWeight = FontWeight.SemiBold,
             color = Theme.colors.primaryTextColor,
-            fontSize = 40.sp
+            fontSize = 30.sp
         )
         Canvas(
             modifier = Modifier
@@ -106,7 +124,7 @@ fun CalendarView(
             clipPath(path) {
                 drawCircle(
                     brush = Brush.radialGradient(
-                        listOf(orange.copy(0.8f), orange.copy(0.2f)),
+                        listOf(calendarColor.copy(0.8f), calendarColor.copy(0.2f)),
                         center = clickAnimationOffset,
                         radius = animationRadius + 0.1f
                     ),
@@ -116,7 +134,7 @@ fun CalendarView(
             }
 
             drawRoundRect(
-                orange,
+                calendarColor,
                 cornerRadius = CornerRadius(25f, 25f),
                 style = Stroke(
                     width = strokeWidth
@@ -125,7 +143,7 @@ fun CalendarView(
 
             for (i in 1 until CALENDAR_ROWS) {
                 drawLine(
-                    color = orange,
+                    color = calendarColor,
                     start = Offset(0f, ySteps * i),
                     end = Offset(canvasWidth, ySteps * i),
                     strokeWidth = strokeWidth
@@ -133,7 +151,7 @@ fun CalendarView(
             }
             for (i in 1 until CALENDAR_COLUMNS) {
                 drawLine(
-                    color = orange,
+                    color = calendarColor,
                     start = Offset(xSteps * i, 0f),
                     end = Offset(xSteps * i, canvasHeight),
                     strokeWidth = strokeWidth
@@ -158,11 +176,11 @@ fun CalendarView(
     }
 }
 
-val orange = Color(0xFFdb660d)
+val calendarColor = Color(0xFF6200EE)
 
-fun createCalendarList(): List<CalendarInput> {
+fun createCalendarList(daysInMonth:Int): List<CalendarInput> {
     val calendarInputs = mutableListOf<CalendarInput>()
-    for (i in 1..31) {
+    for (i in 1..daysInMonth) {
         calendarInputs.add(
             CalendarInput(
                 i,

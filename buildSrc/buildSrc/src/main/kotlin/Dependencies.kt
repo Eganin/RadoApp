@@ -142,5 +142,10 @@ object Dependencies {
             private const val version = "2.6.1"
             const val napier = "io.github.aakira:napier:$version"
         }
+
+        object DateTime {
+            private const val version = "0.4.1"
+            const val kotlinxDatetime = "org.jetbrains.kotlinx:kotlinx-datetime:$version"
+        }
     }
 }
