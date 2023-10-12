@@ -121,18 +121,18 @@ object Dependencies {
     }
 
     object Navigation {
-        object Voyager{
-            private const val version ="1.0.0-rc07"
-            const val navigator ="cafe.adriel.voyager:voyager-navigator:$version"
+        object Voyager {
+            private const val version = "1.0.0-rc07"
+            const val navigator = "cafe.adriel.voyager:voyager-navigator:$version"
             const val kodeinIntegration = "cafe.adriel.voyager:voyager-kodein:$version"
             const val bottomSheetNavigator = "cafe.adriel.voyager:voyager-bottom-sheet-navigator:$version"
             const val tabNavigator = "cafe.adriel.voyager:voyager-tab-navigator:$version"
             const val transitions = "cafe.adriel.voyager:voyager-transitions:$version"
         }
 
-        object MokoMVVM{
-            private const val version ="0.16.1"
-            const val core ="dev.icerock.moko:mvvm-compose:$version"
+        object MokoMVVM {
+            private const val version = "0.16.1"
+            const val core = "dev.icerock.moko:mvvm-compose:$version"
             const val flow = "dev.icerock.moko:mvvm-flow-compose:$version"
         }
     }
