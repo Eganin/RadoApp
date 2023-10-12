@@ -1,5 +1,8 @@
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
@@ -7,7 +10,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import theme.Theme
 import widgets.active.CalendarView
-import widgets.active.NewCalendarView
 
 @Composable
 fun ActiveRequestsForDriverView(modifier: Modifier = Modifier) {
@@ -16,15 +18,6 @@ fun ActiveRequestsForDriverView(modifier: Modifier = Modifier) {
             .verticalScroll(rememberScrollState())
     ) {
         CalendarView(
-            onDayClick = { day ->
-
-            },
-            modifier = Modifier
-                .padding(10.dp)
-                .fillMaxWidth()
-                .aspectRatio(1.3f)
-        )
-        NewCalendarView(
             submitInfo = { date ->
 
             },

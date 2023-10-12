@@ -1,39 +1,34 @@
 package widgets.active
 
-import androidx.compose.animation.core.animate
+import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.CornerRadius
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.graphics.drawscope.clipPath
-import androidx.compose.ui.graphics.nativeCanvas
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.text.drawText
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.rememberTextMeasurer
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import io.github.aakira.napier.log
 import kotlinx.coroutines.launch
 import theme.Theme
 import time.convertDateTime
+import time.convertDayMonthYearToDateAndTimeToDateAnswer
 
 @Composable
 fun CalendarView(
+    submitInfo: (String) -> Unit,
     modifier: Modifier = Modifier,
-    onDayClick: (Int) -> Unit,
-    strokeWidth: Float = 15f
+    animationDuration: Int = 100,
+    scaleDown: Float = 0.9f
 ) {
     val datetime by remember {
         mutableStateOf(convertDateTime())
@@ -51,24 +46,9 @@ fun CalendarView(
         mutableStateOf(datetime.third)
     }
 
-    var canvasSize by remember {
-        mutableStateOf(Size.Zero)
+    var counterDays by remember {
+        mutableStateOf(0)
     }
-    var clickAnimationOffset by remember {
-        mutableStateOf(Offset.Zero)
-    }
-
-    var animationRadius by remember {
-        mutableStateOf(0f)
-    }
-
-    val calendarInput by remember {
-        mutableStateOf(createCalendarList(daysInMonth = daysInMonth))
-    }
-
-    val scope = rememberCoroutineScope()
-
-    val textMeasurer = rememberTextMeasurer()
 
     Column(
         modifier = modifier,
@@ -80,125 +60,89 @@ fun CalendarView(
             color = Theme.colors.primaryTextColor,
             fontSize = 30.sp
         )
-        Canvas(
-            modifier = Modifier
-                .fillMaxSize()
-                .pointerInput(true) {
-                    detectTapGestures(
-                        onTap = { offset ->
-                            val column =
-                                (offset.x / canvasSize.width * CALENDAR_COLUMNS).toInt() + 1
-                            val row = (offset.y / canvasSize.height * CALENDAR_ROWS).toInt() + 1
-                            val day = column + (row - 1) * CALENDAR_COLUMNS
-                            if (day <= calendarInput.size) {
-                                onDayClick(day)
-                                clickAnimationOffset = offset
-                                scope.launch {
-                                    animate(0f, 225f, animationSpec = tween(300)) { value, _ ->
-                                        animationRadius = value
+        Column(modifier = Modifier.fillMaxWidth()) {
+            ROWS_COUNT_IN_CALENDAR.forEach { row ->
+                Row(modifier = Modifier.fillMaxWidth()) {
+                    COLUMNS_COUNT_IN_CALENDAR.forEach { column ->
+                        counterDays++
+                        if (counterDays <= daysInMonth) {
+                            DayCells(
+                                text = counterDays.toString(),
+                                animationDuration = animationDuration,
+                                scaleDown = scaleDown
+                            ) { day ->
+                                submitInfo.invoke(
+                                    convertDayMonthYearToDateAndTimeToDateAnswer(
+                                        year = year,
+                                        month = month,
+                                        day = day
+                                    ).also {
+                                        log(tag = TAG) { it }
                                     }
-                                }
+                                )
                             }
-
+                        } else {
+                            DayCells(
+                                animationDuration = animationDuration,
+                                scaleDown = scaleDown
+                            )
                         }
-                    )
-                }
-        ) {
-            val canvasHeight = size.height
-            val canvasWidth = size.width
-            canvasSize = Size(canvasWidth, canvasHeight)
-            val ySteps = canvasHeight / CALENDAR_ROWS
-            val xSteps = canvasWidth / CALENDAR_COLUMNS
-
-            val column = (clickAnimationOffset.x / canvasSize.width * CALENDAR_COLUMNS).toInt() + 1
-            val row = (clickAnimationOffset.y / canvasSize.height * CALENDAR_ROWS).toInt() + 1
-
-            val path = Path().apply {
-                moveTo((column - 1) * xSteps, (row - 1) * ySteps)
-                lineTo(column * xSteps, (row - 1) * ySteps)
-                lineTo(column * xSteps, row * ySteps)
-                lineTo((column - 1) * xSteps, row * ySteps)
-                close()
-            }
-
-            clipPath(path) {
-                drawCircle(
-                    brush = Brush.radialGradient(
-                        listOf(calendarColor.copy(0.8f), calendarColor.copy(0.2f)),
-                        center = clickAnimationOffset,
-                        radius = animationRadius + 0.1f
-                    ),
-                    radius = animationRadius + 0.1f,
-                    center = clickAnimationOffset
-                )
-            }
-
-            drawRoundRect(
-                calendarColor,
-                cornerRadius = CornerRadius(25f, 25f),
-                style = Stroke(
-                    width = strokeWidth
-                )
-            )
-
-            for (i in 1 until CALENDAR_ROWS) {
-                drawLine(
-                    color = calendarColor,
-                    start = Offset(0f, ySteps * i),
-                    end = Offset(canvasWidth, ySteps * i),
-                    strokeWidth = strokeWidth
-                )
-            }
-            for (i in 1 until CALENDAR_COLUMNS) {
-                drawLine(
-                    color = calendarColor,
-                    start = Offset(xSteps * i, 0f),
-                    end = Offset(xSteps * i, canvasHeight),
-                    strokeWidth = strokeWidth
-                )
-            }
-            val textHeight = 17.dp.toPx()
-            for (i in calendarInput.indices) {
-                val textPositionX = xSteps * (i % CALENDAR_COLUMNS) + strokeWidth
-                val textPositionY = (i / CALENDAR_COLUMNS) * ySteps + textHeight + strokeWidth / 2
-                drawContext.canvas.nativeCanvas.apply {
-                    drawText(
-                        textMeasurer = textMeasurer,
-                        text = "${i + 1}",
-                        topLeft = Offset(
-                            x = textPositionX,
-                            y = textPositionY
-                        )
-                    )
+                    }
                 }
             }
         }
     }
 }
 
-val calendarColor = Color(0xFF6200EE)
+@Composable
+private fun RowScope.DayCells(
+    text: String = "",
+    animationDuration: Int = 100,
+    scaleDown: Float = 0.9f,
+    onDayClick: (Int) -> Unit = {}
+) {
+    val interactionSource = MutableInteractionSource()
 
-fun createCalendarList(daysInMonth:Int): List<CalendarInput> {
-    val calendarInputs = mutableListOf<CalendarInput>()
-    for (i in 1..daysInMonth) {
-        calendarInputs.add(
-            CalendarInput(
-                i,
-                toDos = listOf(
-                    "Day $i:",
-                    "2 p.m. Buying groceries",
-                    "4 p.m. Meeting with Larissa"
-                )
-            )
+    val coroutineScope = rememberCoroutineScope()
+
+    val scale = remember {
+        Animatable(1f)
+    }
+
+    Card(
+        modifier = Modifier.scale(scale = scale.value).aspectRatio(1f).weight(1f).padding(2.dp)
+            .clickable(interactionSource = interactionSource, indication = null) {
+                coroutineScope.launch {
+                    scale.animateTo(
+                        scaleDown,
+                        animationSpec = tween(animationDuration),
+                    )
+                    scale.animateTo(
+                        1f,
+                        animationSpec = tween(animationDuration),
+                    )
+                }
+                if (text.isNotEmpty()) onDayClick.invoke(text.toInt())
+            },
+        shape = RoundedCornerShape(4.dp),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 2.dp,
+            focusedElevation = 4.dp,
+            pressedElevation = 6.dp
+        ),
+        border = BorderStroke(2.dp, Theme.colors.highlightColor)
+    ) {
+        Text(
+            text = text,
+            fontWeight = FontWeight.SemiBold,
+            color = Theme.colors.primaryTextColor,
+            fontSize = 16.sp,
+            modifier = Modifier.padding(4.dp),
+            textAlign = TextAlign.Center
         )
     }
-    return calendarInputs
 }
 
-data class CalendarInput(
-    val day: Int,
-    val toDos: List<String> = emptyList()
-)
-
-private const val CALENDAR_ROWS = 5
-private const val CALENDAR_COLUMNS = 7
+private val ROWS_COUNT_IN_CALENDAR = (1..5)
+private val COLUMNS_COUNT_IN_CALENDAR = (1..7)
+private const val TAG = "CalendarView"
