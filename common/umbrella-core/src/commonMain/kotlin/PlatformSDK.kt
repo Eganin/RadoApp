@@ -24,7 +24,8 @@ object PlatformSDK {
             importAll(
                 platformModule,
                 coreModule,
-                authModule
+                authModule,
+                driverActiveModule
             )
         }.direct)
 
