@@ -4,35 +4,26 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import models.DriverActiveEvent
 import models.DriverActiveViewState
-import models.SmallActiveRequestForDriverResponse
 import org.company.rado.core.MainRes
 import theme.Theme
 import widgets.active.ActiveRequestCells
 import widgets.active.CalendarView
 import widgets.common.ActionButton
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun ActiveRequestsForDriverView(
     state: DriverActiveViewState,
     modifier: Modifier = Modifier,
     eventHandler: (DriverActiveEvent) -> Unit
 ) {
-
-    val testRequests by mutableStateOf(
-        listOf(
-            SmallActiveRequestForDriverResponse(id = 1, mechanicName = "Александр Родионович", datetime = "16 октября"),
-            SmallActiveRequestForDriverResponse(id = 1, mechanicName = "Александр Родионович", datetime = "16 октября"),
-            SmallActiveRequestForDriverResponse(id = 1, mechanicName = "Александр Родионович", datetime = "16 октября")
-        )
-    )
 
     Column(
         modifier = modifier.fillMaxSize().background(color = Theme.colors.primaryBackground).padding(all = 16.dp)
@@ -56,8 +47,8 @@ fun ActiveRequestsForDriverView(
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        FlowColumn(modifier = Modifier.fillMaxSize()) {
-            testRequests.forEach {
+        if (state.errorTextForRequestList.isEmpty()) {
+            state.requests.forEach {
                 ActiveRequestCells(
                     firstText = it.datetime,
                     secondText = it.mechanicName,
@@ -65,6 +56,15 @@ fun ActiveRequestsForDriverView(
                     isReissueRequest = false
                 )
             }
+        } else {
+            Text(
+                modifier = Modifier.fillMaxSize(),
+                text = MainRes.string.requests_error_loading,
+                color = Theme.colors.primaryTextColor,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold
+            )
         }
+
     }
 }

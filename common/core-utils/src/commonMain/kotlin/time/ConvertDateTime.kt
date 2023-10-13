@@ -17,7 +17,7 @@ fun convertDayMonthYearToDateAndTimeToDateAnswer(year: Int, month: String, day: 
         MainRes.string.september_title -> 9
         MainRes.string.october_title -> 10
         MainRes.string.november_title -> 11
-        MainRes.string.december_title -> 12
+        else -> 12
     }
 
     return "${day}.${monthAsNumber}.${year}"
