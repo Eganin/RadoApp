@@ -11,4 +11,6 @@ sealed class DriverActiveEvent {
     data class NumberVehicleChanged(val value: String) : DriverActiveEvent()
 
     data class FaultDescriptionChanged(val value: String) : DriverActiveEvent()
+
+    data class ErrorTextForRequestListChanged(val value: String): DriverActiveEvent()
 }
