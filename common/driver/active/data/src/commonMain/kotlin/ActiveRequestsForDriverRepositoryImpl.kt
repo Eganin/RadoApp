@@ -1,4 +1,5 @@
 import ktor.KtorDriverActiveRemoteDataSource
+import ktor.models.KtorActiveRequest
 import ktor.models.KtorCreateRequest
 import models.ActiveRequestsForDriverItem
 import models.CreateRequestIdItem
@@ -35,10 +36,15 @@ class ActiveRequestsForDriverRepositoryImpl(
     }
 
     override suspend fun getRequestsByDate(date: String): ActiveRequestsForDriverItem {
-        TODO("Not yet implemented")
+        val activeRequestsForDriverItem = try{
+            val userInfo = localDataSource.fetchAllUserInfo()
+            val response =
+                remoteDataSource.fetchRequestsByDate(request = KtorActiveRequest(userId = userInfo.userId, date = date))
+            ActiveRequestsForDriverItem.Success(items = response)
+        }catch (e: Exception){
+            ActiveRequestsForDriverItem.Error(message = MainRes.string.requests_by_date_is_not_fetch)
+        }
+        return activeRequestsForDriverItem
     }
 
-    override suspend fun getRequests(): ActiveRequestsForDriverItem {
-        TODO("Not yet implemented")
-    }
 }

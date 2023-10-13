@@ -19,4 +19,5 @@
     <string name="sign_in_error">Не удалось войти</string>
     <string name="create_request_button_title">Создать завку на ремонт</string>
     <string name="request_is_not_create">Не удалось создать запрос</string>
+    <string name="requests_by_date_is_not_fetch">Не удалось получить заяявки</string>
 </resources>
