@@ -37,7 +37,7 @@ class ActiveRequestsForDriverRepositoryImpl(
 
     override suspend fun getRequestsByDate(date: String): ActiveRequestsForDriverItem {
         val activeRequestsForDriverItem = try{
-            val userInfo = localDataSource.fetchAllUserInfo()
+            val userInfo = localDataSource.fetchLoginUserInfo()
             val response =
                 remoteDataSource.fetchRequestsByDate(request = KtorActiveRequest(userId = userInfo.userId, date = date))
             ActiveRequestsForDriverItem.Success(items = response)

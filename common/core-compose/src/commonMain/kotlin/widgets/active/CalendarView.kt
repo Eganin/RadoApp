@@ -145,7 +145,7 @@ private fun RowScope.DayCells(
             focusedElevation = 4.dp,
             pressedElevation = 6.dp
         ),
-        border = BorderStroke(2.dp, Theme.colors.highlightColor),
+        border = BorderStroke(2.dp, Theme.colors.primaryTextColor),
         colors = CardDefaults.cardColors(containerColor = if (isCliked) Theme.colors.highlightColor else Theme.colors.primaryBackground)
     ) {
         Text(

@@ -43,7 +43,7 @@ val darkPalette = RadoColors(
     thirdTextColor = Color(0xFF0047FF),
     tagColor = Color(0xFF6200EE),
     tagTextColor = Color(0xFFFFFFFF),
-    bottomBarColor = Color(0xFF000000),
+    bottomBarColor = Color(0xFF282323),
     calendarColor = Color(0xFF000000),
     bottomCellsColor = Color(0xFFFFE8E8)
 )

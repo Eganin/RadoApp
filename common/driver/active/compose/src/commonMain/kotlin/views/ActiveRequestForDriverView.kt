@@ -1,3 +1,5 @@
+package views
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -28,7 +30,8 @@ fun ActiveRequestsForDriverView(
             },
             modifier = Modifier
                 .padding(12.dp)
-                .fillMaxWidth()
+                .heightIn(max=500.dp)
+                .widthIn(max=500.dp)
         )
 
         Spacer(modifier = Modifier.height(8.dp))
