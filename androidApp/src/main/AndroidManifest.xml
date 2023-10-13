@@ -5,11 +5,14 @@
 
     <application
             android:name=".RadoApp"
-            android:allowBackup="false"
-            android:supportsRtl="true"
+            android:icon="@android:drawable/ic_menu_compass"
+            android:label="Rado App"
             android:theme="@style/AppTheme">
         <activity
                 android:name="org.company.rado.android.MainActivity"
+                android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
+                android:launchMode="singleInstance"
+                android:windowSoftInputMode="adjustNothing"
                 android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

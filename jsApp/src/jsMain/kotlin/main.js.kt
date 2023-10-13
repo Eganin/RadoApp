@@ -1,3 +1,5 @@
+import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.window.CanvasBasedWindow
 import androidx.compose.ui.window.Window
 import cafe.adriel.voyager.navigator.Navigator
 import navigation.SplashScreen
@@ -6,9 +8,10 @@ import platform.Platform
 import platform.PlatformConfiguration
 import theme.AppTheme
 
+@OptIn(ExperimentalComposeUiApi::class)
 fun main() {
     onWasmReady {
-        Window("Rado") {
+        CanvasBasedWindow("Rado") {
             PlatformSDK.init(
                 platformConfiguration= PlatformConfiguration()
             )
