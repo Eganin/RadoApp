@@ -1,22 +1,23 @@
 package time
 
 import kotlinx.datetime.*
+import org.company.rado.core.MainRes
 
 // returns date as a string
 fun convertDayMonthYearToDateAndTimeToDateAnswer(year: Int, month: String, day: Int): String {
     val monthAsNumber = when (month) {
-        "Январь" -> "01"
-        "Февраль" -> "02"
-        "Март" -> "03"
-        "Апрель" -> "04"
-        "Май" -> "05"
-        "Июнь" -> "06"
-        "Июль" -> "07"
-        "Август" -> "08"
-        "Сентябрь" -> "09"
-        "Октябрь" -> "10"
-        "Ноябрь" -> "11"
-        else -> "12"
+        MainRes.string.january_title -> 1
+        MainRes.string.february_title -> 2
+        MainRes.string.march_title -> 3
+        MainRes.string.april_title -> 4
+        MainRes.string.may_title -> 5
+        MainRes.string.june_title -> 6
+        MainRes.string.july_title -> 7
+        MainRes.string.august_title -> 8
+        MainRes.string.september_title -> 9
+        MainRes.string.october_title -> 10
+        MainRes.string.november_title -> 11
+        MainRes.string.december_title -> 12
     }
 
     return "${day}.${monthAsNumber}.${year}"
@@ -29,19 +30,18 @@ fun convertDateTime(): Triple<Int, String, Int> {
 
     val year = datetimeInSystemZone.year
     val month = when (datetimeInSystemZone.month.name) {
-        "JANUARY" -> "Январь"
-        "FEBRUARY" -> "Февраль"
-        "MARCH" -> "Март"
-        "APRIL" -> "Апрель"
-        "MAY" -> "Май"
-        "JUNE" -> "Июнь"
-        "JULY" -> "Июль"
-        "AUGUST" -> "Август"
-        "SEPTEMBER" -> "Сентябрь"
-        "OCTOBER" -> "Октябрь"
-        "NOVEMBER" -> "Ноябрь"
-        "DECEMBER" -> "Декабрь"
-        else -> ""
+        "JANUARY" -> MainRes.string.january_title
+        "FEBRUARY" -> MainRes.string.february_title
+        "MARCH" -> MainRes.string.march_title
+        "APRIL" -> MainRes.string.april_title
+        "MAY" -> MainRes.string.may_title
+        "JUNE" -> MainRes.string.june_title
+        "JULY" -> MainRes.string.july_title
+        "AUGUST" -> MainRes.string.august_title
+        "SEPTEMBER" -> MainRes.string.september_title
+        "OCTOBER" -> MainRes.string.october_title
+        "NOVEMBER" -> MainRes.string.november_title
+        else -> MainRes.string.december_title
     }
     val countDaysInMonth = findCountDaysInMonth(x = datetimeInSystemZone.monthNumber)
 

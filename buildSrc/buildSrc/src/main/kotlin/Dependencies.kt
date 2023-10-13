@@ -120,6 +120,13 @@ object Dependencies {
         }
     }
 
+    object UI {
+        object FlowLayout {
+            private const val version = "0.33.2-alpha"
+            const val core = "com.google.accompanist:accompanist-flowlayout:$version"
+        }
+    }
+
     object Navigation {
         object Voyager {
             private const val version = "1.0.0-rc07"

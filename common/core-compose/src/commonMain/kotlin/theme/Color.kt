@@ -34,7 +34,7 @@ val lightPalette = RadoColors(
 )
 
 val darkPalette = RadoColors(
-    primaryBackground = Color(0xFF282323),
+    primaryBackground = Color(0xFF24292E),
     primaryAction = Color(0xFFF8D247),
     primaryTextColor = Color(0xFFFFFFFF),
     hintTextColor = Color(0xFFFFE8E8),
@@ -43,7 +43,7 @@ val darkPalette = RadoColors(
     thirdTextColor = Color(0xFF0047FF),
     tagColor = Color(0xFF6200EE),
     tagTextColor = Color(0xFFFFFFFF),
-    bottomBarColor = Color(0xFF282323),
+    bottomBarColor = Color(0xFF24292E),
     calendarColor = Color(0xFF000000),
     bottomCellsColor = Color(0xFFFFE8E8)
 )

@@ -11,6 +11,7 @@ kotlin{
                 implementation(project(":common:driver:active:api"))
                 implementation(project(":common:auth:data"))
                 implementation(project(":common:core"))
+                implementation(project(":common:core-utils"))
 
                 implementation(Dependencies.Kodein.core)
             }

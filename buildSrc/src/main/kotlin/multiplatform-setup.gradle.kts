@@ -33,6 +33,7 @@ kotlin{
                 implementation(Dependencies.Other.Napier.napier)
                 implementation(Dependencies.Kotlin.Coroutines.core)
                 implementation(Dependencies.Other.DateTime.kotlinxDatetime)
+                implementation(Dependencies.UI.FlowLayout.core)
             }
         }
 
