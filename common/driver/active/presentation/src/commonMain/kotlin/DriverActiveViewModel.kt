@@ -2,6 +2,7 @@ import di.Inject
 import io.github.aakira.napier.log
 import kotlinx.coroutines.*
 import models.*
+import org.company.rado.core.MainRes
 import other.BaseSharedViewModel
 
 class DriverActiveViewModel : BaseSharedViewModel<DriverActiveViewState, DriverActiveAction, DriverActiveEvent>(
@@ -22,6 +23,7 @@ class DriverActiveViewModel : BaseSharedViewModel<DriverActiveViewState, DriverA
     override fun obtainEvent(viewEvent: DriverActiveEvent) {
         when (viewEvent) {
             is DriverActiveEvent.CreateRequest -> createRequest()
+            is DriverActiveEvent.OpenDialogCreateRequest -> openCreateRequestScreen()
             is DriverActiveEvent.SelectedDateChanged -> getActiveRequestsByDate(date = viewEvent.value)
             is DriverActiveEvent.SelectedTypeVehicleChanged -> obtainSelectedTypeVehicleChange(typeVehicle = viewEvent.value)
             is DriverActiveEvent.NumberVehicleChanged -> obtainNumberVehicleChange(numberVehicle = viewEvent.value)
@@ -30,19 +32,28 @@ class DriverActiveViewModel : BaseSharedViewModel<DriverActiveViewState, DriverA
         }
     }
 
+    private fun openCreateRequestScreen() {
+        log(tag = TAG) { "Navigate to create request screen" }
+        viewAction = DriverActiveAction.OpenCreateRequestDialog
+    }
+
     private fun createRequest() {
         coroutineScope.launch {
-            val createRequestIdItem = activeRequestsRepository.createRequest(
-                typeVehicle = viewState.selectedVehicleType.nameVehicleType,
-                numberVehicle = viewState.numberVehicle,
-                faultDescription = viewState.faultDescription
-            )
-            if (createRequestIdItem is CreateRequestIdItem.Success) {
-                log(tag = TAG) { "Create request is success" }
-                viewAction = DriverActiveAction.ShowSuccessCreateRequestDialog
-            } else if (createRequestIdItem is CreateRequestIdItem.Error) {
-                log(tag = TAG) { "Create request is failure" }
-                viewAction = DriverActiveAction.ShowErrorSnackBar(message = createRequestIdItem.message)
+            if (viewState.numberVehicle.isNotEmpty()) {
+                val createRequestIdItem = activeRequestsRepository.createRequest(
+                    typeVehicle = viewState.selectedVehicleType.nameVehicleType,
+                    numberVehicle = viewState.numberVehicle,
+                    faultDescription = viewState.faultDescription
+                )
+                if (createRequestIdItem is CreateRequestIdItem.Success) {
+                    log(tag = TAG) { "Create request is success" }
+                    viewAction = DriverActiveAction.ShowSuccessCreateRequestDialog
+                } else if (createRequestIdItem is CreateRequestIdItem.Error) {
+                    log(tag = TAG) { "Create request is failure" }
+                    viewAction = DriverActiveAction.ShowErrorSnackBar(message = createRequestIdItem.message)
+                }
+            } else {
+                viewAction = DriverActiveAction.ShowErrorSnackBar(message = MainRes.string.number_vehicle_is_empty)
             }
         }
     }

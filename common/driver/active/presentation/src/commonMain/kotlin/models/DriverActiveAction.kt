@@ -6,5 +6,5 @@ sealed class DriverActiveAction {
 
     data object ShowSuccessCreateRequestDialog : DriverActiveAction()
 
-    data object OpenCreateRequestScreen : DriverActiveAction()
+    data object OpenCreateRequestDialog : DriverActiveAction()
 }

@@ -6,6 +6,8 @@ sealed class DriverActiveEvent {
 
     data object CreateRequest : DriverActiveEvent()
 
+    data object OpenDialogCreateRequest : DriverActiveEvent()
+
     data class SelectedTypeVehicleChanged(val value: VehicleType) : DriverActiveEvent()
 
     data class NumberVehicleChanged(val value: String) : DriverActiveEvent()
