@@ -18,4 +18,5 @@
     <string name="is_first_sign_in">Отметье, если это первый вход в систему</string>
     <string name="sign_in_error">Не удалось войти</string>
     <string name="create_request_button_title">Создать завку на ремонт</string>
+    <string name="request_is_not_create">Не удалось создать запрос</string>
 </resources>

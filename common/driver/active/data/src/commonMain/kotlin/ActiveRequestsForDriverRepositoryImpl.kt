@@ -1,16 +1,37 @@
+import ktor.KtorDriverActiveRemoteDataSource
+import ktor.models.KtorCreateRequest
 import models.ActiveRequestsForDriverItem
 import models.CreateRequestIdItem
+import models.CreateRequestIdResponse
+import org.company.rado.core.MainRes
+import other.Mapper
 import settings.SettingsAuthDataSource
 
 class ActiveRequestsForDriverRepositoryImpl(
-    private val localDataSource : SettingsAuthDataSource
-): ActiveRequestsForDriverRepository {
+    private val localDataSource: SettingsAuthDataSource,
+    private val remoteDataSource: KtorDriverActiveRemoteDataSource,
+    private val createRequestMapper: Mapper<CreateRequestIdResponse, CreateRequestIdItem>
+) : ActiveRequestsForDriverRepository {
     override suspend fun createRequest(
         typeVehicle: String,
         numberVehicle: String,
         faultDescription: String
     ): CreateRequestIdItem {
-        TODO("Not yet implemented")
+        val createRequestItem = try {
+            val userInfo = localDataSource.fetchLoginUserInfo()
+            val response = remoteDataSource.createRequest(
+                request = KtorCreateRequest(
+                    driverUsername = userInfo.fullName,
+                    typeVehicle = typeVehicle,
+                    numberVehicle = numberVehicle,
+                    faultDescription = faultDescription
+                )
+            )
+            createRequestMapper.map(source = response)
+        } catch (e: Exception) {
+            CreateRequestIdItem.Error(message = MainRes.string.request_is_not_create)
+        }
+        return createRequestItem
     }
 
     override suspend fun getRequestsByDate(date: String): ActiveRequestsForDriverItem {

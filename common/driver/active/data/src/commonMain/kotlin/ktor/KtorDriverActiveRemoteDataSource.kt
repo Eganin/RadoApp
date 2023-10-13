@@ -6,13 +6,14 @@ import io.ktor.client.request.*
 import io.ktor.http.*
 import ktor.models.KtorActiveRequest
 import ktor.models.KtorCreateRequest
-import models.CreateRequestIdItem
+import models.CreateRequestIdResponse
+import models.SmallActiveRequestForDriverResponse
 
 class KtorDriverActiveRemoteDataSource(
     private val httpClient: HttpClient
 ) {
 
-    suspend fun createRequest(request: KtorCreateRequest): CreateRequestIdItem {
+    suspend fun createRequest(request: KtorCreateRequest): CreateRequestIdResponse {
         return httpClient.post {
             url {
                 path("request/create")
@@ -21,7 +22,7 @@ class KtorDriverActiveRemoteDataSource(
         }.body()
     }
 
-    suspend fun fetchRequestsByDate(request: KtorActiveRequest) {
+    suspend fun fetchRequestsByDate(request: KtorActiveRequest) : List<SmallActiveRequestForDriverResponse>{
         return httpClient.post {
             url {
                 path("request/active/driver")
