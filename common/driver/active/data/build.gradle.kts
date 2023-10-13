@@ -9,6 +9,7 @@ kotlin{
         commonMain{
             dependencies{
                 implementation(project(":common:driver:active:api"))
+                implementation(project(":common:auth:data"))
                 implementation(project(":common:core"))
 
                 implementation(Dependencies.Kodein.core)
