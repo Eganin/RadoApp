@@ -29,12 +29,13 @@ class DriverActiveViewModel : BaseSharedViewModel<DriverActiveViewState, DriverA
             is DriverActiveEvent.NumberVehicleChanged -> obtainNumberVehicleChange(numberVehicle = viewEvent.value)
             is DriverActiveEvent.FaultDescriptionChanged -> obtainFaultDescriptionChange(faultDescription = viewEvent.value)
             is DriverActiveEvent.ErrorTextForRequestListChanged -> obtainErrorTextForRequestListChange(errorMessage = viewEvent.value)
+            is DriverActiveEvent.CloseCreateDialog -> obtainCloseCreateDialogChange(isCloseDialog = viewEvent.value)
         }
     }
 
     private fun openCreateRequestScreen() {
         log(tag = TAG) { "Navigate to create request screen" }
-        viewAction = DriverActiveAction.OpenCreateRequestDialog
+        viewState = viewState.copy(showCreateDialog = !viewState.showCreateDialog)
     }
 
     private fun createRequest() {
@@ -47,7 +48,8 @@ class DriverActiveViewModel : BaseSharedViewModel<DriverActiveViewState, DriverA
                 )
                 if (createRequestIdItem is CreateRequestIdItem.Success) {
                     log(tag = TAG) { "Create request is success" }
-                    viewAction = DriverActiveAction.ShowSuccessCreateRequestDialog
+                    viewState =
+                        viewState.copy(showSuccessCreateRequestDialog = !viewState.showSuccessCreateRequestDialog)
                 } else if (createRequestIdItem is CreateRequestIdItem.Error) {
                     log(tag = TAG) { "Create request is failure" }
                     viewAction = DriverActiveAction.ShowErrorSnackBar(message = createRequestIdItem.message)
@@ -71,6 +73,13 @@ class DriverActiveViewModel : BaseSharedViewModel<DriverActiveViewState, DriverA
                 obtainEvent(viewEvent = DriverActiveEvent.ErrorTextForRequestListChanged(value = activeRequestsForDriverItem.message))
             }
         }
+    }
+
+    private fun obtainCloseCreateDialogChange(isCloseDialog: Boolean) {
+        log(tag=TAG) { "CLOSE DIALOG" }
+        viewState = viewState.copy(
+            showCreateDialog = isCloseDialog
+        )
     }
 
     private fun obtainErrorTextForRequestListChange(errorMessage: String) {

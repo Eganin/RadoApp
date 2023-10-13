@@ -1,6 +1,5 @@
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.window.CanvasBasedWindow
-import androidx.compose.ui.window.Window
 import cafe.adriel.voyager.navigator.Navigator
 import navigation.SplashScreen
 import org.jetbrains.skiko.wasm.onWasmReady
@@ -13,9 +12,9 @@ fun main() {
     onWasmReady {
         CanvasBasedWindow("Rado") {
             PlatformSDK.init(
-                platformConfiguration= PlatformConfiguration()
+                platformConfiguration = PlatformConfiguration()
             )
-            AppTheme{
+            AppTheme {
                 Navigator(SplashScreen(platform = Platform.Web))
             }
         }

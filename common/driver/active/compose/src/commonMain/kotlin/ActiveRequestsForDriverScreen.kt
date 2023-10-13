@@ -43,9 +43,6 @@ object ActiveRequestsForDriverScreen : Screen {
                     snackBarHostState.showSnackbar(message = snackBarAction.message)
                 }
             }
-
-            is DriverActiveAction.ShowSuccessCreateRequestDialog -> {}
-            is DriverActiveAction.OpenCreateRequestDialog -> {}
             null -> {}
         }
     }

@@ -6,7 +6,9 @@ data class DriverActiveViewState(
     val selectedVehicleType: VehicleType = VehicleType.Tractor,
     val numberVehicle: String = "",
     val faultDescription: String = "",
-    val errorTextForRequestList : String =""
+    val errorTextForRequestList : String ="",
+    val showCreateDialog : Boolean = false,
+    val showSuccessCreateRequestDialog : Boolean= false
 )
 
 enum class VehicleType(val nameVehicleType: String) {

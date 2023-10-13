@@ -15,4 +15,6 @@ sealed class DriverActiveEvent {
     data class FaultDescriptionChanged(val value: String) : DriverActiveEvent()
 
     data class ErrorTextForRequestListChanged(val value: String): DriverActiveEvent()
+
+    data class CloseCreateDialog(val value : Boolean): DriverActiveEvent()
 }
