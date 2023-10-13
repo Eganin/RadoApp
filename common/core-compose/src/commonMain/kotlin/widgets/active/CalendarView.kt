@@ -50,42 +50,52 @@ fun CalendarView(
         mutableStateOf(0)
     }
 
-    Column(
+    Card(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(10.dp)
+        shape = RoundedCornerShape(4.dp),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 12.dp
+        ),
+        colors = CardDefaults.cardColors(containerColor = Theme.colors.primaryBackground),
+        border = BorderStroke(1.dp, Theme.colors.primaryTextColor)
     ) {
-        Text(
-            text = "$month $year",
-            fontWeight = FontWeight.SemiBold,
-            color = Theme.colors.primaryTextColor,
-            fontSize = 30.sp
-        )
-        Column(modifier = Modifier.fillMaxWidth()) {
-            ROWS_COUNT_IN_CALENDAR.forEach { row ->
-                Row(modifier = Modifier.fillMaxWidth()) {
-                    COLUMNS_COUNT_IN_CALENDAR.forEach { column ->
-                        counterDays++
-                        if (counterDays <= daysInMonth) {
-                            DayCells(
-                                text = counterDays.toString(),
-                                animationDuration = animationDuration,
-                                scaleDown = scaleDown
-                            ) { day ->
-                                submitInfo.invoke(
-                                    convertDayMonthYearToDateAndTimeToDateAnswer(
-                                        year = year,
-                                        month = month,
-                                        day = day
-                                    ).also {
-                                        log(tag = TAG) { it }
-                                    }
+        Column(
+            modifier=Modifier.padding(12.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            Text(
+                text = "$month $year",
+                fontWeight = FontWeight.SemiBold,
+                color = Theme.colors.primaryTextColor,
+                fontSize = 30.sp
+            )
+            Column(modifier = Modifier.fillMaxWidth()) {
+                ROWS_COUNT_IN_CALENDAR.forEach { row ->
+                    Row(modifier = Modifier.fillMaxWidth()) {
+                        COLUMNS_COUNT_IN_CALENDAR.forEach { column ->
+                            counterDays++
+                            if (counterDays <= daysInMonth) {
+                                DayCells(
+                                    text = counterDays.toString(),
+                                    animationDuration = animationDuration,
+                                    scaleDown = scaleDown
+                                ) { day ->
+                                    submitInfo.invoke(
+                                        convertDayMonthYearToDateAndTimeToDateAnswer(
+                                            year = year,
+                                            month = month,
+                                            day = day
+                                        ).also {
+                                            log(tag = TAG) { it }
+                                        }
+                                    )
+                                }
+                            } else {
+                                DayCells(
+                                    animationDuration = animationDuration,
+                                    scaleDown = scaleDown
                                 )
                             }
-                        } else {
-                            DayCells(
-                                animationDuration = animationDuration,
-                                scaleDown = scaleDown
-                            )
                         }
                     }
                 }
@@ -109,9 +119,12 @@ private fun RowScope.DayCells(
         Animatable(1f)
     }
 
+    var isCliked by remember { mutableStateOf(false) }
+
     Card(
         modifier = Modifier.scale(scale = scale.value).aspectRatio(1f).weight(1f).padding(2.dp)
             .clickable(interactionSource = interactionSource, indication = null) {
+                //launch animate
                 coroutineScope.launch {
                     scale.animateTo(
                         scaleDown,
@@ -122,6 +135,8 @@ private fun RowScope.DayCells(
                         animationSpec = tween(animationDuration),
                     )
                 }
+                isCliked = !isCliked
+                // invoke submit data
                 if (text.isNotEmpty()) onDayClick.invoke(text.toInt())
             },
         shape = RoundedCornerShape(4.dp),
@@ -130,7 +145,8 @@ private fun RowScope.DayCells(
             focusedElevation = 4.dp,
             pressedElevation = 6.dp
         ),
-        border = BorderStroke(2.dp, Theme.colors.highlightColor)
+        border = BorderStroke(2.dp, Theme.colors.highlightColor),
+        colors = CardDefaults.cardColors(containerColor = if (isCliked) Theme.colors.highlightColor else Theme.colors.primaryBackground)
     ) {
         Text(
             text = text,

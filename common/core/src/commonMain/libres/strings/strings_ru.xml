@@ -17,4 +17,5 @@
     <string name="sign_in_button_title">Вход</string>
     <string name="is_first_sign_in">Отметье, если это первый вход в систему</string>
     <string name="sign_in_error">Не удалось войти</string>
+    <string name="create_request_button_title">Создать завку</string>
 </resources>

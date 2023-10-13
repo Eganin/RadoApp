@@ -24,6 +24,7 @@ import models.AuthEvent
 import models.AuthViewState
 import org.company.rado.core.MainRes
 import theme.Theme
+import widgets.common.ActionButton
 
 @Composable
 fun AuthView(
@@ -159,18 +160,8 @@ fun AuthView(
         //register/login button
         Spacer(modifier = Modifier.height(64.dp))
 
-        Button(
-            onClick = { eventHandler.invoke(AuthEvent.RegisterClick) },
-            modifier = Modifier.fillMaxWidth(),
-            colors = ButtonDefaults.buttonColors(containerColor = Theme.colors.primaryAction),
-            shape = RoundedCornerShape(size = 16.dp)
-        ) {
-            Text(
-                text = MainRes.string.sign_in_button_title,
-                fontSize = 24.sp,
-                color = Theme.colors.secondaryTextColor,
-                modifier = Modifier.padding(8.dp)
-            )
-        }
+        ActionButton(text = MainRes.string.sign_in_button_title, onClick = {
+            eventHandler.invoke(AuthEvent.RegisterClick)
+        })
     }
 }
