@@ -6,7 +6,6 @@ import io.ktor.client.plugins.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.plugins.logging.*
 import io.ktor.client.request.*
-import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import org.kodein.di.DI
 import org.kodein.di.bind
@@ -32,7 +31,7 @@ internal val ktorModule = DI.Module(name = "ktorModule") {
             }
 
             defaultRequest {
-                url("https://eganinrado.serveo.net")
+                url("https://radoapp.serveo.net")
                 //url("http://127.0.0.1:8080")
                 header("Content-Type", "application/json; charset=UTF-8")
             }
