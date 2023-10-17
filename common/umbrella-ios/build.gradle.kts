@@ -7,6 +7,7 @@ plugins {
 version = "0.0.1"
 
 kotlin {
+    jvmToolchain(11)
     cocoapods {
         summary = "Rado iOS SDK"
         homepage = "https://google.com"
@@ -34,5 +35,9 @@ kotlin {
                 api(project(":common:umbrella-compose"))
             }
         }
+    }
+
+    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+        kotlinOptions.jvmTarget = "11"
     }
 }
