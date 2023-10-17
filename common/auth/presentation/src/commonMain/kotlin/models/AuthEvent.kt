@@ -23,4 +23,8 @@ sealed class AuthEvent {
     data class IsFirstSignUpChanged(val value: Boolean): AuthEvent()
 
     data object RegisterClick : AuthEvent()
+
+    data object StartLoading : AuthEvent()
+
+    data object EndLoading : AuthEvent()
 }
