@@ -17,11 +17,21 @@ kotlin{
 
     jvm("desktop")
 
-    js(IR) {
+    js {
         browser()
+        binaries.executable()
     }
 
-    ios()
+    listOf(
+        iosX64(),
+        iosArm64(),
+        iosSimulatorArm64()
+    ).forEach {
+        it.binaries.framework {
+            baseName = "ComposeApp"
+            isStatic = true
+        }
+    }
 
     sourceSets {
         named("commonMain") {
@@ -57,4 +67,9 @@ kotlin{
             }
         }
     }
+
+    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+        kotlinOptions.jvmTarget = "11"
+    }
+
 }
