@@ -67,9 +67,9 @@ fun ActiveRequestsForDriverView(
         }
 
         if (state.showCreateDialog) {
-            CustomAlertDialog(
-                onDismiss = { eventHandler.invoke(DriverActiveEvent.CloseCreateDialog(value = state.showCreateDialog)) },
-                onExit = { eventHandler.invoke(DriverActiveEvent.CloseCreateDialog(value = state.showCreateDialog)) })
+            CreateRequestAlertDialog(
+                onDismiss = { eventHandler.invoke(DriverActiveEvent.CloseCreateDialog(value = !state.showCreateDialog)) },
+                onExit = { eventHandler.invoke(DriverActiveEvent.CloseCreateDialog(value = !state.showCreateDialog)) })
         }
     }
 }

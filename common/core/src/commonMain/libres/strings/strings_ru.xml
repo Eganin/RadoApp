@@ -34,5 +34,6 @@
     <string name="october_title">Октябрь</string>
     <string name="november_title">Ноябрь</string>
     <string name="december_title">Декабрь</string>
-    <string name="requests_error_loading">Произошла ошибка загрузки заявок</string>
+    <string name="requests_error_loading">Произошла ошибка при загрузке заявок</string>
+    <string name="back_title">Назад</string>
 </resources>
