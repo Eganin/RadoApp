@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
     spec.name                     = 'umbrella_ios'
-    spec.version                  = '0.0.1'
+    spec.version                  = '0.0.3'
     spec.homepage                 = 'https://google.com'
     spec.source                   = { :http=> ''}
     spec.authors                  = ''

@@ -4,7 +4,7 @@ plugins {
     kotlin("native.cocoapods")
 }
 
-version = "0.0.1"
+version = "0.0.3"
 
 kotlin {
     jvmToolchain(11)

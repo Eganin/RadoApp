@@ -1,5 +1,5 @@
 PODS:
-  - umbrella_ios (0.0.1)
+  - umbrella_ios (0.0.3)
 
 DEPENDENCIES:
   - umbrella_ios (from `../common/umbrella-ios`)
@@ -9,7 +9,7 @@ EXTERNAL SOURCES:
     :path: "../common/umbrella-ios"
 
 SPEC CHECKSUMS:
-  umbrella_ios: 85654c378e2db017f8491de9db6ca6874883b159
+  umbrella_ios: 6bb2762c3700fc9eec103e6e15ecd5ab2dfaca8d
 
 PODFILE CHECKSUM: 4dc55551e18d10ef6f379f8c06e54c385bd651c6
 
