@@ -10,4 +10,4 @@ expect class PlatformConfiguration{
     val platform: Platform
 }
 
-val localPlatform= staticCompositionLocalOf<Platform> { error("No default platform") }
+val LocalPlatform= staticCompositionLocalOf<Platform> { error("No default platform") }

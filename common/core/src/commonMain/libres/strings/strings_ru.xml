@@ -36,4 +36,7 @@
     <string name="december_title">Декабрь</string>
     <string name="requests_error_loading">Произошла ошибка при загрузке заявок</string>
     <string name="back_title">Назад</string>
+    <string name="choose_machine_title">Выберите тип транспортного средства:</string>
+    <string name="trailer_title">Прицеп</string>
+    <string name="tractor_title">Тягач</string>
 </resources>

@@ -7,7 +7,7 @@ import theme.AppTheme
 
 @Composable
 fun App(platform: Platform){
-    AppTheme{
-        Navigator(SplashScreen(platform= platform))
+    AppTheme(platform=platform){
+        Navigator(SplashScreen)
     }
 }
