@@ -28,14 +28,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.seiko.imageloader.rememberImagePainter
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.Check
-import io.github.skeptick.libres.compose.painterResource
-import io.github.skeptick.libres.images.Image
 import theme.Theme
 
 @Composable
-fun ImageMachineCells(imageSize: Dp, title: String, modifier: Modifier = Modifier) {
+fun ImageMachineCells(
+    imageSize: Dp,
+    imageLink: String,
+    title: String,
+    modifier: Modifier = Modifier
+) {
 
     var isExpanded by remember { mutableStateOf(false) }
     val sizeExpansion = 10.dp
@@ -49,12 +53,12 @@ fun ImageMachineCells(imageSize: Dp, title: String, modifier: Modifier = Modifie
             }.animateContentSize().size(if (isExpanded) imageSize + sizeExpansion else imageSize)
                 .aspectRatio(1f).clip(shape = RoundedCornerShape(size = 10.dp))
         ) {
-//            Image(
-//                painter = painterResource(image = image),
-//                contentDescription = null,
-//                contentScale = ContentScale.Crop,
-//                modifier = Modifier.fillMaxSize()
-//            )
+            Image(
+                painter = rememberImagePainter(url = imageLink),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxSize()
+            )
             if (isExpanded) {
                 Icon(
                     imageVector = FeatherIcons.Check,

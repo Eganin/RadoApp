@@ -42,7 +42,7 @@ fun CreateRequestAlertDialog(
     val isLargePlatform =
         LocalPlatform.current == Platform.Web || LocalPlatform.current == Platform.Desktop
     val imageSize =
-        if (isLargePlatform) (LocalDensity.current.density.dp * 120) else (LocalDensity.current.density.dp * 25)
+        if (isLargePlatform) (LocalDensity.current.density.dp * 70) else (LocalDensity.current.density.dp * 25)
 
     Dialog(
         onDismissRequest = onDismiss,
@@ -91,14 +91,14 @@ fun CreateRequestAlertDialog(
 
                     ImageMachineCells(
                         imageSize = imageSize,
-                        //image = MainRes.image.tractor,
-                        title = MainRes.string.tractor_title
+                        title = MainRes.string.tractor_title,
+                        imageLink = "https://radoapp.serveo.net/resources/tractor.jpg"
                     )
 
                     ImageMachineCells(
                         imageSize = imageSize,
-                        //image = MainRes.image.trailer,
-                        title = MainRes.string.trailer_title
+                        title = MainRes.string.trailer_title,
+                        imageLink = "https://radoapp.serveo.net/resources/trailer.jpg"
                     )
                 }
             }

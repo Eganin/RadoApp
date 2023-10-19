@@ -1,8 +1,14 @@
 import di.Inject
 import io.github.aakira.napier.log
-import kotlinx.coroutines.*
-import models.*
-import org.company.rado.core.MainRes
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
+import models.ActiveRequestsForDriverItem
+import models.DriverActiveAction
+import models.DriverActiveEvent
+import models.DriverActiveViewState
 import other.BaseSharedViewModel
 
 class DriverActiveViewModel : BaseSharedViewModel<DriverActiveViewState, DriverActiveAction, DriverActiveEvent>(
@@ -22,12 +28,8 @@ class DriverActiveViewModel : BaseSharedViewModel<DriverActiveViewState, DriverA
 
     override fun obtainEvent(viewEvent: DriverActiveEvent) {
         when (viewEvent) {
-            is DriverActiveEvent.CreateRequest -> createRequest()
             is DriverActiveEvent.OpenDialogCreateRequest -> openCreateRequestScreen()
             is DriverActiveEvent.SelectedDateChanged -> getActiveRequestsByDate(date = viewEvent.value)
-            is DriverActiveEvent.SelectedTypeVehicleChanged -> obtainSelectedTypeVehicleChange(typeVehicle = viewEvent.value)
-            is DriverActiveEvent.NumberVehicleChanged -> obtainNumberVehicleChange(numberVehicle = viewEvent.value)
-            is DriverActiveEvent.FaultDescriptionChanged -> obtainFaultDescriptionChange(faultDescription = viewEvent.value)
             is DriverActiveEvent.ErrorTextForRequestListChanged -> obtainErrorTextForRequestListChange(errorMessage = viewEvent.value)
             is DriverActiveEvent.CloseCreateDialog -> obtainCloseCreateDialogChange(isCloseDialog = viewEvent.value)
         }
@@ -36,28 +38,6 @@ class DriverActiveViewModel : BaseSharedViewModel<DriverActiveViewState, DriverA
     private fun openCreateRequestScreen() {
         log(tag = TAG) { "Navigate to create request screen" }
         viewState = viewState.copy(showCreateDialog = !viewState.showCreateDialog)
-    }
-
-    private fun createRequest() {
-        coroutineScope.launch {
-            if (viewState.numberVehicle.isNotEmpty()) {
-                val createRequestIdItem = activeRequestsRepository.createRequest(
-                    typeVehicle = viewState.selectedVehicleType.nameVehicleType,
-                    numberVehicle = viewState.numberVehicle,
-                    faultDescription = viewState.faultDescription
-                )
-                if (createRequestIdItem is CreateRequestIdItem.Success) {
-                    log(tag = TAG) { "Create request is success" }
-                    viewState =
-                        viewState.copy(showSuccessCreateRequestDialog = !viewState.showSuccessCreateRequestDialog)
-                } else if (createRequestIdItem is CreateRequestIdItem.Error) {
-                    log(tag = TAG) { "Create request is failure" }
-                    viewAction = DriverActiveAction.ShowErrorSnackBar(message = createRequestIdItem.message)
-                }
-            } else {
-                viewAction = DriverActiveAction.ShowErrorSnackBar(message = MainRes.string.number_vehicle_is_empty)
-            }
-        }
     }
 
     private fun getActiveRequestsByDate(date: String = "") {
@@ -87,27 +67,6 @@ class DriverActiveViewModel : BaseSharedViewModel<DriverActiveViewState, DriverA
             errorTextForRequestList = errorMessage
         )
         log(tag = TAG) { "Error message for requests setup" }
-    }
-
-    private fun obtainSelectedTypeVehicleChange(typeVehicle: VehicleType) {
-        viewState = viewState.copy(
-            selectedVehicleType = typeVehicle
-        )
-        log(tag = TAG) { "Type vehicle is changed" }
-    }
-
-    private fun obtainNumberVehicleChange(numberVehicle: String) {
-        viewState = viewState.copy(
-            numberVehicle = numberVehicle
-        )
-        log(tag = TAG) { "Number vehicle is changed" }
-    }
-
-    private fun obtainFaultDescriptionChange(faultDescription: String) {
-        viewState = viewState.copy(
-            faultDescription = faultDescription
-        )
-        log(tag = TAG) { "Fault description is changed" }
     }
 
     private companion object {

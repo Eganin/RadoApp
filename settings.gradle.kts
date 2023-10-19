@@ -68,6 +68,9 @@ include(":common:observer:reject:data")
 include(":common:observer:reject:presentation")
 include(":common:observer:reject:compose")
 
+include(":common:shared:active:presentation")
+include(":common:shared:active:compose")
+
 pluginManagement {
     repositories {
         google()
