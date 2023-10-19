@@ -1,5 +1,6 @@
-package widgets.active
+package views
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -25,7 +26,7 @@ fun ActiveRequestCells(
     onReissueRequest: () -> Unit ={}
 ) {
     Row(modifier = modifier.fillMaxWidth().padding(16.dp)) {
-        Column(modifier = Modifier.weight(1f)) {
+        Column(modifier = Modifier.clickable { onClick.invoke() }.weight(1f)) {
             Text(
                 text = firstText,
                 color = Theme.colors.primaryTextColor,

@@ -21,8 +21,6 @@ import models.DriverActiveEvent
 import models.DriverActiveViewState
 import org.company.rado.core.MainRes
 import theme.Theme
-import widgets.active.ActiveRequestCells
-import widgets.active.CalendarView
 import widgets.common.ActionButton
 
 @Composable

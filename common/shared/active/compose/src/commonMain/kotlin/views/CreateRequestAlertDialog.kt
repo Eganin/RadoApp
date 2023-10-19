@@ -151,7 +151,10 @@ fun CreateRequestAlertDialog(
                         )
                     },
                     trailingIcon = {
-                        Icon(FeatherIcons.AlertCircle, contentDescription = null)
+                        if (state.value.notVehicleNumber) Icon(
+                            FeatherIcons.AlertCircle,
+                            contentDescription = null
+                        )
                     },
                     onValueChange = {
                         viewModel.obtainEvent(
@@ -164,7 +167,7 @@ fun CreateRequestAlertDialog(
                         Text(
                             text = MainRes.string.number_vehicle_label,
                             color = Theme.colors.primaryTextColor,
-                            fontSize = if(isLargePlatform) 16.sp else 8.sp
+                            fontSize = if (isLargePlatform) 16.sp else 8.sp
                         )
                     },
                     modifier = Modifier.fillMaxWidth(),
@@ -189,7 +192,7 @@ fun CreateRequestAlertDialog(
                         Text(
                             text = MainRes.string.fault_description_label,
                             color = Theme.colors.primaryTextColor,
-                            fontSize = if(isLargePlatform) 16.sp else 8.sp
+                            fontSize = if (isLargePlatform) 16.sp else 8.sp
                         )
                     },
                     modifier = Modifier.fillMaxWidth()

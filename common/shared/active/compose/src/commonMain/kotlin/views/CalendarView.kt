@@ -1,4 +1,4 @@
-package widgets.active
+package views
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
