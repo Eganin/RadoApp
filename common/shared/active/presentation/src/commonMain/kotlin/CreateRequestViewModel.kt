@@ -29,15 +29,14 @@ class CreateRequestViewModel :
             is CreateRequestEvent.SelectedTypeVehicleChanged -> obtainSelectedTypeVehicleChange(
                 typeVehicle = viewEvent.value
             )
-
             is CreateRequestEvent.NumberVehicleChanged -> obtainNumberVehicleChange(numberVehicle = viewEvent.value)
             is CreateRequestEvent.FaultDescriptionChanged -> obtainFaultDescriptionChange(
                 faultDescription = viewEvent.value
             )
-
             is CreateRequestEvent.TractorIsExpandedChanged -> obtainTractorIsExpandedChange()
-
             is CreateRequestEvent.TrailerIsExpandedChanged -> obtainTrailerIsExpandedChange()
+            is CreateRequestEvent.CloseSuccessDialog->closeSuccessDialog()
+            is CreateRequestEvent.CloseFailureDialog->closeFailureDialog()
         }
     }
 
@@ -63,6 +62,18 @@ class CreateRequestViewModel :
                 viewState = viewState.copy(notVehicleNumber = true)
             }
         }
+    }
+
+    private fun closeSuccessDialog(){
+        viewState=viewState.copy(showSuccessCreateRequestDialog = !viewState.showSuccessCreateRequestDialog)
+        viewAction=CreateRequestAction.CloseCreateRequestAlertDialog
+        log(tag= TAG) { "Create request success dialog close" }
+    }
+
+    private fun closeFailureDialog(){
+        viewState=viewState.copy(showFailureCreateRequestDialog = !viewState.showFailureCreateRequestDialog)
+        viewAction=CreateRequestAction.CloseCreateRequestAlertDialog
+        log(tag= TAG) { "Create request failure dialog close" }
     }
 
     private fun obtainTractorIsExpandedChange() {

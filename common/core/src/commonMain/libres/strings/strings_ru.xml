@@ -44,4 +44,8 @@
     <string name="image_fault_title">Вы можете вложить фотографии неисправности ТС</string>
     <string name="send_repair_request_title">Отправить заявку на ремонт</string>
     <string name="number_vehicle_error_message">Неправильно введен номер ТС</string>
+    <string name="success_create_request_title">Заявка отправлена</string>
+    <string name="success_create_request_text">Ожидайте принятие решения по вашей заявке и назначенния даты ремонта</string>
+    <string name="ok_button_title">ОК</string>
+    <string name="failure_create_request_title">Заявка не отправлена</string>
 </resources>

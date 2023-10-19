@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -33,6 +32,8 @@ import compose.icons.FeatherIcons
 import compose.icons.feathericons.AlertCircle
 import compose.icons.feathericons.ArrowLeft
 import dev.icerock.moko.mvvm.compose.viewModelFactory
+import io.github.aakira.napier.log
+import models.CreateRequestAction
 import models.CreateRequestEvent
 import models.VehicleType
 import org.company.rado.core.MainRes
@@ -50,8 +51,8 @@ fun CreateRequestAlertDialog(
 ) {
 
     val viewModel = viewModelFactory { CreateRequestViewModel() }.createViewModel()
-
     val state = viewModel.viewStates().observeAsState()
+    val action = viewModel.viewActions().observeAsState()
 
     val isLargePlatform =
         LocalPlatform.current == Platform.Web || LocalPlatform.current == Platform.Desktop
@@ -65,8 +66,7 @@ fun CreateRequestAlertDialog(
         Card(
             shape = RoundedCornerShape(10.dp),
             modifier = modifier
-                .fillMaxWidth()
-                .fillMaxHeight()
+                .fillMaxSize()
                 .padding(16.dp),
             colors = CardDefaults.cardColors(containerColor = Theme.colors.primaryBackground)
         ) {
@@ -221,5 +221,30 @@ fun CreateRequestAlertDialog(
                     })
             }
         }
+
+        if (state.value.showSuccessCreateRequestDialog) {
+            SuccessCreateRequestDialog(
+                onDismiss = {
+                    viewModel.obtainEvent(viewEvent = CreateRequestEvent.CloseSuccessDialog)
+                }, onExit = {
+                    viewModel.obtainEvent(viewEvent = CreateRequestEvent.CloseSuccessDialog)
+                })
+        }
+
+        if (state.value.showFailureCreateRequestDialog) {
+            FailureCreateRequestDialog(
+                onDismiss = { viewModel.obtainEvent(viewEvent = CreateRequestEvent.CloseFailureDialog) },
+                onExit = { viewModel.obtainEvent(viewEvent = CreateRequestEvent.CloseFailureDialog) }
+            )
+        }
+    }
+
+    when (action.value) {
+        is CreateRequestAction.CloseCreateRequestAlertDialog -> {
+            log(tag = "CLOSE") { "close dialog" }
+            onExit()
+        }
+
+        null -> {}
     }
 }
