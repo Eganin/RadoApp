@@ -39,4 +39,9 @@
     <string name="choose_machine_title">Выберите тип транспортного средства:</string>
     <string name="trailer_title">Прицеп</string>
     <string name="tractor_title">Тягач</string>
+    <string name="number_vehicle_label">Укажите гос.номер ТС в формате a012aa196</string>
+    <string name="fault_description_label">Опишите неисправность(максимум 1000 символов)</string>
+    <string name="image_fault_title">Вы можете вложить фотографии неисправности ТС</string>
+    <string name="send_repair_request_title">Отправить заявку на ремонт</string>
+    <string name="number_vehicle_error_message">Неправильно введен номер ТС</string>
 </resources>

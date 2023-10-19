@@ -10,7 +10,6 @@ import models.CreateRequestEvent
 import models.CreateRequestIdItem
 import models.CreateRequestViewState
 import models.VehicleType
-import org.company.rado.core.MainRes
 import other.BaseSharedViewModel
 
 class CreateRequestViewModel :
@@ -30,16 +29,22 @@ class CreateRequestViewModel :
             is CreateRequestEvent.SelectedTypeVehicleChanged -> obtainSelectedTypeVehicleChange(
                 typeVehicle = viewEvent.value
             )
+
             is CreateRequestEvent.NumberVehicleChanged -> obtainNumberVehicleChange(numberVehicle = viewEvent.value)
             is CreateRequestEvent.FaultDescriptionChanged -> obtainFaultDescriptionChange(
                 faultDescription = viewEvent.value
             )
+
+            is CreateRequestEvent.TractorIsExpandedChanged -> obtainTractorIsExpandedChange()
+
+            is CreateRequestEvent.TrailerIsExpandedChanged -> obtainTrailerIsExpandedChange()
         }
     }
 
     private fun createRequest() {
         coroutineScope.launch {
             if (viewState.numberVehicle.isNotEmpty()) {
+                viewState = viewState.copy(notVehicleNumber = false)
                 val createRequestIdItem = activeRequestsRepository.createRequest(
                     typeVehicle = viewState.selectedVehicleType.nameVehicleType,
                     numberVehicle = viewState.numberVehicle,
@@ -51,35 +56,46 @@ class CreateRequestViewModel :
                         viewState.copy(showSuccessCreateRequestDialog = !viewState.showSuccessCreateRequestDialog)
                 } else if (createRequestIdItem is CreateRequestIdItem.Error) {
                     log(tag = TAG) { "Create request is failure" }
-                    viewAction =
-                        CreateRequestAction.ShowErrorSnackBar(message = createRequestIdItem.message)
+                    viewState =
+                        viewState.copy(showFailureCreateRequestDialog = !viewState.showFailureCreateRequestDialog)
                 }
             } else {
-                viewAction =
-                    CreateRequestAction.ShowErrorSnackBar(message = MainRes.string.number_vehicle_is_empty)
+                viewState = viewState.copy(notVehicleNumber = true)
             }
         }
+    }
+
+    private fun obtainTractorIsExpandedChange() {
+        viewState = viewState.copy(tractorIsExpanded = !viewState.tractorIsExpanded)
+        viewState = viewState.copy(trailerIsExpanded = !viewState.trailerIsExpanded)
+        log(tag = TAG) { "Tractor expanded changed ${viewState.tractorIsExpanded}" }
+    }
+
+    private fun obtainTrailerIsExpandedChange() {
+        viewState = viewState.copy(trailerIsExpanded = !viewState.trailerIsExpanded)
+        viewState = viewState.copy(tractorIsExpanded = !viewState.tractorIsExpanded)
+        log(tag = TAG) { "Trailer expanded changed ${viewState.trailerIsExpanded}" }
     }
 
     private fun obtainSelectedTypeVehicleChange(typeVehicle: VehicleType) {
         viewState = viewState.copy(
             selectedVehicleType = typeVehicle
         )
-        log(tag = TAG) { "Type vehicle is changed" }
+        log(tag = TAG) { "Type vehicle is changed ${viewState.selectedVehicleType}" }
     }
 
     private fun obtainNumberVehicleChange(numberVehicle: String) {
         viewState = viewState.copy(
             numberVehicle = numberVehicle
         )
-        log(tag = TAG) { "Number vehicle is changed" }
+        log(tag = TAG) { "Number vehicle is changed ${viewState.numberVehicle}" }
     }
 
     private fun obtainFaultDescriptionChange(faultDescription: String) {
         viewState = viewState.copy(
             faultDescription = faultDescription
         )
-        log(tag = TAG) { "Fault description is changed" }
+        log(tag = TAG) { "Fault description is changed ${viewState.faultDescription}" }
     }
 
     private companion object {

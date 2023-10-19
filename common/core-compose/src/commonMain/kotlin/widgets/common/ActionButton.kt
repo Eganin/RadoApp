@@ -1,6 +1,5 @@
 package widgets.common
 
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -17,7 +16,7 @@ import theme.Theme
 fun ActionButton(text: String, onClick: () -> Unit, modifier: Modifier = Modifier) {
     Button(
         onClick = onClick,
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier,
         colors = ButtonDefaults.buttonColors(containerColor = Theme.colors.primaryAction),
         shape = RoundedCornerShape(size = 32.dp)
     ) {

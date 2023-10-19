@@ -1,7 +1,14 @@
 package views
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
@@ -26,7 +33,8 @@ fun ActiveRequestsForDriverView(
 ) {
 
     Column(
-        modifier = modifier.fillMaxSize().background(color = Theme.colors.primaryBackground).padding(all = 16.dp)
+        modifier = modifier.fillMaxSize().background(color = Theme.colors.primaryBackground)
+            .padding(all = 16.dp)
             .verticalScroll(rememberScrollState())
     ) {
         CalendarView(
@@ -41,9 +49,12 @@ fun ActiveRequestsForDriverView(
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        ActionButton(text = MainRes.string.create_request_button_title, onClick = {
-            eventHandler.invoke(DriverActiveEvent.OpenDialogCreateRequest)
-        })
+        ActionButton(
+            text = MainRes.string.create_request_button_title,
+            modifier = Modifier.fillMaxWidth(),
+            onClick = {
+                eventHandler.invoke(DriverActiveEvent.OpenDialogCreateRequest)
+            })
 
         Spacer(modifier = Modifier.height(8.dp))
 

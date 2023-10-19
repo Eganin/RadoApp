@@ -48,7 +48,8 @@ fun AuthView(
     eventHandler: (AuthEvent) -> Unit
 ) {
     Column(
-        modifier = modifier.fillMaxSize().background(color = Theme.colors.primaryBackground).padding(all = 16.dp)
+        modifier = modifier.fillMaxSize().background(color = Theme.colors.primaryBackground)
+            .padding(all = 16.dp)
             .verticalScroll(rememberScrollState())
     ) {
         Spacer(modifier = Modifier.height(8.dp))
@@ -63,7 +64,11 @@ fun AuthView(
 
         Spacer(modifier = Modifier.height(64.dp))
 
-        Text(text = MainRes.string.choose_position, fontSize = 16.sp, color = Theme.colors.primaryTextColor)
+        Text(
+            text = MainRes.string.choose_position,
+            fontSize = 16.sp,
+            color = Theme.colors.primaryTextColor
+        )
 
         Spacer(modifier = Modifier.height(8.dp))
         //Dropdown menu
@@ -76,7 +81,12 @@ fun AuthView(
                 ),
                 value = state.exposedMenuValue,
                 onValueChange = {},
-                label = { Text(text = MainRes.string.position_title, color = Theme.colors.primaryTextColor) },
+                label = {
+                    Text(
+                        text = MainRes.string.position_title,
+                        color = Theme.colors.primaryTextColor
+                    )
+                },
                 trailingIcon = {
                     Icon(
                         imageVector = if (state.exposedMenuIsEnabled) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
@@ -88,7 +98,8 @@ fun AuthView(
                 },
                 modifier = Modifier.onGloballyPositioned {
                     eventHandler.invoke(AuthEvent.ExposedMenuSizeChanged(value = it.size.toSize()))
-                }
+                },
+                maxLines = 1
             )
 
             DropdownMenu(
@@ -98,7 +109,12 @@ fun AuthView(
                 onDismissRequest = { eventHandler.invoke(AuthEvent.ExposedMenuEnableChanged(value = false)) }) {
                 state.itemsExposedMenu.forEachIndexed { index, position ->
                     DropdownMenuItem(
-                        text = { Text(text = position.positionName, color = Theme.colors.primaryTextColor) },
+                        text = {
+                            Text(
+                                text = position.positionName,
+                                color = Theme.colors.primaryTextColor
+                            )
+                        },
                         onClick = {
                             eventHandler.invoke(AuthEvent.ExposedMenuIndexChanged(value = index))
                             eventHandler.invoke(AuthEvent.ExposedMenuEnableChanged(value = false))
@@ -143,7 +159,8 @@ fun AuthView(
                     }
                 },
                 label = { Text(text = title, color = Theme.colors.primaryTextColor) },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                maxLines = 1
             )
         }
 
@@ -157,9 +174,15 @@ fun AuthView(
             ),
             value = state.phone,
             onValueChange = { eventHandler.invoke(AuthEvent.PhoneChanged(value = it)) },
-            label = { Text(text = MainRes.string.phone_title, color = Theme.colors.primaryTextColor) },
+            label = {
+                Text(
+                    text = MainRes.string.phone_title,
+                    color = Theme.colors.primaryTextColor
+                )
+            },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            maxLines = 1
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -169,19 +192,26 @@ fun AuthView(
                 checked = state.isFirstSignIn,
                 onCheckedChange = { eventHandler.invoke(AuthEvent.IsFirstSignUpChanged(value = !state.isFirstSignIn)) })
             Spacer(modifier = Modifier.width(8.dp))
-            Text(text = MainRes.string.is_first_sign_in, fontSize = 16.sp, color = Theme.colors.primaryTextColor)
+            Text(
+                text = MainRes.string.is_first_sign_in,
+                fontSize = 16.sp,
+                color = Theme.colors.primaryTextColor
+            )
         }
 
         //register/login button
         Spacer(modifier = Modifier.height(64.dp))
 
-        ActionButton(text = MainRes.string.sign_in_button_title, onClick = {
-            eventHandler.invoke(AuthEvent.RegisterClick)
-        })
+        ActionButton(
+            text = MainRes.string.sign_in_button_title,
+            modifier = Modifier.fillMaxWidth(),
+            onClick = {
+                eventHandler.invoke(AuthEvent.RegisterClick)
+            })
     }
 
-    if (state.isLoading){
-        Box(modifier=Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+    if (state.isLoading) {
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             CircularProgressIndicator(
                 modifier = Modifier.width(64.dp),
                 color = Theme.colors.highlightColor,

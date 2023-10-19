@@ -9,4 +9,8 @@ sealed class CreateRequestEvent {
     data class NumberVehicleChanged(val value: String) : CreateRequestEvent()
 
     data class FaultDescriptionChanged(val value: String) : CreateRequestEvent()
+
+    data object TrailerIsExpandedChanged: CreateRequestEvent()
+
+    data object TractorIsExpandedChanged: CreateRequestEvent()
 }
