@@ -1,11 +1,14 @@
 package ktor
 
-import io.ktor.client.*
-import io.ktor.client.call.*
-import io.ktor.client.request.*
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
 import io.ktor.client.request.forms.MultiPartFormDataContent
 import io.ktor.client.request.forms.formData
-import io.ktor.http.*
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
+import io.ktor.http.Headers
+import io.ktor.http.HttpHeaders
+import io.ktor.http.path
 import ktor.models.KtorActiveRequest
 import ktor.models.KtorCreateRequest
 import models.CreateRequestIdResponse
@@ -24,7 +27,7 @@ class KtorDriverActiveRemoteDataSource(
         }.body()
     }
 
-    suspend fun fetchRequestsByDate(request: KtorActiveRequest) : List<SmallActiveRequestForDriverResponse>{
+    suspend fun fetchRequestsByDate(request: KtorActiveRequest): List<SmallActiveRequestForDriverResponse> {
         return httpClient.post {
             url {
                 path("request/active/driver")
@@ -33,20 +36,22 @@ class KtorDriverActiveRemoteDataSource(
         }.body()
     }
 
-    suspend fun uploadImage(byteArray: ByteArray){
-        httpClient.post{
+    suspend fun uploadResourceImage(image: Pair<String, ByteArray>) {
+        httpClient.post {
             url {
-                path("images/create")
+                path("resources/create")
                 setBody(
                     MultiPartFormDataContent(
                         formData {
-                            append("description", 9)
                             append(
                                 "image",
-                                byteArray,
+                                image.second,
                                 Headers.build {
                                     append(HttpHeaders.ContentType, "image/png")
-                                    append(HttpHeaders.ContentDisposition, "filename=\"test.png\"")
+                                    append(
+                                        HttpHeaders.ContentDisposition,
+                                        "filename=\"${image.first}\""
+                                    )
                                 })
                         },
                         boundary = "WebAppBoundary"

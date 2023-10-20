@@ -14,6 +14,8 @@ sealed class CreateRequestEvent {
 
     data object TractorIsExpandedChanged : CreateRequestEvent()
 
+    data object ImageRepairExpandedChanged: CreateRequestEvent()
+
     data object CloseSuccessDialog : CreateRequestEvent()
 
     data object CloseFailureDialog : CreateRequestEvent()

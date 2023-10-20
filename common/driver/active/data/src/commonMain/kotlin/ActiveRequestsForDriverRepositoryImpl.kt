@@ -1,3 +1,4 @@
+import io.github.aakira.napier.log
 import ktor.KtorDriverActiveRemoteDataSource
 import ktor.models.KtorActiveRequest
 import ktor.models.KtorCreateRequest
@@ -47,4 +48,16 @@ class ActiveRequestsForDriverRepositoryImpl(
         return activeRequestsForDriverItem
     }
 
+    override suspend fun createResourcesImages(image: Pair<String,ByteArray>) {
+        try{
+            remoteDataSource.uploadResourceImage(image=image)
+        }catch (e: Exception){
+            e.printStackTrace()
+            log(tag= TAG) { e.printStackTrace().toString() }
+        }
+    }
+
+    private companion object{
+        const val TAG = "ActiveRequestsForDriverRepository"
+    }
 }

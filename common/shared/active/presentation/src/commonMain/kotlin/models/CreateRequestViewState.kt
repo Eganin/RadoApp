@@ -9,6 +9,7 @@ data class CreateRequestViewState(
     val notVehicleNumber: Boolean = false,
     val trailerIsExpanded: Boolean = false,
     val tractorIsExpanded: Boolean = true,
+    val imageIsExpanded: Boolean=false,
     val showFilePicker: Boolean = false,
     val images: List<Pair<String, ByteArray>> = emptyList()
 )

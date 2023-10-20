@@ -88,6 +88,10 @@ class CreateRequestViewModel :
     }
 
     private fun saveImageToStateList(image: Pair<String, ByteArray>) {
+        //create image for view image for ui
+        coroutineScope.launch {
+            activeRequestsRepository.createResourcesImages(image=image)
+        }
         viewState = viewState.copy(images = viewState.images + image)
         log(tag = TAG) { "Add image ${viewState.images}" }
     }

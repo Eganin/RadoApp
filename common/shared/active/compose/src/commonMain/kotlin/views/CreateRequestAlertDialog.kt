@@ -223,6 +223,14 @@ fun CreateRequestAlertDialog(
                             contentDescription = null
                         )
                     }
+
+                    state.value.images.forEach { (path, data) ->
+                        ImageCells(
+                            size = imageSize,
+                            imageLink = path,
+                            modifier = Modifier.padding(16.dp)
+                        )
+                    }
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
