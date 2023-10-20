@@ -10,11 +10,15 @@ sealed class CreateRequestEvent {
 
     data class FaultDescriptionChanged(val value: String) : CreateRequestEvent()
 
-    data object TrailerIsExpandedChanged: CreateRequestEvent()
+    data object TrailerIsExpandedChanged : CreateRequestEvent()
 
-    data object TractorIsExpandedChanged: CreateRequestEvent()
+    data object TractorIsExpandedChanged : CreateRequestEvent()
 
-    data object CloseSuccessDialog: CreateRequestEvent()
+    data object CloseSuccessDialog : CreateRequestEvent()
 
-    data object CloseFailureDialog: CreateRequestEvent()
+    data object CloseFailureDialog : CreateRequestEvent()
+
+    data object FilePickerVisibilityChanged : CreateRequestEvent()
+
+    data class SetImage(val filePath: String, val imageByteArray: ByteArray) : CreateRequestEvent()
 }

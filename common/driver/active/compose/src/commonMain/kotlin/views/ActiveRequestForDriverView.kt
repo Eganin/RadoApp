@@ -29,7 +29,6 @@ fun ActiveRequestsForDriverView(
     modifier: Modifier = Modifier,
     eventHandler: (DriverActiveEvent) -> Unit
 ) {
-
     Column(
         modifier = modifier.fillMaxSize().background(color = Theme.colors.primaryBackground)
             .padding(all = 16.dp)

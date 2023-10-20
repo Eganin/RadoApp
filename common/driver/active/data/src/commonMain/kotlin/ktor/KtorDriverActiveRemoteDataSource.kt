@@ -30,4 +30,8 @@ class KtorDriverActiveRemoteDataSource(
             }
         }.body()
     }
+
+//    suspend fun uploadImage(byteArray: ByteArray){
+//        httpClient.post{}
+//    }
 }

@@ -29,14 +29,23 @@ class CreateRequestViewModel :
             is CreateRequestEvent.SelectedTypeVehicleChanged -> obtainSelectedTypeVehicleChange(
                 typeVehicle = viewEvent.value
             )
+
             is CreateRequestEvent.NumberVehicleChanged -> obtainNumberVehicleChange(numberVehicle = viewEvent.value)
             is CreateRequestEvent.FaultDescriptionChanged -> obtainFaultDescriptionChange(
                 faultDescription = viewEvent.value
             )
+
             is CreateRequestEvent.TractorIsExpandedChanged -> obtainTractorIsExpandedChange()
             is CreateRequestEvent.TrailerIsExpandedChanged -> obtainTrailerIsExpandedChange()
-            is CreateRequestEvent.CloseSuccessDialog->closeSuccessDialog()
-            is CreateRequestEvent.CloseFailureDialog->closeFailureDialog()
+            is CreateRequestEvent.CloseSuccessDialog -> closeSuccessDialog()
+            is CreateRequestEvent.CloseFailureDialog -> closeFailureDialog()
+            is CreateRequestEvent.FilePickerVisibilityChanged -> obtainFilePickerVisibilityChange()
+            is CreateRequestEvent.SetImage -> saveImageToStateList(
+                image = Pair(
+                    first = viewEvent.filePath,
+                    second = viewEvent.imageByteArray
+                )
+            )
         }
     }
 
@@ -64,16 +73,27 @@ class CreateRequestViewModel :
         }
     }
 
-    private fun closeSuccessDialog(){
-        viewState=viewState.copy(showSuccessCreateRequestDialog = !viewState.showSuccessCreateRequestDialog)
-        viewAction=CreateRequestAction.CloseCreateRequestAlertDialog
-        log(tag= TAG) { "Create request success dialog close" }
+    private fun closeSuccessDialog() {
+        viewState =
+            viewState.copy(showSuccessCreateRequestDialog = !viewState.showSuccessCreateRequestDialog)
+        viewAction = CreateRequestAction.CloseCreateRequestAlertDialog
+        log(tag = TAG) { "Create request success dialog close" }
     }
 
-    private fun closeFailureDialog(){
-        viewState=viewState.copy(showFailureCreateRequestDialog = !viewState.showFailureCreateRequestDialog)
-        viewAction=CreateRequestAction.CloseCreateRequestAlertDialog
-        log(tag= TAG) { "Create request failure dialog close" }
+    private fun closeFailureDialog() {
+        viewState =
+            viewState.copy(showFailureCreateRequestDialog = !viewState.showFailureCreateRequestDialog)
+        viewAction = CreateRequestAction.CloseCreateRequestAlertDialog
+        log(tag = TAG) { "Create request failure dialog close" }
+    }
+
+    private fun saveImageToStateList(image: Pair<String, ByteArray>) {
+        viewState = viewState.copy(images = viewState.images + image)
+        log(tag = TAG) { "Add image ${viewState.images}" }
+    }
+
+    private fun obtainFilePickerVisibilityChange() {
+        viewState = viewState.copy(showFilePicker = !viewState.showFilePicker)
     }
 
     private fun obtainTractorIsExpandedChange() {
