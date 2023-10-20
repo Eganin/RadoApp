@@ -154,5 +154,10 @@ object Dependencies {
             private const val version = "0.4.1"
             const val kotlinxDatetime = "org.jetbrains.kotlinx:kotlinx-datetime:$version"
         }
+
+        object FilePicker{
+            private const val version = "2.1.0"
+            const val core = "com.darkrockstudios:mpfilepicker:$version"
+        }
     }
 }

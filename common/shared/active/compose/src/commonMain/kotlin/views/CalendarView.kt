@@ -70,9 +70,9 @@ fun CalendarView(
                 fontSize = 30.sp
             )
             Column(modifier = Modifier.fillMaxWidth()) {
-                ROWS_COUNT_IN_CALENDAR.forEach { row ->
+                ROWS_COUNT_IN_CALENDAR.forEach {
                     Row(modifier = Modifier.fillMaxWidth()) {
-                        COLUMNS_COUNT_IN_CALENDAR.forEach { column ->
+                        COLUMNS_COUNT_IN_CALENDAR.forEach {
                             counterDays++
                             if (counterDays <= daysInMonth) {
                                 DayCells(

@@ -21,5 +21,23 @@ kotlin{
                 implementation(Dependencies.Resources.ComposeIcons.composeIconsFeatherIcons)
             }
         }
+
+        androidMain{
+            dependencies{
+                implementation(Dependencies.Other.FilePicker.core)
+            }
+        }
+
+        desktopMain{
+            dependencies{
+                implementation(Dependencies.Other.FilePicker.core)
+            }
+        }
+
+        jsMain{
+            dependencies{
+                implementation(Dependencies.Other.FilePicker.core)
+            }
+        }
     }
 }
