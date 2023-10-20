@@ -46,6 +46,8 @@ class CreateRequestViewModel :
                     second = viewEvent.imageByteArray
                 )
             )
+
+            is CreateRequestEvent.ImageRepairExpandedChanged -> obtainImageIsExpandedChange()
         }
     }
 
@@ -90,9 +92,12 @@ class CreateRequestViewModel :
     private fun saveImageToStateList(image: Pair<String, ByteArray>) {
         //create image for view image for ui
         coroutineScope.launch {
-            activeRequestsRepository.createResourcesImages(image=image)
+            activeRequestsRepository.createResourcesImages(image = image)
         }
-        viewState = viewState.copy(images = viewState.images + image)
+        val newImagesList = mutableListOf(image)
+        newImagesList.addAll(viewState.images)
+        log(tag = TAG) { "Count images ${newImagesList.size}" }
+        viewState = viewState.copy(images = newImagesList)
         log(tag = TAG) { "Add image ${viewState.images}" }
     }
 
@@ -104,6 +109,11 @@ class CreateRequestViewModel :
         viewState = viewState.copy(tractorIsExpanded = !viewState.tractorIsExpanded)
         viewState = viewState.copy(trailerIsExpanded = !viewState.trailerIsExpanded)
         log(tag = TAG) { "Tractor expanded changed ${viewState.tractorIsExpanded}" }
+    }
+
+    private fun obtainImageIsExpandedChange() {
+        viewState = viewState.copy(imageIsExpanded = !viewState.imageIsExpanded)
+        log(tag = TAG) { "Image expanded changed ${viewState.imageIsExpanded}" }
     }
 
     private fun obtainTrailerIsExpandedChange() {

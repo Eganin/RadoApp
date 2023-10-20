@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -213,22 +214,27 @@ fun CreateRequestAlertDialog(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                Row(modifier = Modifier.fillMaxWidth()) {
-                    Box(modifier = Modifier.clickable {
-                        viewModel.obtainEvent(viewEvent = CreateRequestEvent.FilePickerVisibilityChanged)
-                    }.size(imageSize).background(Theme.colors.primaryAction)) {
-                        Icon(
-                            modifier = Modifier.fillMaxSize(),
-                            imageVector = FeatherIcons.Plus,
-                            contentDescription = null
-                        )
+                LazyRow(modifier = Modifier.fillMaxWidth()) {
+                    item {
+                        Box(modifier = Modifier.clickable {
+                            viewModel.obtainEvent(viewEvent = CreateRequestEvent.FilePickerVisibilityChanged)
+                        }.size(imageSize).background(Theme.colors.primaryAction)) {
+                            Icon(
+                                modifier = Modifier.fillMaxSize(),
+                                imageVector = FeatherIcons.Plus,
+                                contentDescription = null
+                            )
+                        }
                     }
-
-                    state.value.images.forEach { (path, data) ->
+                    items(state.value.images.count()) {
                         ImageCells(
                             size = imageSize,
-                            imageLink = path,
-                            modifier = Modifier.padding(16.dp)
+                            isExpanded = state.value.imageIsExpanded,
+                            imageLink = state.value.images.get(it).first,
+                            modifier = Modifier.padding(start = 16.dp, end = 16.dp),
+                            eventHandler = {
+                                viewModel.obtainEvent(viewEvent = CreateRequestEvent.ImageRepairExpandedChanged)
+                            }
                         )
                     }
                 }
