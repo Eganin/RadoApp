@@ -3,6 +3,8 @@ package ktor
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
+import io.ktor.client.request.forms.MultiPartFormDataContent
+import io.ktor.client.request.forms.formData
 import io.ktor.http.*
 import ktor.models.KtorActiveRequest
 import ktor.models.KtorCreateRequest
@@ -31,7 +33,26 @@ class KtorDriverActiveRemoteDataSource(
         }.body()
     }
 
-//    suspend fun uploadImage(byteArray: ByteArray){
-//        httpClient.post{}
-//    }
+    suspend fun uploadImage(byteArray: ByteArray){
+        httpClient.post{
+            url {
+                path("images/create")
+                setBody(
+                    MultiPartFormDataContent(
+                        formData {
+                            append("description", 9)
+                            append(
+                                "image",
+                                byteArray,
+                                Headers.build {
+                                    append(HttpHeaders.ContentType, "image/png")
+                                    append(HttpHeaders.ContentDisposition, "filename=\"test.png\"")
+                                })
+                        },
+                        boundary = "WebAppBoundary"
+                    )
+                )
+            }
+        }
+    }
 }
