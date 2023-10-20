@@ -8,4 +8,6 @@ interface ActiveRequestsForDriverRepository {
     suspend fun getRequestsByDate(date: String): ActiveRequestsForDriverItem
 
     suspend fun createResourcesImages(image: Pair<String,ByteArray>)
+
+    suspend fun createImagesForRequest(requestId:Int,images: List<Pair<String,ByteArray>>)
 }

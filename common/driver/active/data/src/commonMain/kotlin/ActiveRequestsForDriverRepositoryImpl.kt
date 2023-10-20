@@ -37,27 +37,44 @@ class ActiveRequestsForDriverRepositoryImpl(
     }
 
     override suspend fun getRequestsByDate(date: String): ActiveRequestsForDriverItem {
-        val activeRequestsForDriverItem = try{
+        val activeRequestsForDriverItem = try {
             val userInfo = localDataSource.fetchLoginUserInfo()
             val response =
-                remoteDataSource.fetchRequestsByDate(request = KtorActiveRequest(userId = userInfo.userId, date = date))
+                remoteDataSource.fetchRequestsByDate(
+                    request = KtorActiveRequest(
+                        userId = userInfo.userId,
+                        date = date
+                    )
+                )
             ActiveRequestsForDriverItem.Success(items = response)
-        }catch (e: Exception){
+        } catch (e: Exception) {
             ActiveRequestsForDriverItem.Error(message = MainRes.string.requests_by_date_is_not_fetch)
         }
         return activeRequestsForDriverItem
     }
 
-    override suspend fun createResourcesImages(image: Pair<String,ByteArray>) {
-        try{
-            remoteDataSource.uploadResourceImage(image=image)
-        }catch (e: Exception){
+    override suspend fun createResourcesImages(image: Pair<String, ByteArray>) {
+        try {
+            remoteDataSource.uploadResourceImage(image = image)
+        } catch (e: Exception) {
             e.printStackTrace()
-            log(tag= TAG) { e.printStackTrace().toString() }
+            log(tag = TAG) { e.printStackTrace().toString() }
         }
     }
 
-    private companion object{
+    override suspend fun createImagesForRequest(
+        requestId: Int,
+        images: List<Pair<String, ByteArray>>
+    ) {
+        try {
+            remoteDataSource.uploadImagesForRequest(requestId = requestId, images = images)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            log(tag = TAG) { e.printStackTrace().toString() }
+        }
+    }
+
+    private companion object {
         const val TAG = "ActiveRequestsForDriverRepository"
     }
 }

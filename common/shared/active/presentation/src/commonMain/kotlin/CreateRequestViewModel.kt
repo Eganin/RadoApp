@@ -42,8 +42,7 @@ class CreateRequestViewModel :
             is CreateRequestEvent.FilePickerVisibilityChanged -> obtainFilePickerVisibilityChange()
             is CreateRequestEvent.SetImage -> saveImageToStateList(
                 image = Pair(
-                    first = viewEvent.filePath,
-                    second = viewEvent.imageByteArray
+                    first = viewEvent.filePath, second = viewEvent.imageByteArray
                 )
             )
 
@@ -62,6 +61,12 @@ class CreateRequestViewModel :
                 )
                 if (createRequestIdItem is CreateRequestIdItem.Success) {
                     log(tag = TAG) { "Create request is success" }
+                    //save images
+                    if (viewState.images.isNotEmpty()) {
+                        activeRequestsRepository.createImagesForRequest(
+                            requestId = createRequestIdItem.requestId, images = viewState.images
+                        )
+                    }
                     viewState =
                         viewState.copy(showSuccessCreateRequestDialog = !viewState.showSuccessCreateRequestDialog)
                 } else if (createRequestIdItem is CreateRequestIdItem.Error) {
