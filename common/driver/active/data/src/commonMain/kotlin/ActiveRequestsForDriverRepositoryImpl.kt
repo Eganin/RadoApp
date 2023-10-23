@@ -67,7 +67,9 @@ class ActiveRequestsForDriverRepositoryImpl(
         images: List<Pair<String, ByteArray>>
     ) {
         try {
-            remoteDataSource.uploadImagesForRequest(requestId = requestId, images = images)
+            images.forEach {image->
+                remoteDataSource.uploadImagesForRequest(requestId = requestId, image = image)
+            }
         } catch (e: Exception) {
             e.printStackTrace()
             log(tag = TAG) { e.printStackTrace().toString() }

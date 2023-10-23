@@ -47,29 +47,27 @@ class KtorDriverActiveRemoteDataSource(
         }.body()
     }
 
-    suspend fun uploadImagesForRequest(requestId:Int,images: List<Pair<String,ByteArray>>){
+    suspend fun uploadImagesForRequest(requestId:Int,image: Pair<String,ByteArray>){
         httpClient.post {
             url {
                 path("images/create")
                 setBody(
-                    images.forEach { image->
-                        MultiPartFormDataContent(
-                            formData {
-                                append("description", requestId)
-                                append(
-                                    "image",
-                                    image.second,
-                                    Headers.build {
-                                        append(HttpHeaders.ContentType, "image/png")
-                                        append(
-                                            HttpHeaders.ContentDisposition,
-                                            "filename=\"${image.first}\""
-                                        )
-                                    })
-                            },
-                            boundary = "WebAppBoundary"
-                        )
-                    }
+                    MultiPartFormDataContent(
+                        formData {
+                            append("description", requestId)
+                            append(
+                                "image",
+                                image.second,
+                                Headers.build {
+                                    append(HttpHeaders.ContentType, "image/png")
+                                    append(
+                                        HttpHeaders.ContentDisposition,
+                                        "filename=\"${image.first.split("/").last()}\""
+                                    )
+                                })
+                        },
+                        boundary = "WebAppBoundary"
+                    )
                 )
             }
         }
@@ -89,7 +87,7 @@ class KtorDriverActiveRemoteDataSource(
                                     append(HttpHeaders.ContentType, "image/png")
                                     append(
                                         HttpHeaders.ContentDisposition,
-                                        "filename=\"${image.first}\""
+                                        "filename=\"${image.first.split("/").last()}\""
                                     )
                                 })
                         },

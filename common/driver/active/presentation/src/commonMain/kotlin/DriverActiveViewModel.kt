@@ -100,6 +100,9 @@ class DriverActiveViewModel :
         viewState = viewState.copy(
             showCreateDialog = !viewState.showCreateDialog
         )
+        //update requests list after close create dialog
+        getUnconfirmedRequests()
+        getActiveRequestsByDate()
     }
 
     private fun obtainErrorTextForRequestListChange(errorMessage: String) {
