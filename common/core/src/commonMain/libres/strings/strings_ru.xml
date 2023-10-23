@@ -48,4 +48,5 @@
     <string name="success_create_request_text">Ожидайте принятие решения по вашей заявке и назначенния даты ремонта</string>
     <string name="ok_button_title">ОК</string>
     <string name="failure_create_request_title">Заявка не отправлена</string>
+    <string name="unconfirmed_requests_is_not_fetch">Не удалось получить данные по неподтвержденным заявкам</string>
 </resources>
