@@ -2,11 +2,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
-import cafe.adriel.voyager.navigator.Navigator
-import navigation.SplashScreen
+import navigation.App
 import platform.Platform
 import platform.PlatformConfiguration
-import theme.AppTheme
 import java.awt.Dimension
 
 fun main() = application {
@@ -19,8 +17,6 @@ fun main() = application {
         onCloseRequest = ::exitApplication,
     ) {
         window.minimumSize = Dimension(350, 600)
-        AppTheme{
-            Navigator(SplashScreen(platform=Platform.Desktop))
-        }
+        App(platform = Platform.Desktop)
     }
 }

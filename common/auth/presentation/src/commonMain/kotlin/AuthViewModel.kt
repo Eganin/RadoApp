@@ -36,10 +36,13 @@ class AuthViewModel : BaseSharedViewModel<AuthViewState, AuthAction, AuthEvent>(
             is AuthEvent.ExposedMenuSizeChanged -> obtainExposedMenuSizeChange(size = viewEvent.value)
             is AuthEvent.ExposedMenuIndexChanged -> obtainExposedMenuIndexChange(index = viewEvent.value)
             is AuthEvent.IsFirstSignUpChanged -> obtainIsFirstSignInChange(isFirstSignIn = viewEvent.value)
+            is AuthEvent.StartLoading-> obtainStartLoading()
+            is AuthEvent.EndLoading -> obtainEndLoading()
         }
     }
 
     private fun sendLogin() {
+        obtainEvent(viewEvent = AuthEvent.StartLoading)
         val phoneIsValid = validatePhone.invoke(phone = viewState.phone)
         val fullNameIsValid = validateFullName.invoke(
             firstname = viewState.firstName,
@@ -95,10 +98,19 @@ class AuthViewModel : BaseSharedViewModel<AuthViewState, AuthAction, AuthEvent>(
                 }
             }
         }
+        obtainEvent(viewEvent = AuthEvent.EndLoading)
     }
 
     private fun obtainIsFirstSignInChange(isFirstSignIn: Boolean) {
         viewState = viewState.copy(isFirstSignIn = isFirstSignIn)
+    }
+
+    private fun obtainStartLoading(){
+        viewState = viewState.copy(isLoading = true)
+    }
+
+    private fun obtainEndLoading(){
+        viewState = viewState.copy(isLoading = false)
     }
 
     private fun obtainExposedMenuIndexChange(index: Int) {
@@ -127,6 +139,7 @@ class AuthViewModel : BaseSharedViewModel<AuthViewState, AuthAction, AuthEvent>(
 
     private fun checkUserLoggedIn() {
         coroutineScope.launch {
+            obtainEvent(viewEvent = AuthEvent.StartLoading)
             log(tag = TAG) { "Check User logged in" }
             val loginInfoItem = authRepository.isUserLoggedIn()
             if (loginInfoItem is LoginInfoItem.Success) {
@@ -134,6 +147,7 @@ class AuthViewModel : BaseSharedViewModel<AuthViewState, AuthAction, AuthEvent>(
                 viewState = viewState.copy(position = loginInfoItem.position.fromPositionNameToPosition())
                 viewAction = AuthAction.OpenMainFlow(position = viewState.position)
             }
+            obtainEvent(viewEvent = AuthEvent.EndLoading)
         }
     }
 

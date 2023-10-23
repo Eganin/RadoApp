@@ -27,6 +27,7 @@ class AuthRepositoryImpl(
             val userIdItem = userIdMapper.map(source = response)
             if (userIdItem is UserIdItem.Success) {
                 localDataSource.saveLoginUserInfo(
+                    userId = userIdItem.userId,
                     position = position,
                     fullName = fullName,
                     phone = phone
@@ -49,17 +50,24 @@ class AuthRepositoryImpl(
                     phone = phone
                 )
             )
+            localDataSource.saveLoginUserInfo(
+                userId = response.userId,
+                position = response.position,
+                fullName = response.fullName,
+                phone = response.phone
+            )
             loginInfoMapper.map(source = response)
         } catch (e: Exception) {
             LoginInfoItem.Error(message = MainRes.string.sign_in_error)
         }
+
         return loginInfoItem
     }
 
     override suspend fun isUserLoggedIn(): LoginInfoItem {
         val loginInfoItem = try {
             val userInfoFromLocal = localDataSource.fetchLoginUserInfo()
-            log(tag=TAG) { userInfoFromLocal.toString() }
+            log(tag = TAG) { userInfoFromLocal.toString() }
             val response = remoteDataSource.performLogin(
                 request = KtorRegisterOrLoginRequest(
                     position = userInfoFromLocal.position,
@@ -74,7 +82,7 @@ class AuthRepositoryImpl(
         return loginInfoItem
     }
 
-    private companion object{
-        const val TAG ="AuthRepository"
+    private companion object {
+        const val TAG = "AuthRepository"
     }
 }

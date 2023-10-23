@@ -1,17 +1,29 @@
 package navigation
 
 import androidx.compose.runtime.Composable
+import cafe.adriel.voyager.core.registry.ScreenRegistry
+import cafe.adriel.voyager.core.registry.rememberScreen
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import platform.Platform
 
-class SplashScreen(private val platform: Platform) : Screen {
+object SplashScreen : Screen {
     @Composable
     override fun Content() {
-        //navigate to home screen in the current module
-        val navigator = LocalNavigator.currentOrThrow
-        navigator.push(HomeScreen(platform=platform))
-    }
+        ScreenRegistry {
+            featureAuthScreenModule()
 
+            mainDriverScreenModule()
+            mainMechanicScreenModule()
+            mainObserverScreenModule()
+
+            featureActiveRequestsForDriverScreenModule()
+        }
+
+        //navigate to auth screen in the auth module
+        val navigator = LocalNavigator.currentOrThrow
+        val authScreen = rememberScreen(AuthSharedScreen.Auth)
+        navigator.push(authScreen)
+    }
 }
