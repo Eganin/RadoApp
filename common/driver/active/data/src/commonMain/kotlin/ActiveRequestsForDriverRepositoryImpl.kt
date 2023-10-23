@@ -53,15 +53,6 @@ class ActiveRequestsForDriverRepositoryImpl(
         return activeRequestsForDriverItem
     }
 
-    override suspend fun createResourcesImages(image: Pair<String, ByteArray>) {
-        try {
-            remoteDataSource.uploadResourceImage(image = image)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            log(tag = TAG) { e.printStackTrace().toString() }
-        }
-    }
-
     override suspend fun createImagesForRequest(
         requestId: Int,
         images: List<Pair<String, ByteArray>>

@@ -36,7 +36,7 @@ fun ImageMachineCells(
     imageLink: String,
     title: String,
     isExpanded: Boolean,
-    eventHandler: () -> Unit,
+    eventHandler: () -> Unit={},
     modifier: Modifier = Modifier
 ) {
     val sizeExpansion = 10.dp

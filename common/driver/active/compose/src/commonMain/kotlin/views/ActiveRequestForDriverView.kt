@@ -15,6 +15,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import models.DriverActiveEvent
@@ -123,7 +124,30 @@ fun ActiveRequestsForDriverView(
             InfoRequestAlertDialog(
                 onDismiss = { eventHandler.invoke(DriverActiveEvent.CloseInfoDialog) },
                 requestId = state.requestIdForInfo,
-                actionControl = {
+                actionControl = { infoRequestState ->
+                    if (infoRequestState.mechanicPhone.isNotEmpty()) {
+                        Text(
+                            text = MainRes.string.contact_a_mechanic + infoRequestState.mechanicPhone,
+                            fontSize = 12.sp,
+                            color = Theme.colors.primaryTextColor,
+                            textAlign = TextAlign.Start,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    if (infoRequestState.datetime.isNotEmpty()) {
+                        Text(
+                            text = MainRes.string.datetime_title + infoRequestState.datetime,
+                            fontSize = 12.sp,
+                            color = Theme.colors.primaryTextColor,
+                            textAlign = TextAlign.Start,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
+
                     ActionButton(
                         text = MainRes.string.close_window_title,
                         modifier = Modifier.fillMaxWidth(),

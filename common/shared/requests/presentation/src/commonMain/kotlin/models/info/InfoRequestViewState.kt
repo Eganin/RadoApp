@@ -10,5 +10,7 @@ data class InfoRequestViewState(
     val mechanicPhone: String = "",
     val driverPhone: String = "",
     val datetime: String = "",
-    val errorTitleMessage: String =""
+    val errorTitleMessage: String = "",
+    val imageIsExpanded: Boolean = false,
+    val isLoading: Boolean = false
 )

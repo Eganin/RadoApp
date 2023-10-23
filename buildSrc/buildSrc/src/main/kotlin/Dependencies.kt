@@ -159,5 +159,10 @@ object Dependencies {
             private const val version = "2.1.0"
             const val core = "com.darkrockstudios:mpfilepicker:$version"
         }
+
+        object UUID{
+            private const val version ="0.8.1"
+            const val core = "com.benasher44:uuid:$version"
+        }
     }
 }

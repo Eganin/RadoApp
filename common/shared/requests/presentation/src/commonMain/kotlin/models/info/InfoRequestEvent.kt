@@ -7,4 +7,6 @@ sealed class InfoRequestEvent {
     data class ActiveRequestGetInfo(val requestId:Int): InfoRequestEvent()
 
     data class PhoneClick(val phoneNumber: String) : InfoRequestEvent()
+
+    data object ImageRepairExpandedChanged: InfoRequestEvent()
 }

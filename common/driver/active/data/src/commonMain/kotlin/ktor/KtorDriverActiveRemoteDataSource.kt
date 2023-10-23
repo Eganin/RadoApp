@@ -1,5 +1,6 @@
 package ktor
 
+import com.benasher44.uuid.uuid4
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.forms.MultiPartFormDataContent
@@ -39,15 +40,15 @@ class KtorDriverActiveRemoteDataSource(
         }.body()
     }
 
-    suspend fun fetchUnconfirmedRequests(request: KtorUnconfirmedRequest): List<SmallUnconfirmedRequestResponse>{
-        return httpClient.get{
+    suspend fun fetchUnconfirmedRequests(request: KtorUnconfirmedRequest): List<SmallUnconfirmedRequestResponse> {
+        return httpClient.get {
             url {
                 path("/request/unconfirmed/driver/${request.userId}")
             }
         }.body()
     }
 
-    suspend fun uploadImagesForRequest(requestId:Int,image: Pair<String,ByteArray>){
+    suspend fun uploadImagesForRequest(requestId: Int, image: Pair<String, ByteArray>) {
         httpClient.post {
             url {
                 path("images/create")
@@ -62,32 +63,7 @@ class KtorDriverActiveRemoteDataSource(
                                     append(HttpHeaders.ContentType, "image/png")
                                     append(
                                         HttpHeaders.ContentDisposition,
-                                        "filename=\"${image.first.split("/").last()}\""
-                                    )
-                                })
-                        },
-                        boundary = "WebAppBoundary"
-                    )
-                )
-            }
-        }
-    }
-
-    suspend fun uploadResourceImage(image: Pair<String, ByteArray>) {
-        httpClient.post {
-            url {
-                path("resources/create")
-                setBody(
-                    MultiPartFormDataContent(
-                        formData {
-                            append(
-                                "image",
-                                image.second,
-                                Headers.build {
-                                    append(HttpHeaders.ContentType, "image/png")
-                                    append(
-                                        HttpHeaders.ContentDisposition,
-                                        "filename=\"${image.first.split("/").last()}\""
+                                        "filename=\"${uuid4().mostSignificantBits}.jpg\""
                                     )
                                 })
                         },

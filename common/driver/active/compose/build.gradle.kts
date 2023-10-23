@@ -12,6 +12,7 @@ kotlin{
                 implementation(project(":common:core-utils"))
                 implementation(project(":common:driver:active:presentation"))
                 implementation(project(":common:shared:requests:compose"))
+                implementation(project(":common:shared:requests:presentation"))
 
                 implementation(Dependencies.Navigation.Voyager.navigator)
                 implementation(Dependencies.Navigation.MokoMVVM.core)

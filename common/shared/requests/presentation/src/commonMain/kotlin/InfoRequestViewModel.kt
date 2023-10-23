@@ -28,13 +28,15 @@ class InfoRequestViewModel :
     override fun obtainEvent(viewEvent: InfoRequestEvent) {
         when (viewEvent) {
             is InfoRequestEvent.UnconfirmedRequestGetInfo -> getInfoForUnconfirmedRequest(requestId = viewEvent.requestId)
-            is InfoRequestEvent.ActiveRequestGetInfo->{}
+            is InfoRequestEvent.ActiveRequestGetInfo -> {}
+            is InfoRequestEvent.ImageRepairExpandedChanged -> obtainImageRepairExpandedChanged()
             is InfoRequestEvent.PhoneClick -> {}
         }
     }
 
     private fun getInfoForUnconfirmedRequest(requestId: Int) {
         coroutineScope.launch {
+            viewState = viewState.copy(isLoading = !viewState.isLoading)
             val unconfirmedRequestInfoItem =
                 unconfirmedRequestsRepository.getInfoForUnconfirmedRequest(requestId = requestId)
             if (unconfirmedRequestInfoItem is UnconfirmedRequestInfoItem.Success) {
@@ -53,7 +55,14 @@ class InfoRequestViewModel :
                     errorTitleMessage = unconfirmedRequestInfoItem.message
                 )
             }
+            viewState = viewState.copy(isLoading = !viewState.isLoading)
         }
+    }
+
+    private fun obtainImageRepairExpandedChanged() {
+        viewState = viewState.copy(
+            imageIsExpanded = !viewState.imageIsExpanded
+        )
     }
 
     private companion object {

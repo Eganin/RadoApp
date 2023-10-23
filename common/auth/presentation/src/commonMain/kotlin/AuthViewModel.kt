@@ -42,7 +42,7 @@ class AuthViewModel : BaseSharedViewModel<AuthViewState, AuthAction, AuthEvent>(
     }
 
     private fun sendLogin() {
-        obtainStartLoading()
+        obtainEvent(viewEvent = AuthEvent.StartLoading)
         val phoneIsValid = validatePhone.invoke(phone = viewState.phone)
         val fullNameIsValid = validateFullName.invoke(
             firstname = viewState.firstName,
@@ -98,7 +98,7 @@ class AuthViewModel : BaseSharedViewModel<AuthViewState, AuthAction, AuthEvent>(
                 }
             }
         }
-        obtainEndLoading()
+        obtainEvent(viewEvent = AuthEvent.EndLoading)
     }
 
     private fun obtainIsFirstSignInChange(isFirstSignIn: Boolean) {

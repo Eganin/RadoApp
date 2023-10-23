@@ -52,6 +52,7 @@ class CreateRequestViewModel :
 
     private fun createRequest() {
         coroutineScope.launch {
+            viewState = viewState.copy(isLoading = !viewState.isLoading)
             if (viewState.numberVehicle.isNotEmpty()) {
                 viewState = viewState.copy(notVehicleNumber = false)
                 val createRequestIdItem = activeRequestsRepository.createRequest(
@@ -77,6 +78,7 @@ class CreateRequestViewModel :
             } else {
                 viewState = viewState.copy(notVehicleNumber = true)
             }
+            viewState = viewState.copy(isLoading = !viewState.isLoading)
         }
     }
 
@@ -95,10 +97,6 @@ class CreateRequestViewModel :
     }
 
     private fun saveImageToStateList(image: Pair<String, ByteArray>) {
-        //create image for view image for ui
-        coroutineScope.launch {
-            activeRequestsRepository.createResourcesImages(image = image)
-        }
         val newImagesList = mutableListOf(image)
         newImagesList.addAll(viewState.images)
         log(tag = TAG) { "Count images ${newImagesList.size}" }
