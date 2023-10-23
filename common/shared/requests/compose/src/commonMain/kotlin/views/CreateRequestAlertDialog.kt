@@ -38,9 +38,9 @@ import compose.icons.feathericons.ArrowLeft
 import compose.icons.feathericons.Plus
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 import io.github.aakira.napier.log
-import models.CreateRequestAction
-import models.CreateRequestEvent
-import models.VehicleType
+import models.create.CreateRequestAction
+import models.create.CreateRequestEvent
+import models.create.VehicleType
 import org.company.rado.core.MainRes
 import other.observeAsState
 import platform.LocalPlatform

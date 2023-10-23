@@ -5,11 +5,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
-import models.CreateRequestAction
-import models.CreateRequestEvent
+import models.create.CreateRequestAction
+import models.create.CreateRequestEvent
 import models.CreateRequestIdItem
-import models.CreateRequestViewState
-import models.VehicleType
+import models.create.CreateRequestViewState
+import models.create.VehicleType
 import other.BaseSharedViewModel
 
 class CreateRequestViewModel :

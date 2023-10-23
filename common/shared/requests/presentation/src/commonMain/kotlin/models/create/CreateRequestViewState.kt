@@ -1,4 +1,6 @@
-package models
+package models.create
+
+import org.company.rado.core.MainRes
 
 data class CreateRequestViewState(
     val selectedVehicleType: VehicleType = VehicleType.Tractor,
@@ -9,13 +11,20 @@ data class CreateRequestViewState(
     val notVehicleNumber: Boolean = false,
     val trailerIsExpanded: Boolean = false,
     val tractorIsExpanded: Boolean = true,
-    val imageIsExpanded: Boolean=false,
+    val imageIsExpanded: Boolean = false,
     val showFilePicker: Boolean = false,
     val images: List<Pair<String, ByteArray>> = emptyList()
 )
 
 
 enum class VehicleType(val nameVehicleType: String) {
-    Tractor(nameVehicleType = "Тягач"),
-    Trailer(nameVehicleType = "Прицеп")
+    Tractor(nameVehicleType = MainRes.string.tractor_enum_value),
+    Trailer(nameVehicleType = MainRes.string.trailer_enum_value)
+}
+
+fun String.toVehicleType(): VehicleType {
+    return when (this) {
+        MainRes.string.tractor_enum_value -> VehicleType.Tractor
+        else -> VehicleType.Trailer
+    }
 }

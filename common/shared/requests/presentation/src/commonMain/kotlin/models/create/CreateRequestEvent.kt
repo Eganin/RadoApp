@@ -1,4 +1,4 @@
-package models
+package models.create
 
 sealed class CreateRequestEvent {
 

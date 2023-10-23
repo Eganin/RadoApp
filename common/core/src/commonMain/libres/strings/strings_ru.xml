@@ -53,4 +53,6 @@
     <string name="active_requests_title">Активные заявки</string>
     <string name="empty_title">Пусто</string>
     <string name="unconfirmed_request_info_is_not_fetch">Не удалось получить данные по неподтвержденной заявке</string>
+    <string name="trailer_enum_value">Прицеп</string>
+    <string name="tractor_enum_value">Тягач</string>
 </resources>
