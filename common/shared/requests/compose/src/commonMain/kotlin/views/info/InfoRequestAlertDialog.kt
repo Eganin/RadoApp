@@ -184,6 +184,17 @@ fun InfoRequestAlertDialog(
             }
         }
 
+        if (state.value.errorTitleMessage.isNotEmpty()){
+            Text(
+                text = MainRes.string.base_error_message,
+                fontSize = 24.sp,
+                color = Theme.colors.primaryTextColor,
+                textAlign = TextAlign.Center,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.fillMaxSize()
+            )
+        }
+
         if (state.value.isLoading) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator(
