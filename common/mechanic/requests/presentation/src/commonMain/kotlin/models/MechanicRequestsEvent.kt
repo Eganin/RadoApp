@@ -15,4 +15,6 @@ sealed class MechanicRequestsEvent {
 
     data class ConfirmationRequest(val requestId: Int, val time: String, val date: String) :
         MechanicRequestsEvent()
+
+    data class ErrorTextForRequestListChanged(val message: String) : MechanicRequestsEvent()
 }
