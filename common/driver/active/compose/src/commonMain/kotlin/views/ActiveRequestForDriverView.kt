@@ -22,6 +22,7 @@ import models.DriverActiveViewState
 import org.company.rado.core.MainRes
 import theme.Theme
 import widgets.common.ActionButton
+import widgets.common.TextStickyHeader
 
 @Composable
 fun ActiveRequestsForDriverView(
@@ -56,12 +57,44 @@ fun ActiveRequestsForDriverView(
         Spacer(modifier = Modifier.height(8.dp))
 
         if (state.errorTextForRequestList.isEmpty()) {
-            state.requests.forEach {
-                ActiveRequestCells(
-                    firstText = it.datetime,
-                    secondText = it.mechanicName,
-                    onClick = {},
-                    isReissueRequest = false
+            TextStickyHeader(
+                textTitle = MainRes.string.active_requests_title,
+                modifier = Modifier.fillMaxWidth()
+            )
+            if (state.requests.isNotEmpty()) {
+                state.requests.forEach {
+                    RequestCells(
+                        firstText = it.datetime,
+                        secondText = it.mechanicName,
+                        onClick = {},
+                        isReissueRequest = true
+                    )
+                }
+            } else {
+                TextStickyHeader(
+                    textTitle = MainRes.string.empty_title,
+                    fontSize = 16,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+            TextStickyHeader(
+                textTitle = MainRes.string.unconfirmed_requests_title,
+                modifier = Modifier.fillMaxWidth()
+            )
+            if (state.unconfirmedRequests.isNotEmpty()) {
+                state.unconfirmedRequests.forEach {
+                    RequestCells(
+                        firstText = it.vehicleType,
+                        secondText = it.vehicleNumber,
+                        onClick = {},
+                        isReissueRequest = false
+                    )
+                }
+            } else {
+                TextStickyHeader(
+                    textTitle = MainRes.string.empty_title,
+                    fontSize = 16,
+                    modifier = Modifier.fillMaxWidth()
                 )
             }
         } else {

@@ -1,7 +1,12 @@
 package views
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -17,16 +22,16 @@ import org.company.rado.core.MainRes
 import theme.Theme
 
 @Composable
-fun ActiveRequestCells(
+fun RequestCells(
     firstText: String,
     secondText: String,
     isReissueRequest: Boolean,
     modifier: Modifier = Modifier,
-    onClick : ()->Unit,
-    onReissueRequest: () -> Unit ={}
+    onClick: () -> Unit,
+    onReissueRequest: () -> Unit = {}
 ) {
-    Row(modifier = modifier.fillMaxWidth().padding(16.dp)) {
-        Column(modifier = Modifier.clickable { onClick.invoke() }.weight(1f)) {
+    Row(modifier = modifier.clickable { onClick.invoke() }.fillMaxWidth().padding(16.dp)) {
+        Column(modifier = Modifier.weight(1f)) {
             Text(
                 text = firstText,
                 color = Theme.colors.primaryTextColor,
@@ -47,7 +52,7 @@ fun ActiveRequestCells(
             TextButton(
                 onClick = onReissueRequest,
                 colors = ButtonDefaults.textButtonColors(contentColor = Theme.colors.highlightColor)
-            ){
+            ) {
                 Text(
                     text = MainRes.string.reissue_request_title,
                     fontSize = 12.sp,
@@ -55,7 +60,11 @@ fun ActiveRequestCells(
                 )
             }
         } else {
-            Icon(imageVector = FeatherIcons.AlignJustify,contentDescription = null)
+            Icon(
+                imageVector = FeatherIcons.AlignJustify,
+                contentDescription = null,
+                tint = Theme.colors.primaryTextColor
+            )
         }
     }
 }

@@ -9,11 +9,13 @@ import models.ActiveRequestsForDriverItem
 import models.DriverActiveAction
 import models.DriverActiveEvent
 import models.DriverActiveViewState
+import models.UnconfirmedRequestsForDriverItem
 import other.BaseSharedViewModel
 
-class DriverActiveViewModel : BaseSharedViewModel<DriverActiveViewState, DriverActiveAction, DriverActiveEvent>(
-    initialState = DriverActiveViewState()
-) {
+class DriverActiveViewModel :
+    BaseSharedViewModel<DriverActiveViewState, DriverActiveAction, DriverActiveEvent>(
+        initialState = DriverActiveViewState()
+    ) {
 
     private val coroutineScope =
         CoroutineScope(SupervisorJob() + Dispatchers.Default + CoroutineExceptionHandler { _, throwable ->
@@ -22,7 +24,11 @@ class DriverActiveViewModel : BaseSharedViewModel<DriverActiveViewState, DriverA
 
     private val activeRequestsRepository: ActiveRequestsForDriverRepository = Inject.instance()
 
+    private val unconfirmedRequestsRepository: UnconfirmedRequestsForDriverRepository =
+        Inject.instance()
+
     init {
+        getUnconfirmedRequests()
         getActiveRequestsByDate()
     }
 
@@ -30,7 +36,10 @@ class DriverActiveViewModel : BaseSharedViewModel<DriverActiveViewState, DriverA
         when (viewEvent) {
             is DriverActiveEvent.OpenDialogCreateRequest -> openCreateRequestScreen()
             is DriverActiveEvent.SelectedDateChanged -> getActiveRequestsByDate(date = viewEvent.value)
-            is DriverActiveEvent.ErrorTextForRequestListChanged -> obtainErrorTextForRequestListChange(errorMessage = viewEvent.value)
+            is DriverActiveEvent.ErrorTextForRequestListChanged -> obtainErrorTextForRequestListChange(
+                errorMessage = viewEvent.value
+            )
+
             is DriverActiveEvent.CloseCreateDialog -> obtainCloseCreateDialogChange(isCloseDialog = viewEvent.value)
         }
     }
@@ -42,21 +51,37 @@ class DriverActiveViewModel : BaseSharedViewModel<DriverActiveViewState, DriverA
 
     private fun getActiveRequestsByDate(date: String = "") {
         coroutineScope.launch {
-            val activeRequestsForDriverItem = activeRequestsRepository.getRequestsByDate(date = date)
+            val activeRequestsForDriverItem =
+                activeRequestsRepository.getRequestsByDate(date = date)
             if (activeRequestsForDriverItem is ActiveRequestsForDriverItem.Success) {
-                log(tag = TAG) { activeRequestsForDriverItem.items.toString() }
+                log(tag = TAG) { "Active requests by date" + activeRequestsForDriverItem.items.toString() }
                 viewState = viewState.copy(
                     requests = activeRequestsForDriverItem.items
                 )
             } else if (activeRequestsForDriverItem is ActiveRequestsForDriverItem.Error) {
-                log(tag = TAG) { "Active Requests without date is failure" }
+                log(tag = TAG) { "Active Requests is failure" }
                 obtainEvent(viewEvent = DriverActiveEvent.ErrorTextForRequestListChanged(value = activeRequestsForDriverItem.message))
             }
         }
     }
 
+    private fun getUnconfirmedRequests() {
+        coroutineScope.launch {
+            val unconfirmedRequestsForDriverItem = unconfirmedRequestsRepository.getRequests()
+            if (unconfirmedRequestsForDriverItem is UnconfirmedRequestsForDriverItem.Success) {
+                log(tag = TAG) { "Unconfirmed requests" + unconfirmedRequestsForDriverItem.items.toString() }
+                viewState = viewState.copy(
+                    unconfirmedRequests = unconfirmedRequestsForDriverItem.items
+                )
+            } else if (unconfirmedRequestsForDriverItem is UnconfirmedRequestsForDriverItem.Error) {
+                log(tag = TAG) { "Unconfirmed Requests failure" }
+                obtainEvent(viewEvent = DriverActiveEvent.ErrorTextForRequestListChanged(value = unconfirmedRequestsForDriverItem.message))
+            }
+        }
+    }
+
     private fun obtainCloseCreateDialogChange(isCloseDialog: Boolean) {
-        log(tag=TAG) { "CLOSE DIALOG" }
+        log(tag = TAG) { "CLOSE DIALOG" }
         viewState = viewState.copy(
             showCreateDialog = isCloseDialog
         )
