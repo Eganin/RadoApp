@@ -25,7 +25,8 @@ object PlatformSDK {
                 platformModule,
                 coreModule,
                 authModule,
-                driverActiveModule
+                driverActiveModule,
+                sharedRequestsModule
             )
         }.direct)
 
