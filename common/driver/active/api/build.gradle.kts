@@ -8,6 +8,7 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
+                implementation(project(":common:core"))
                 implementation(Dependencies.Kotlin.Serialization.serialization)
             }
         }
