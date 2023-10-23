@@ -9,7 +9,7 @@ import models.ActiveRequestsForDriverItem
 import models.DriverActiveAction
 import models.DriverActiveEvent
 import models.DriverActiveViewState
-import models.UnconfirmedRequestsForDriverItem
+import models.UnconfirmedRequestsItem
 import other.BaseSharedViewModel
 
 class DriverActiveViewModel :
@@ -24,8 +24,7 @@ class DriverActiveViewModel :
 
     private val activeRequestsRepository: ActiveRequestsForDriverRepository = Inject.instance()
 
-    private val unconfirmedRequestsRepository: UnconfirmedRequestsForDriverRepository =
-        Inject.instance()
+    private val unconfirmedRequestsRepository: UnconfirmedRequestsRepository = Inject.instance()
 
     init {
         getUnconfirmedRequests()
@@ -75,13 +74,14 @@ class DriverActiveViewModel :
 
     private fun getUnconfirmedRequests() {
         coroutineScope.launch {
-            val unconfirmedRequestsForDriverItem = unconfirmedRequestsRepository.getRequests()
-            if (unconfirmedRequestsForDriverItem is UnconfirmedRequestsForDriverItem.Success) {
+            val unconfirmedRequestsForDriverItem =
+                unconfirmedRequestsRepository.getRequests(isDriver = true)
+            if (unconfirmedRequestsForDriverItem is UnconfirmedRequestsItem.Success) {
                 log(tag = TAG) { "Unconfirmed requests" + unconfirmedRequestsForDriverItem.items.toString() }
                 viewState = viewState.copy(
                     unconfirmedRequests = unconfirmedRequestsForDriverItem.items
                 )
-            } else if (unconfirmedRequestsForDriverItem is UnconfirmedRequestsForDriverItem.Error) {
+            } else if (unconfirmedRequestsForDriverItem is UnconfirmedRequestsItem.Error) {
                 log(tag = TAG) { "Unconfirmed Requests failure" }
                 obtainEvent(viewEvent = DriverActiveEvent.ErrorTextForRequestListChanged(value = unconfirmedRequestsForDriverItem.message))
             }

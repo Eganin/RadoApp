@@ -21,7 +21,8 @@ val sharedRequestsModule = DI.Module(name = "sharedRequestsModule") {
     bind<UnconfirmedRequestsRepository>() with singleton {
         UnconfirmedRequestsRepositoryImpl(
             remoteDataSource = instance(),
-            unconfirmedRequestInfoItemMapper = instance()
+            unconfirmedRequestInfoItemMapper = instance(),
+            localDataSource = instance()
         )
     }
 }

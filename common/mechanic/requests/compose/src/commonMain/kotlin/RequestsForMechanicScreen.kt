@@ -1,0 +1,10 @@
+import androidx.compose.runtime.Composable
+import cafe.adriel.voyager.core.screen.Screen
+
+object RequestsForMechanicScreen: Screen {
+
+    @Composable
+    override fun Content() {
+        TODO("Not yet implemented")
+    }
+}

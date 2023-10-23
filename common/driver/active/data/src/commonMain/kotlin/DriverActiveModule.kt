@@ -25,11 +25,4 @@ val driverActiveModule = DI.Module(name = "driverActiveModule") {
             createRequestMapper = instance()
         )
     }
-
-    bind<UnconfirmedRequestsForDriverRepository>() with singleton {
-        UnconfirmedRequestsForDriverRepositoryImpl(
-            localDataSource = instance(),
-            remoteDataSource = instance()
-        )
-    }
 }
