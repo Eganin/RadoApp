@@ -27,7 +27,8 @@ class InfoRequestViewModel :
 
     override fun obtainEvent(viewEvent: InfoRequestEvent) {
         when (viewEvent) {
-            is InfoRequestEvent.UnconfirmedRequestGetInfo -> getInfoForUnconfirmedRequest(requestId = viewEvent.value)
+            is InfoRequestEvent.UnconfirmedRequestGetInfo -> getInfoForUnconfirmedRequest(requestId = viewEvent.requestId)
+            is InfoRequestEvent.ActiveRequestGetInfo->{}
             is InfoRequestEvent.PhoneClick -> {}
         }
     }

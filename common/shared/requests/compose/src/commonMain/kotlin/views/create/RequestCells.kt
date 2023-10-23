@@ -1,4 +1,4 @@
-package views
+package views.create
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column

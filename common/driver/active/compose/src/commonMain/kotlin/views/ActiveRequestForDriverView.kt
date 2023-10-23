@@ -21,6 +21,10 @@ import models.DriverActiveEvent
 import models.DriverActiveViewState
 import org.company.rado.core.MainRes
 import theme.Theme
+import views.create.CalendarView
+import views.create.CreateRequestAlertDialog
+import views.create.RequestCells
+import views.info.InfoRequestAlertDialog
 import widgets.common.ActionButton
 import widgets.common.TextStickyHeader
 
@@ -86,7 +90,9 @@ fun ActiveRequestsForDriverView(
                     RequestCells(
                         firstText = it.vehicleType,
                         secondText = it.vehicleNumber,
-                        onClick = {},
+                        onClick = {
+                            eventHandler.invoke(DriverActiveEvent.OpenDialogInfoRequest(requestId = it.id))
+                        },
                         isReissueRequest = false
                     )
                 }
@@ -109,8 +115,21 @@ fun ActiveRequestsForDriverView(
 
         if (state.showCreateDialog) {
             CreateRequestAlertDialog(
-                onDismiss = { eventHandler.invoke(DriverActiveEvent.CloseCreateDialog(value = !state.showCreateDialog)) },
-                onExit = { eventHandler.invoke(DriverActiveEvent.CloseCreateDialog(value = !state.showCreateDialog)) })
+                onDismiss = { eventHandler.invoke(DriverActiveEvent.CloseCreateDialog) },
+                onExit = { eventHandler.invoke(DriverActiveEvent.CloseCreateDialog) })
+        }
+
+        if (state.showInfoDialog) {
+            InfoRequestAlertDialog(
+                onDismiss = { eventHandler.invoke(DriverActiveEvent.CloseInfoDialog) },
+                requestId = state.requestIdForInfo,
+                actionControl = {
+                    ActionButton(
+                        text = MainRes.string.close_window_title,
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = { eventHandler.invoke(DriverActiveEvent.CloseInfoDialog) })
+                }
+            )
         }
     }
 }

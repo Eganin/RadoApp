@@ -2,7 +2,9 @@ package models.info
 
 sealed class InfoRequestEvent {
 
-    data class UnconfirmedRequestGetInfo(val value: Int) : InfoRequestEvent()
+    data class UnconfirmedRequestGetInfo(val requestId: Int) : InfoRequestEvent()
 
-    data class PhoneClick(val value: String) : InfoRequestEvent()
+    data class ActiveRequestGetInfo(val requestId:Int): InfoRequestEvent()
+
+    data class PhoneClick(val phoneNumber: String) : InfoRequestEvent()
 }

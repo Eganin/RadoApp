@@ -35,18 +35,26 @@ class DriverActiveViewModel :
     override fun obtainEvent(viewEvent: DriverActiveEvent) {
         when (viewEvent) {
             is DriverActiveEvent.OpenDialogCreateRequest -> openCreateRequestScreen()
+            is DriverActiveEvent.OpenDialogInfoRequest -> openInfoRequestScreen(requestId = viewEvent.requestId)
             is DriverActiveEvent.SelectedDateChanged -> getActiveRequestsByDate(date = viewEvent.value)
             is DriverActiveEvent.ErrorTextForRequestListChanged -> obtainErrorTextForRequestListChange(
                 errorMessage = viewEvent.value
             )
 
-            is DriverActiveEvent.CloseCreateDialog -> obtainCloseCreateDialogChange(isCloseDialog = viewEvent.value)
+            is DriverActiveEvent.CloseCreateDialog -> obtainCloseCreateDialogChange()
+            is DriverActiveEvent.CloseInfoDialog -> obtainCloseInfoDialogChange()
         }
     }
 
     private fun openCreateRequestScreen() {
         log(tag = TAG) { "Navigate to create request screen" }
         viewState = viewState.copy(showCreateDialog = !viewState.showCreateDialog)
+    }
+
+    private fun openInfoRequestScreen(requestId: Int) {
+        log(tag = TAG) { "Navigate to info request screen" }
+        viewState =
+            viewState.copy(requestIdForInfo = requestId, showInfoDialog = !viewState.showInfoDialog)
     }
 
     private fun getActiveRequestsByDate(date: String = "") {
@@ -80,10 +88,17 @@ class DriverActiveViewModel :
         }
     }
 
-    private fun obtainCloseCreateDialogChange(isCloseDialog: Boolean) {
-        log(tag = TAG) { "CLOSE DIALOG" }
+    private fun obtainCloseInfoDialogChange() {
+        log(tag = TAG) { "Close info dialog" }
         viewState = viewState.copy(
-            showCreateDialog = isCloseDialog
+            showInfoDialog = !viewState.showInfoDialog
+        )
+    }
+
+    private fun obtainCloseCreateDialogChange() {
+        log(tag = TAG) { "CLOSE CREATE DIALOG" }
+        viewState = viewState.copy(
+            showCreateDialog = !viewState.showCreateDialog
         )
     }
 

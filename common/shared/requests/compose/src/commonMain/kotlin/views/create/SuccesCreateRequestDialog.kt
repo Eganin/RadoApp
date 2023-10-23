@@ -1,5 +1,6 @@
-package views
+package views.create
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -20,7 +21,7 @@ import org.company.rado.core.MainRes
 import theme.Theme
 
 @Composable
-fun FailureCreateRequestDialog(
+fun SuccessCreateRequestDialog(
     onDismiss: () -> Unit,
     onExit: () -> Unit,
     modifier: Modifier = Modifier
@@ -36,11 +37,18 @@ fun FailureCreateRequestDialog(
             colors = CardDefaults.cardColors(containerColor = Theme.colors.primaryBackground)
         ) {
             Column(
-                modifier = Modifier.fillMaxWidth().padding(16.dp)
+                modifier = Modifier.fillMaxWidth().padding(16.dp),
+                verticalArrangement = Arrangement.SpaceAround
             ) {
                 Text(
-                    text = MainRes.string.failure_create_request_title,
+                    text = MainRes.string.success_create_request_title,
                     color = Theme.colors.primaryTextColor,
+                    fontSize = 16.sp
+                )
+
+                Text(
+                    text = MainRes.string.success_create_request_text,
+                    color = Theme.colors.secondaryTextColor,
                     fontSize = 16.sp
                 )
 

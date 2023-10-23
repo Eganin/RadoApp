@@ -1,4 +1,4 @@
-package views
+package views.create
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image

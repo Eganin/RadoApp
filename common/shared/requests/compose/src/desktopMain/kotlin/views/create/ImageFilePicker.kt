@@ -1,8 +1,8 @@
-package views
+package views.create
 
 import androidx.compose.runtime.Composable
 import com.darkrockstudios.libraries.mpfilepicker.FilePicker
-import com.darkrockstudios.libraries.mpfilepicker.WebFile
+import com.darkrockstudios.libraries.mpfilepicker.JvmFile
 
 @Composable
 actual fun ImageFilePicker(
@@ -13,8 +13,7 @@ actual fun ImageFilePicker(
     val fileType = listOf("jpg", "png", "jpeg")
     FilePicker(showFilePicker, fileExtensions = fileType) { file ->
         closeFilePicker.invoke()
-        val newFile = file as WebFile
-        newFile.platformFile
-        receiveFilePathAndByteArray.invoke(newFile.path, ByteArray(size=0))
+        val newFile = file as JvmFile
+        receiveFilePathAndByteArray.invoke(newFile.path, newFile.platformFile.readBytes())
     }
 }
