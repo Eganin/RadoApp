@@ -18,11 +18,11 @@ val authModule = DI.Module(name = "authModule") {
         KtorAuthRemoteDataSource(httpClient = instance())
     }
 
-    bind<Mapper<UserIdResponse, UserIdItem>>() with provider {
+    bind<Mapper<UserIdResponse, UserIdItem>>() with singleton {
         UserIdMapper()
     }
 
-    bind<Mapper<LoginInfoResponse, LoginInfoItem>>() with provider {
+    bind<Mapper<LoginInfoResponse, LoginInfoItem>>() with singleton {
         LoginInfoMapper()
     }
 

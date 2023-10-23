@@ -15,7 +15,8 @@ data class RadoColors(
     val tagTextColor: Color,
     val bottomBarColor:Color,
     val calendarColor: Color,
-    val bottomCellsColor:Color
+    val bottomCellsColor:Color,
+    val errorColor:Color
 )
 
 val lightPalette = RadoColors(
@@ -30,11 +31,12 @@ val lightPalette = RadoColors(
     tagTextColor = Color(0xFFFFFFFF),
     bottomBarColor = Color(0xFFFFFFFF),
     calendarColor = Color(0xFFFFFFFF),
-    bottomCellsColor = Color(0xFFE0E0E0)
+    bottomCellsColor = Color(0xFFE0E0E0),
+    errorColor = Color.Red
 )
 
 val darkPalette = RadoColors(
-    primaryBackground = Color(0xFF282323),
+    primaryBackground = Color(0xFF24292E),
     primaryAction = Color(0xFFF8D247),
     primaryTextColor = Color(0xFFFFFFFF),
     hintTextColor = Color(0xFFFFE8E8),
@@ -43,9 +45,10 @@ val darkPalette = RadoColors(
     thirdTextColor = Color(0xFF0047FF),
     tagColor = Color(0xFF6200EE),
     tagTextColor = Color(0xFFFFFFFF),
-    bottomBarColor = Color(0xFF000000),
+    bottomBarColor = Color(0xFF24292E),
     calendarColor = Color(0xFF000000),
-    bottomCellsColor = Color(0xFFFFE8E8)
+    bottomCellsColor = Color(0xFFFFE8E8),
+    errorColor = Color.Red
 )
 
 val LocalColorProvider = staticCompositionLocalOf<RadoColors> {

@@ -2,7 +2,7 @@ plugins {
     id("multiplatform-setup")
     id("android-setup")
     kotlin("plugin.serialization")
-    id("app.cash.sqldelight") version "2.0.0"
+    //id("app.cash.sqldelight") version "2.0.0"
     id("io.github.skeptick.libres")
 }
 
@@ -33,7 +33,7 @@ kotlin {
         androidMain {
             dependencies {
                 implementation(Dependencies.Ktor.android)
-                implementation(Dependencies.Persistence.SqlDelight.androidDriver)
+                //implementation(Dependencies.Persistence.SqlDelight.androidDriver)
                 implementation(Dependencies.Resources.Libres.libresCompose)
             }
         }
@@ -41,21 +41,21 @@ kotlin {
         iosMain {
             dependencies {
                 implementation(Dependencies.Ktor.ios)
-                implementation(Dependencies.Persistence.SqlDelight.nativeDriver)
+                //implementation(Dependencies.Persistence.SqlDelight.nativeDriver)
             }
         }
 
         desktopMain {
             dependencies {
                 implementation(Dependencies.Ktor.okhttp)
-                implementation(Dependencies.Persistence.SqlDelight.sqliteDriver)
+                //implementation(Dependencies.Persistence.SqlDelight.sqliteDriver)
             }
         }
 
         jsMain{
             dependencies {
                 implementation(Dependencies.Ktor.js)
-                implementation(Dependencies.Persistence.SqlDelight.jsDriver)
+                //implementation(Dependencies.Persistence.SqlDelight.jsDriver)
                 implementation(npm("sql.js", "1.6.2"))
                 implementation(devNpm("copy-webpack-plugin", "9.1.0"))
             }
@@ -63,15 +63,15 @@ kotlin {
     }
 }
 
-sqldelight {
-    databases {
-        create("Database") {
-            packageName.set("org.company.rado")
-            schemaOutputDirectory.set(file("src/commonMain/sqldelight/databases/schema"))
-            migrationOutputDirectory.set(file("src/commonMain/sqldelight/databases/migrations"))
-        }
-    }
-}
+//sqldelight {
+//    databases {
+//        create("Database") {
+//            packageName.set("org.company.rado")
+//            schemaOutputDirectory.set(file("src/commonMain/sqldelight/databases/schema"))
+//            migrationOutputDirectory.set(file("src/commonMain/sqldelight/databases/migrations"))
+//        }
+//    }
+//}
 
 libres {
     generatedClassName = "MainRes" // "Res" by default

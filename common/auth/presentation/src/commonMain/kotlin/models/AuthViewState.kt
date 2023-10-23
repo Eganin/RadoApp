@@ -17,7 +17,8 @@ data class AuthViewState(
         Position.DRIVER,
         Position.MECHANIC,
         Position.OBSERVER
-    )
+    ),
+    val isLoading : Boolean = false
 )
 
 enum class Position(

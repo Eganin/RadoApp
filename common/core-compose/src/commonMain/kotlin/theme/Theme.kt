@@ -3,6 +3,8 @@ package theme
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import platform.LocalPlatform
+import platform.Platform
 
 object Theme {
     val colors: RadoColors
@@ -11,9 +13,10 @@ object Theme {
 }
 
 @Composable
-fun AppTheme(content: @Composable () -> Unit) {
+fun AppTheme(platform: Platform,content: @Composable () -> Unit) {
     CompositionLocalProvider(
-        LocalColorProvider provides if (!isSystemInDarkTheme()) lightPalette else darkPalette,
+        LocalColorProvider provides if(!isSystemInDarkTheme()) lightPalette else darkPalette,
+        LocalPlatform provides platform,
         content = content
     )
 }
