@@ -7,5 +7,6 @@ data class DriverActiveViewState(
     val errorTextForRequestList : String ="",
     val showCreateDialog : Boolean = false,
     val showInfoDialog: Boolean = false,
-    val requestIdForInfo :Int=-1
+    val requestIdForInfo :Int=-1,
+    val isLoading: Boolean=false
 )

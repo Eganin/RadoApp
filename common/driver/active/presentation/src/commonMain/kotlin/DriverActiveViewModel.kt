@@ -45,6 +45,10 @@ class DriverActiveViewModel :
         }
     }
 
+    private fun changeLoading() {
+        viewState = viewState.copy(isLoading = !viewState.isLoading)
+    }
+
     private fun openCreateRequestScreen() {
         log(tag = TAG) { "Navigate to create request screen" }
         viewState = viewState.copy(showCreateDialog = !viewState.showCreateDialog)
@@ -58,6 +62,7 @@ class DriverActiveViewModel :
 
     private fun getActiveRequestsByDate(date: String = "") {
         coroutineScope.launch {
+            changeLoading()
             val activeRequestsForDriverItem =
                 activeRequestsRepository.getRequestsByDate(date = date)
             if (activeRequestsForDriverItem is ActiveRequestsForDriverItem.Success) {
@@ -69,11 +74,13 @@ class DriverActiveViewModel :
                 log(tag = TAG) { "Active Requests is failure" }
                 obtainEvent(viewEvent = DriverActiveEvent.ErrorTextForRequestListChanged(value = activeRequestsForDriverItem.message))
             }
+            changeLoading()
         }
     }
 
     private fun getUnconfirmedRequests() {
         coroutineScope.launch {
+            changeLoading()
             val unconfirmedRequestsForDriverItem =
                 unconfirmedRequestsRepository.getRequests(isDriver = true)
             if (unconfirmedRequestsForDriverItem is UnconfirmedRequestsItem.Success) {
@@ -85,6 +92,7 @@ class DriverActiveViewModel :
                 log(tag = TAG) { "Unconfirmed Requests failure" }
                 obtainEvent(viewEvent = DriverActiveEvent.ErrorTextForRequestListChanged(value = unconfirmedRequestsForDriverItem.message))
             }
+            changeLoading()
         }
     }
 

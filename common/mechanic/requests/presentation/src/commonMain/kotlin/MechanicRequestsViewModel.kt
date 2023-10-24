@@ -40,6 +40,7 @@ class MechanicRequestsViewModel :
 
     private fun getUnconfirmedRequests() {
         coroutineScope.launch {
+            changeLoading()
             val unconfirmedRequestsForDriverItem =
                 unconfirmedRequestsRepository.getRequests(isDriver = false)
             if (unconfirmedRequestsForDriverItem is UnconfirmedRequestsItem.Success) {
@@ -51,6 +52,7 @@ class MechanicRequestsViewModel :
                 log(tag = TAG) { "Unconfirmed Requests failure" }
                 obtainEvent(viewEvent = MechanicRequestsEvent.ErrorTextForRequestListChanged(message = unconfirmedRequestsForDriverItem.message))
             }
+            changeLoading()
         }
     }
 
@@ -59,6 +61,10 @@ class MechanicRequestsViewModel :
             showInfoDialog = !viewState.showInfoDialog,
             requestsIdForInfo = requestId
         )
+    }
+
+    private fun changeLoading() {
+        viewState = viewState.copy(isLoading = !viewState.isLoading)
     }
 
     private companion object {

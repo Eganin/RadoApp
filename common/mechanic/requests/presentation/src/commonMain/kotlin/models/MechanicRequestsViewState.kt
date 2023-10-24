@@ -6,5 +6,6 @@ data class MechanicRequestsViewState(
     val showInfoDialog:Boolean = false,
     val requestsIdForInfo: Int=-1,
     val datetime: String ="",
-    val rejectDescription:String=""
+    val rejectDescription:String="",
+    val isLoading: Boolean = false
 )
