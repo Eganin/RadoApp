@@ -1,10 +1,8 @@
-import models.ConfirmationRequestRemote
-import models.RejectRequestRemote
 import other.WrapperForResponse
 
 interface RequestsForMechanicRepository {
 
-    suspend fun confirmationRequest(request:ConfirmationRequestRemote): WrapperForResponse
+    suspend fun confirmationRequest(requestId: Int, date: String, time: String): WrapperForResponse
 
-    suspend fun rejectRequest(request: RejectRequestRemote):WrapperForResponse
+    suspend fun rejectRequest(requestId: Int, commentMechanic: String): WrapperForResponse
 }

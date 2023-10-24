@@ -68,4 +68,6 @@
     <string name="modify_time_title">Изменить время</string>
     <string name="reject_request_title">Отменить заявку</string>
     <string name="confirm_request_title">Принять заявку</string>
+    <string name="confirm_request_error_message">При подтверждении заявки произошла ошибка</string>
+    <string name="reject_request_error_message">При отмене заявки произошла ошибка</string>
 </resources>
