@@ -30,9 +30,11 @@ class MechanicRequestsViewModel :
     override fun obtainEvent(viewEvent: MechanicRequestsEvent) {
         when (viewEvent) {
             is MechanicRequestsEvent.OpenDialogInfoRequest -> obtainShowInfoDialogChanged(requestId = viewEvent.requestId)
-            is MechanicRequestsEvent.ConfirmationRequest -> {}
-            is MechanicRequestsEvent.RejectRequest -> {}
-            is MechanicRequestsEvent.ErrorTextForRequestListChanged -> {}
+            is MechanicRequestsEvent.ConfirmationRequest -> confirmationRequest()
+            is MechanicRequestsEvent.ErrorTextForRequestListChanged -> obtainErrorTextForRequestListChanged(
+                errorMessage = viewEvent.message
+            )
+
             is MechanicRequestsEvent.CloseInfoDialog -> obtainShowInfoDialogChanged()
             is MechanicRequestsEvent.OpenDatePicker -> obtainShowDatePickerChanged()
             is MechanicRequestsEvent.OpenTimePicker -> obtainShowTimePickerChangedAndDate(date = viewEvent.date)
@@ -43,6 +45,9 @@ class MechanicRequestsViewModel :
                 hour = viewEvent.hour,
                 minute = viewEvent.minute
             )
+
+            is MechanicRequestsEvent.RejectRequest -> {}
+            is MechanicRequestsEvent.DriverPhoneClick -> {}
         }
     }
 
@@ -62,6 +67,19 @@ class MechanicRequestsViewModel :
             }
             changeLoading()
         }
+    }
+
+    private fun confirmationRequest() {
+        coroutineScope.launch {
+            changeLoading()
+            changeLoading()
+        }
+    }
+
+    private fun obtainErrorTextForRequestListChanged(errorMessage: String) {
+        viewState = viewState.copy(
+            errorTextForRequestList = errorMessage
+        )
     }
 
     private fun obtainReopenInfoDialogChanged() {

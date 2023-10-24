@@ -23,4 +23,6 @@ sealed class MechanicRequestsEvent {
     data object ConfirmationRequest : MechanicRequestsEvent()
 
     data class ErrorTextForRequestListChanged(val message: String) : MechanicRequestsEvent()
+
+    data object DriverPhoneClick : MechanicRequestsEvent()
 }
