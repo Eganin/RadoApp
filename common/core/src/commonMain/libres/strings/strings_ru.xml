@@ -63,11 +63,14 @@
     <string name="image_fault_unconfirmed_request">Вложенные изображения:</string>
     <string name="datetime_title">Дата: </string>
     <string name="contact_a_driver">Связаться с водителем: </string>
-    <string name="contact_a_mechanic">Связвться с механиком: </string>
+    <string name="contact_a_mechanic">Связаться с механиком: </string>
     <string name="choose_time_title">Выбрать время</string>
     <string name="modify_time_title">Изменить время</string>
     <string name="reject_request_title">Отменить заявку</string>
     <string name="confirm_request_title">Принять заявку</string>
     <string name="confirm_request_error_message">При подтверждении заявки произошла ошибка</string>
     <string name="reject_request_error_message">При отмене заявки произошла ошибка</string>
+    <string name="success_request_confirmation_title">Заявка на ремонт одобрена</string>
+    <string name="success_request_confirmation_text">Водитель будет уведомлен</string>
+    <string name="failure_request_confirmation_title">Одобрение заявки не ремонт не выполнилось</string>
 </resources>

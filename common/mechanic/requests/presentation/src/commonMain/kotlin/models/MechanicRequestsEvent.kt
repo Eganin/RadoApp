@@ -14,6 +14,10 @@ sealed class MechanicRequestsEvent {
 
     data object CloseTimePicker : MechanicRequestsEvent()
 
+    data object CloseSuccessDialog : MechanicRequestsEvent()
+
+    data object CloseFailureDialog : MechanicRequestsEvent()
+
     data class SubmitDateTime(val hour: Int,val minute:Int): MechanicRequestsEvent()
 
     data object ReopenDialogInfoRequest : MechanicRequestsEvent()

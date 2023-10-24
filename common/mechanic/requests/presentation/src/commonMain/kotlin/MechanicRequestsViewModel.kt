@@ -10,6 +10,7 @@ import models.MechanicRequestsEvent
 import models.MechanicRequestsViewState
 import models.UnconfirmedRequestsItem
 import other.BaseSharedViewModel
+import other.WrapperForResponse
 import time.convertDateAndHoursAndMinutesToString
 
 class MechanicRequestsViewModel :
@@ -22,6 +23,8 @@ class MechanicRequestsViewModel :
         })
 
     private val unconfirmedRequestsRepository: UnconfirmedRequestsRepository = Inject.instance()
+
+    private val requestsForMechanicRepository: RequestsForMechanicRepository = Inject.instance()
 
     init {
         getUnconfirmedRequests()
@@ -46,6 +49,8 @@ class MechanicRequestsViewModel :
                 minute = viewEvent.minute
             )
 
+            is MechanicRequestsEvent.CloseSuccessDialog -> {}
+            is MechanicRequestsEvent.CloseFailureDialog -> {}
             is MechanicRequestsEvent.RejectRequest -> {}
             is MechanicRequestsEvent.DriverPhoneClick -> {}
         }
@@ -72,8 +77,29 @@ class MechanicRequestsViewModel :
     private fun confirmationRequest() {
         coroutineScope.launch {
             changeLoading()
+            val response = requestsForMechanicRepository.confirmationRequest(
+                requestId = viewState.requestsIdForInfo,
+                date = viewState.datetimeForServer.first,
+                time = viewState.datetimeForServer.second
+            )
+            if (response is WrapperForResponse.Success) {
+                obtainShowSuccessDialog()
+            } else if (response is WrapperForResponse.Failure) {
+                obtainShowFailureDialog()
+            }
+            obtainShowInfoDialogChanged()
+            //update requests list for mechanic
+            getUnconfirmedRequests()
             changeLoading()
         }
+    }
+
+    private fun obtainShowSuccessDialog() {
+        viewState = viewState.copy(showSuccessDialog = !viewState.showSuccessDialog)
+    }
+
+    private fun obtainShowFailureDialog() {
+        viewState = viewState.copy(showFailureDialog = !viewState.showFailureDialog)
     }
 
     private fun obtainErrorTextForRequestListChanged(errorMessage: String) {

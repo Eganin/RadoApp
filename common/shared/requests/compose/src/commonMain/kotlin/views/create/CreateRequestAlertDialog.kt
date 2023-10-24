@@ -268,13 +268,16 @@ fun CreateRequestAlertDialog(
                     viewModel.obtainEvent(viewEvent = CreateRequestEvent.CloseSuccessDialog)
                 }, onExit = {
                     viewModel.obtainEvent(viewEvent = CreateRequestEvent.CloseSuccessDialog)
-                })
+                },
+                firstText = MainRes.string.success_create_request_title,
+                secondText = MainRes.string.success_create_request_text)
         }
 
         if (state.value.showFailureCreateRequestDialog) {
             FailureCreateRequestDialog(
                 onDismiss = { viewModel.obtainEvent(viewEvent = CreateRequestEvent.CloseFailureDialog) },
-                onExit = { viewModel.obtainEvent(viewEvent = CreateRequestEvent.CloseFailureDialog) }
+                onExit = { viewModel.obtainEvent(viewEvent = CreateRequestEvent.CloseFailureDialog) },
+                firstText = MainRes.string.failure_create_request_title
             )
         }
     }

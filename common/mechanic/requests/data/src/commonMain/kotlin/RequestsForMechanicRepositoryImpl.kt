@@ -27,7 +27,7 @@ class RequestsForMechanicRepositoryImpl(
         return if (statusCode == HttpStatusCode.OK) {
             WrapperForResponse.Success()
         } else {
-            WrapperForResponse.Failure(message = MainRes.confirm_request_error_message)
+            WrapperForResponse.Failure(message = MainRes.string.confirm_request_error_message)
         }
     }
 
@@ -46,7 +46,7 @@ class RequestsForMechanicRepositoryImpl(
         return if (statusCode == HttpStatusCode.OK) {
             WrapperForResponse.Success()
         } else {
-            WrapperForResponse.Failure(message = MainRes.reject_request_error_message)
+            WrapperForResponse.Failure(message = MainRes.string.reject_request_error_message)
         }
     }
 }

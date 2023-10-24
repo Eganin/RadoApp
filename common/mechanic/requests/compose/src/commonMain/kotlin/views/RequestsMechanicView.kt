@@ -23,7 +23,9 @@ import models.MechanicRequestsEvent
 import models.MechanicRequestsViewState
 import org.company.rado.core.MainRes
 import theme.Theme
+import views.create.FailureCreateRequestDialog
 import views.create.RequestCells
+import views.create.SuccessCreateRequestDialog
 import views.info.InfoRequestAlertDialog
 import widgets.common.ActionButton
 
@@ -129,6 +131,26 @@ fun RequestsMechanicView(
                 trackColor = Theme.colors.primaryAction
             )
         }
+    }
+
+    if (state.showSuccessDialog) {
+        SuccessCreateRequestDialog(
+            onDismiss = {
+                eventHandler.invoke(MechanicRequestsEvent.CloseSuccessDialog)
+            }, onExit = {
+                eventHandler.invoke(MechanicRequestsEvent.CloseSuccessDialog)
+            },
+            firstText = MainRes.string.success_request_confirmation_title,
+            secondText = MainRes.string.success_request_confirmation_text
+        )
+    }
+
+    if (state.showFailureDialog) {
+        FailureCreateRequestDialog(
+            onDismiss = { eventHandler.invoke(MechanicRequestsEvent.CloseFailureDialog) },
+            onExit = { eventHandler.invoke(MechanicRequestsEvent.CloseFailureDialog) },
+            firstText = MainRes.string.failure_request_confirmation_title
+        )
     }
 
     if (state.showDatePicker) {
