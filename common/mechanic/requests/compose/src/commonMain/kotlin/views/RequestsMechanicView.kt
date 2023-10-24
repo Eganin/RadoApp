@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -27,12 +28,14 @@ import views.create.RequestCells
 import views.info.InfoRequestAlertDialog
 import widgets.common.ActionButton
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RequestsMechanicView(
     state: MechanicRequestsViewState,
     modifier: Modifier = Modifier,
     eventHandler: (MechanicRequestsEvent) -> Unit
 ) {
+
     LazyColumn(
         modifier = modifier.fillMaxSize().background(color = Theme.colors.primaryBackground)
             .padding(all = 16.dp)
@@ -82,7 +85,7 @@ fun RequestsMechanicView(
                 ActionButton(
                     text = MainRes.string.choose_time_title,
                     modifier = Modifier.fillMaxWidth(),
-                    onClick = { eventHandler.invoke(MechanicRequestsEvent.ChooseDateTime) })
+                    onClick = { eventHandler.invoke(MechanicRequestsEvent.OpenDatePicker) })
 
                 Spacer(modifier = Modifier.height(16.dp))
 
@@ -110,4 +113,23 @@ fun RequestsMechanicView(
             )
         }
     }
+
+    if (state.showDatePicker) {
+        MechanicDatePicker(
+            confirmAction = { dateLong ->
+                eventHandler.invoke(MechanicRequestsEvent.OpenTimePicker(date = dateLong))
+            }, exitAction = {
+                eventHandler.invoke(MechanicRequestsEvent.CloseDatePicker)
+            })
+    }
+
+    if (state.showTimePicker){
+        MechanicTimePicker(
+            confirmAction = { (hour,minute) ->
+
+            }, exitAction = {
+                eventHandler.invoke(MechanicRequestsEvent.CloseTimePicker)
+            })
+    }
+
 }

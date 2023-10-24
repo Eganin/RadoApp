@@ -20,6 +20,7 @@ kotlin{
                 implementation(Dependencies.Resources.Libres.libresCompose)
                 implementation(Dependencies.Resources.Image.composeImageLoader)
                 implementation(Dependencies.Resources.ComposeIcons.composeIconsFeatherIcons)
+                implementation(Dependencies.Other.DateTime.kotlinxDatetime)
             }
         }
     }

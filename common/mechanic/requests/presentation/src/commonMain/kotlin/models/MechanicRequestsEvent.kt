@@ -6,7 +6,13 @@ sealed class MechanicRequestsEvent {
 
     data object CloseInfoDialog : MechanicRequestsEvent()
 
-    data object ChooseDateTime : MechanicRequestsEvent()
+    data object OpenDatePicker: MechanicRequestsEvent()
+
+    data class OpenTimePicker(val date: Long) : MechanicRequestsEvent()
+
+    data object CloseDatePicker: MechanicRequestsEvent()
+
+    data object CloseTimePicker : MechanicRequestsEvent()
 
     data class ReopenDialogInfoRequest(val requestId: Int, val datetime: String) :
         MechanicRequestsEvent()

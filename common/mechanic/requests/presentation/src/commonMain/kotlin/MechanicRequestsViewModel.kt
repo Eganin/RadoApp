@@ -33,7 +33,10 @@ class MechanicRequestsViewModel :
             is MechanicRequestsEvent.RejectRequest -> {}
             is MechanicRequestsEvent.ErrorTextForRequestListChanged -> {}
             is MechanicRequestsEvent.CloseInfoDialog -> {}
-            is MechanicRequestsEvent.ChooseDateTime -> {}
+            is MechanicRequestsEvent.OpenDatePicker -> obtainShowDatePickerChanged()
+            is MechanicRequestsEvent.OpenTimePicker -> obtainShowTimePickerChangedAndDate(date = viewEvent.date)
+            is MechanicRequestsEvent.CloseDatePicker -> obtainShowDatePickerChanged()
+            is MechanicRequestsEvent.CloseTimePicker -> obtainShowTimePickerChanged()
             is MechanicRequestsEvent.ReopenDialogInfoRequest -> {}
         }
     }
@@ -54,6 +57,25 @@ class MechanicRequestsViewModel :
             }
             changeLoading()
         }
+    }
+
+    private fun obtainShowDatePickerChanged() {
+        viewState = viewState.copy(
+            showDatePicker = !viewState.showDatePicker
+        )
+    }
+
+    private fun obtainShowTimePickerChangedAndDate(date:Long) {
+        viewState = viewState.copy(
+            showTimePicker = !viewState.showTimePicker,
+            date = date
+        )
+    }
+
+    private fun obtainShowTimePickerChanged() {
+        viewState = viewState.copy(
+            showTimePicker = !viewState.showTimePicker
+        )
     }
 
     private fun obtainShowInfoDialogChanged(requestId: Int) {
