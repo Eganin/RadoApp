@@ -49,8 +49,8 @@ class MechanicRequestsViewModel :
                 minute = viewEvent.minute
             )
 
-            is MechanicRequestsEvent.CloseSuccessDialog -> {}
-            is MechanicRequestsEvent.CloseFailureDialog -> {}
+            is MechanicRequestsEvent.CloseSuccessDialog -> obtainShowSuccessDialog()
+            is MechanicRequestsEvent.CloseFailureDialog -> obtainShowFailureDialog()
             is MechanicRequestsEvent.RejectRequest -> {}
             is MechanicRequestsEvent.DriverPhoneClick -> {}
         }

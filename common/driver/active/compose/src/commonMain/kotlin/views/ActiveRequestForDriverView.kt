@@ -14,8 +14,11 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -26,6 +29,8 @@ import models.DriverActiveEvent
 import models.DriverActiveViewState
 import org.company.rado.core.MainRes
 import theme.Theme
+import time.convertDateLongToString
+import time.datetimeStringToPrettyString
 import views.create.CalendarView
 import views.create.CreateRequestAlertDialog
 import views.create.RequestCells
@@ -33,21 +38,35 @@ import views.info.InfoRequestAlertDialog
 import widgets.common.ActionButton
 import widgets.common.TextStickyHeader
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ActiveRequestsForDriverView(
     state: DriverActiveViewState,
     modifier: Modifier = Modifier,
     eventHandler: (DriverActiveEvent) -> Unit
 ) {
+
+    val datePickerState = rememberDatePickerState()
+
+    LaunchedEffect(key1 = datePickerState.selectedDateMillis) {
+        datePickerState.selectedDateMillis?.let {
+            eventHandler.invoke(
+                DriverActiveEvent.SelectedDateChanged(
+                    value = convertDateLongToString(
+                        date = it
+                    )
+                )
+            )
+        }
+    }
+
     Column(
         modifier = modifier.fillMaxSize().background(color = Theme.colors.primaryBackground)
             .padding(all = 16.dp)
             .verticalScroll(rememberScrollState())
     ) {
         CalendarView(
-            submitInfo = { date ->
-                eventHandler.invoke(DriverActiveEvent.SelectedDateChanged(value = date))
-            },
+            state = datePickerState,
             modifier = Modifier
                 .padding(12.dp)
                 .heightIn(max = 500.dp)
@@ -73,7 +92,7 @@ fun ActiveRequestsForDriverView(
             if (state.requests.isNotEmpty()) {
                 state.requests.forEach {
                     RequestCells(
-                        firstText = it.datetime,
+                        firstText = datetimeStringToPrettyString(dateTime = it.datetime),
                         secondText = it.mechanicName,
                         onClick = {},
                         isReissueRequest = true,
