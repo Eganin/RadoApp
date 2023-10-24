@@ -13,21 +13,22 @@ fun convertDateAndHoursAndMinutesToString(
     minute: Int
 ): Pair<String, Pair<String, String>> {
     val dateFromLong = convertDateLongToString(date = date)
-    val answerForServer = Pair(first = dateFromLong, second = "$hour:$minute")
-    val answerForView = "$dateFromLong $hour:$minute"
+    val newMinute = if(minute ==0) "00" else minute.toString()
+    val answerForServer = Pair(first = dateFromLong, second = "$hour:$newMinute")
+    val answerForView = "$dateFromLong $hour:$newMinute"
     return Pair(first = answerForView, second = answerForServer)
 }
 
 fun convertDateLongToString(date: Long): String {
-    return Instant.fromEpochMilliseconds(date)
+    val (year,month,day)  =Instant.fromEpochMilliseconds(date)
         .toLocalDateTime(TimeZone.currentSystemDefault()).date.toString().split("-")
-        .joinToString(separator = ".")
+    return "$day.$month.$year"
 }
 
 fun datetimeStringToPrettyString(dateTime: String): String {
     val (date, time) = dateTime.split(";")
     log(tag = "DATE") { date }
-    val (year, month, day) = date.split(".")
+    val (day, month, _) = date.split(".")
 
     val prettyMonth = when (month.toInt()) {
         1 -> MainRes.string.january_title
