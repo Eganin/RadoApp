@@ -72,7 +72,8 @@ fun ActiveRequestsForDriverView(
                         firstText = it.datetime,
                         secondText = it.mechanicName,
                         onClick = {},
-                        isReissueRequest = true
+                        isReissueRequest = true,
+                        onReissueRequest = {}
                     )
                 }
             } else {
