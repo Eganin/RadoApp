@@ -1,5 +1,6 @@
 package views
 
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -8,6 +9,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.company.rado.core.MainRes
 import theme.Theme
@@ -27,8 +29,6 @@ fun MechanicDatePicker(
         },
         confirmButton = {
             TextButton(onClick = {
-//                val l = Instant.fromEpochMilliseconds(selectedDate)
-//                val date = l.toLocalDateTime(TimeZone.currentSystemDefault()).date
                 confirmAction.invoke(datePickerState.selectedDateMillis!!)
             }) {
                 Text(
@@ -49,7 +49,7 @@ fun MechanicDatePicker(
                 )
             }
         },
-        modifier = modifier
+        modifier = modifier.padding(16.dp)
     ) {
         DatePicker(
             state = datePickerState

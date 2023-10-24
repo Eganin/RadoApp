@@ -1,6 +1,10 @@
 package time
 
-import kotlinx.datetime.*
+import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import org.company.rado.core.MainRes
 
 // returns date as a string
@@ -23,10 +27,26 @@ fun convertDayMonthYearToDateAndTimeToDateAnswer(year: Int, month: String, day: 
     return "${day}.${monthAsNumber}.${year}"
 }
 
+// return pair first-answer for view, second answer for server(date;time)
+fun convertDateAndHoursAndMinutesToString(
+    date: Long,
+    hour: Int,
+    minute: Int
+): Pair<String, Pair<String, String>> {
+    val dateFromLong =
+        Instant.fromEpochMilliseconds(date)
+            .toLocalDateTime(TimeZone.currentSystemDefault()).date.toString().split("-")
+            .joinToString(separator = ".")
+    val answerForServer = Pair(first = dateFromLong, second = "$hour:$minute")
+    val answerForView = "$dateFromLong $hour:$minute"
+    return Pair(first = answerForView, second = answerForServer)
+}
+
 //Returns year, month, count days in a month
 fun convertDateTime(): Triple<Int, String, Int> {
     val currentMoment: Instant = Clock.System.now()
-    val datetimeInSystemZone: LocalDateTime = currentMoment.toLocalDateTime(TimeZone.currentSystemDefault())
+    val datetimeInSystemZone: LocalDateTime =
+        currentMoment.toLocalDateTime(TimeZone.currentSystemDefault())
 
     val year = datetimeInSystemZone.year
     val month = when (datetimeInSystemZone.month.name) {

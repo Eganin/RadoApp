@@ -22,7 +22,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import io.github.aakira.napier.log
 import org.company.rado.core.MainRes
 import theme.Theme
 
@@ -73,7 +72,6 @@ fun MechanicTimePicker(
                         onClick = {
                             val answer =
                                 Pair(first = timePickerState.hour, second = timePickerState.minute)
-                            log(tag = "TIME") { answer.toString() }
                             confirmAction.invoke(answer)
                         }
                     ) {

@@ -109,7 +109,7 @@ fun InfoRequestAlertDialog(
 
                 Text(
                     text = MainRes.string.number_vehicle_title,
-                    fontSize = 8.sp,
+                    fontSize = 12.sp,
                     color = Theme.colors.primaryTextColor,
                     textAlign = TextAlign.Start,
                     fontWeight = FontWeight.Bold,
@@ -120,7 +120,7 @@ fun InfoRequestAlertDialog(
 
                 Text(
                     text = state.value.numberVehicle,
-                    fontSize = 8.sp,
+                    fontSize = 12.sp,
                     color = Theme.colors.primaryTextColor,
                     textAlign = TextAlign.Start,
                     modifier = Modifier.fillMaxWidth()
@@ -133,7 +133,7 @@ fun InfoRequestAlertDialog(
 
                     Text(
                         text = MainRes.string.fault_description_title,
-                        fontSize = 8.sp,
+                        fontSize = 12.sp,
                         color = Theme.colors.primaryTextColor,
                         textAlign = TextAlign.Start,
                         fontWeight = FontWeight.Bold,
@@ -144,7 +144,7 @@ fun InfoRequestAlertDialog(
 
                     Text(
                         text = state.value.faultDescription,
-                        fontSize = 8.sp,
+                        fontSize = 12.sp,
                         color = Theme.colors.primaryTextColor,
                         textAlign = TextAlign.Start,
                         modifier = Modifier.fillMaxWidth()
@@ -156,7 +156,7 @@ fun InfoRequestAlertDialog(
                 if (state.value.images.isNotEmpty()){
                     Text(
                         text = MainRes.string.image_fault_unconfirmed_request,
-                        fontSize = 8.sp,
+                        fontSize = 12.sp,
                         color = Theme.colors.primaryTextColor,
                         textAlign = TextAlign.Start,
                         fontWeight = FontWeight.Bold,

@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import dev.icerock.moko.mvvm.compose.viewModelFactory
+import io.github.aakira.napier.log
 import kotlinx.coroutines.launch
 import models.MechanicRequestsAction
 import other.observeAsState
@@ -40,8 +41,8 @@ object RequestsForMechanicScreen : Screen {
         }
 
         when (action.value) {
-            is MechanicRequestsAction.ShowErrorSnackBar -> {
-                val snackBarAction = action.value as MechanicRequestsAction.ShowErrorSnackBar
+            is MechanicRequestsAction.ShowSnackBar -> {
+                val snackBarAction = action.value as MechanicRequestsAction.ShowSnackBar
                 scope.launch {
                     snackBarHostState.showSnackbar(message = snackBarAction.message)
                 }

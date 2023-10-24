@@ -14,13 +14,13 @@ sealed class MechanicRequestsEvent {
 
     data object CloseTimePicker : MechanicRequestsEvent()
 
-    data class ReopenDialogInfoRequest(val requestId: Int, val datetime: String) :
-        MechanicRequestsEvent()
+    data class SubmitDateTime(val hour: Int,val minute:Int): MechanicRequestsEvent()
+
+    data object ReopenDialogInfoRequest : MechanicRequestsEvent()
 
     data object RejectRequest : MechanicRequestsEvent()
 
-    data class ConfirmationRequest(val requestId: Int, val time: String, val date: String) :
-        MechanicRequestsEvent()
+    data object ConfirmationRequest : MechanicRequestsEvent()
 
     data class ErrorTextForRequestListChanged(val message: String) : MechanicRequestsEvent()
 }

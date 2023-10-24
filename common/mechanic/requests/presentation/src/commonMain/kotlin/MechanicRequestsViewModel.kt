@@ -10,6 +10,7 @@ import models.MechanicRequestsEvent
 import models.MechanicRequestsViewState
 import models.UnconfirmedRequestsItem
 import other.BaseSharedViewModel
+import time.convertDateAndHoursAndMinutesToString
 
 class MechanicRequestsViewModel :
     BaseSharedViewModel<MechanicRequestsViewState, MechanicRequestsAction, MechanicRequestsEvent>(
@@ -32,12 +33,16 @@ class MechanicRequestsViewModel :
             is MechanicRequestsEvent.ConfirmationRequest -> {}
             is MechanicRequestsEvent.RejectRequest -> {}
             is MechanicRequestsEvent.ErrorTextForRequestListChanged -> {}
-            is MechanicRequestsEvent.CloseInfoDialog -> {}
+            is MechanicRequestsEvent.CloseInfoDialog -> obtainShowInfoDialogChanged()
             is MechanicRequestsEvent.OpenDatePicker -> obtainShowDatePickerChanged()
             is MechanicRequestsEvent.OpenTimePicker -> obtainShowTimePickerChangedAndDate(date = viewEvent.date)
             is MechanicRequestsEvent.CloseDatePicker -> obtainShowDatePickerChanged()
             is MechanicRequestsEvent.CloseTimePicker -> obtainShowTimePickerChanged()
-            is MechanicRequestsEvent.ReopenDialogInfoRequest -> {}
+            is MechanicRequestsEvent.ReopenDialogInfoRequest -> obtainReopenInfoDialogChanged()
+            is MechanicRequestsEvent.SubmitDateTime -> submitDateTime(
+                hour = viewEvent.hour,
+                minute = viewEvent.minute
+            )
         }
     }
 
@@ -59,13 +64,37 @@ class MechanicRequestsViewModel :
         }
     }
 
+    private fun obtainReopenInfoDialogChanged() {
+        viewState = viewState.copy(
+            reopenDialog = !viewState.reopenDialog
+        )
+    }
+
+    private fun obtainShowInfoDialogChanged() {
+        viewState = viewState.copy(
+            showInfoDialog = !viewState.showInfoDialog
+        )
+    }
+
+    private fun submitDateTime(hour: Int, minute: Int) {
+        val (datetimeForView, datetimeForServer) = convertDateAndHoursAndMinutesToString(
+            date = viewState.date,
+            hour = hour,
+            minute = minute
+        )
+        viewState = viewState.copy(
+            datetime = datetimeForView,
+            datetimeForServer = datetimeForServer
+        )
+    }
+
     private fun obtainShowDatePickerChanged() {
         viewState = viewState.copy(
             showDatePicker = !viewState.showDatePicker
         )
     }
 
-    private fun obtainShowTimePickerChangedAndDate(date:Long) {
+    private fun obtainShowTimePickerChangedAndDate(date: Long) {
         viewState = viewState.copy(
             showTimePicker = !viewState.showTimePicker,
             date = date
