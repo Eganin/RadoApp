@@ -27,7 +27,15 @@ class MechanicRequestsViewModel :
     }
 
     override fun obtainEvent(viewEvent: MechanicRequestsEvent) {
-        TODO("Not yet implemented")
+        when (viewEvent) {
+            is MechanicRequestsEvent.OpenDialogInfoRequest -> obtainShowInfoDialogChanged(requestId = viewEvent.requestId)
+            is MechanicRequestsEvent.ConfirmationRequest -> {}
+            is MechanicRequestsEvent.RejectRequest -> {}
+            is MechanicRequestsEvent.ErrorTextForRequestListChanged -> {}
+            is MechanicRequestsEvent.CloseInfoDialog -> {}
+            is MechanicRequestsEvent.ChooseDateTime -> {}
+            is MechanicRequestsEvent.ReopenDialogInfoRequest -> {}
+        }
     }
 
     private fun getUnconfirmedRequests() {
@@ -44,6 +52,13 @@ class MechanicRequestsViewModel :
                 obtainEvent(viewEvent = MechanicRequestsEvent.ErrorTextForRequestListChanged(message = unconfirmedRequestsForDriverItem.message))
             }
         }
+    }
+
+    private fun obtainShowInfoDialogChanged(requestId: Int) {
+        viewState = viewState.copy(
+            showInfoDialog = !viewState.showInfoDialog,
+            requestsIdForInfo = requestId
+        )
     }
 
     private companion object {

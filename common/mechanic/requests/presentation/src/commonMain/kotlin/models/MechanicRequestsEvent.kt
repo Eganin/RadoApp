@@ -11,7 +11,7 @@ sealed class MechanicRequestsEvent {
     data class ReopenDialogInfoRequest(val requestId: Int, val datetime: String) :
         MechanicRequestsEvent()
 
-    data class RejectRequest(val description: String) : MechanicRequestsEvent()
+    data object RejectRequest : MechanicRequestsEvent()
 
     data class ConfirmationRequest(val requestId: Int, val time: String, val date: String) :
         MechanicRequestsEvent()
