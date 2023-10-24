@@ -94,7 +94,9 @@ fun ActiveRequestsForDriverView(
                     RequestCells(
                         firstText = datetimeStringToPrettyString(dateTime = it.datetime),
                         secondText = it.mechanicName,
-                        onClick = {},
+                        onClick = {
+                            eventHandler.invoke(DriverActiveEvent.OpenDialogInfoRequest(requestId = it.id))
+                        },
                         isReissueRequest = true,
                         onReissueRequest = {}
                     )
@@ -163,7 +165,9 @@ fun ActiveRequestsForDriverView(
 
                     if (infoRequestState.datetime.isNotEmpty()) {
                         Text(
-                            text = MainRes.string.datetime_title + infoRequestState.datetime,
+                            text = MainRes.string.datetime_title + datetimeStringToPrettyString(
+                                dateTime = infoRequestState.datetime
+                            ),
                             fontSize = 12.sp,
                             color = Theme.colors.primaryTextColor,
                             textAlign = TextAlign.Start,

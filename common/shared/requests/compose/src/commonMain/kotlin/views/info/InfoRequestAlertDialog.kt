@@ -153,7 +153,7 @@ fun InfoRequestAlertDialog(
                     Spacer(modifier = Modifier.height(16.dp))
                 }
 
-                if (state.value.images.isNotEmpty()){
+                if (state.value.images.isNotEmpty()) {
                     Text(
                         text = MainRes.string.image_fault_unconfirmed_request,
                         fontSize = 12.sp,
@@ -181,18 +181,18 @@ fun InfoRequestAlertDialog(
                 }
 
                 actionControl(state.value)
-            }
-        }
 
-        if (state.value.errorTitleMessage.isNotEmpty()){
-            Text(
-                text = MainRes.string.base_error_message,
-                fontSize = 24.sp,
-                color = Theme.colors.primaryTextColor,
-                textAlign = TextAlign.Center,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.fillMaxSize()
-            )
+                if (state.value.errorTitleMessage.isNotEmpty()) {
+                    Text(
+                        text = MainRes.string.base_error_message,
+                        fontSize = 24.sp,
+                        color = Theme.colors.primaryTextColor,
+                        textAlign = TextAlign.Center,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
+            }
         }
 
         if (state.value.isLoading) {
