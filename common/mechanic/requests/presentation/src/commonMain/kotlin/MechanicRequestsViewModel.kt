@@ -130,6 +130,8 @@ class MechanicRequestsViewModel :
             datetime = datetimeForView,
             datetimeForServer = datetimeForServer
         )
+        log(tag="DATE") { datetimeForView }
+        log(tag="DATE") { datetimeForServer.toString() }
     }
 
     private fun obtainShowDatePickerChanged() {

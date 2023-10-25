@@ -69,7 +69,6 @@ fun ActiveRequestsForDriverView(
         CalendarView(
             state = datePickerState,
             modifier = Modifier
-                .padding(12.dp)
                 .heightIn(max = 500.dp)
                 .widthIn(max = 500.dp)
         )
@@ -103,15 +102,14 @@ fun ActiveRequestsForDriverView(
                                 )
                             )
                         },
-                        isReissueRequest = true,
-                        onReissueRequest = {}
+                        isReissueRequest = false
                     )
                 }
             } else {
                 TextStickyHeader(
                     textTitle = MainRes.string.empty_title,
                     fontSize = 16,
-                    modifier = Modifier.fillMaxWidth().padding(all=16.dp)
+                    modifier = Modifier.fillMaxWidth().padding(all = 16.dp)
                 )
             }
             TextStickyHeader(
@@ -131,14 +129,15 @@ fun ActiveRequestsForDriverView(
                                 )
                             )
                         },
-                        isReissueRequest = false
+                        isReissueRequest = true,
+                        onReissueRequest = {}
                     )
                 }
             } else {
                 TextStickyHeader(
                     textTitle = MainRes.string.empty_title,
                     fontSize = 16,
-                    modifier = Modifier.fillMaxWidth().padding(all=16.dp)
+                    modifier = Modifier.fillMaxWidth().padding(all = 16.dp)
                 )
             }
         } else {

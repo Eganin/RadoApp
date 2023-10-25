@@ -13,12 +13,14 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import io.github.aakira.napier.log
 import models.MechanicRequestsEvent
 import models.MechanicRequestsViewState
 import org.company.rado.core.MainRes
@@ -86,6 +88,10 @@ fun RequestsMechanicView(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 if (state.reopenDialog) {
+                    SideEffect {
+                        log(tag = "DATE VIEW") { state.datetime }
+                        log(tag = "DATE VIEW") { "SIDE EFFECT" }
+                    }
                     Text(
                         text = MainRes.string.datetime_title + state.datetime,
                         fontSize = 12.sp,
@@ -100,7 +106,14 @@ fun RequestsMechanicView(
                 ActionButton(
                     text = if (state.reopenDialog) MainRes.string.modify_time_title else MainRes.string.choose_time_title,
                     modifier = Modifier.fillMaxWidth(),
-                    onClick = { eventHandler.invoke(MechanicRequestsEvent.OpenDatePicker) })
+                    onClick = {
+                        if (state.reopenDialog) {
+                            eventHandler.invoke(MechanicRequestsEvent.ReopenDialogInfoRequest)
+                            eventHandler.invoke(MechanicRequestsEvent.OpenDatePicker)
+                        } else {
+                            eventHandler.invoke(MechanicRequestsEvent.OpenDatePicker)
+                        }
+                    })
 
                 Spacer(modifier = Modifier.height(16.dp))
 

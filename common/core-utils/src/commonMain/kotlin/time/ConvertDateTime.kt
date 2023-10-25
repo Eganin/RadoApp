@@ -1,6 +1,5 @@
 package time
 
-import io.github.aakira.napier.log
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
@@ -13,21 +12,20 @@ fun convertDateAndHoursAndMinutesToString(
     minute: Int
 ): Pair<String, Pair<String, String>> {
     val dateFromLong = convertDateLongToString(date = date)
-    val newMinute = if(minute ==0) "00" else minute.toString()
+    val newMinute = if (minute in 0..9) "0${minute}" else minute.toString()
     val answerForServer = Pair(first = dateFromLong, second = "$hour:$newMinute")
     val answerForView = "$dateFromLong $hour:$newMinute"
     return Pair(first = answerForView, second = answerForServer)
 }
 
 fun convertDateLongToString(date: Long): String {
-    val (year,month,day)  =Instant.fromEpochMilliseconds(date)
+    val (year, month, day) = Instant.fromEpochMilliseconds(date)
         .toLocalDateTime(TimeZone.currentSystemDefault()).date.toString().split("-")
     return "$day.$month.$year"
 }
 
 fun datetimeStringToPrettyString(dateTime: String): String {
     val (date, time) = dateTime.split(";")
-    log(tag = "DATE") { date }
     val (day, month, _) = date.split(".")
 
     val prettyMonth = when (month.toInt()) {
