@@ -9,7 +9,7 @@ import models.ActiveRequestsForDriverItem
 import models.DriverActiveAction
 import models.DriverActiveEvent
 import models.DriverActiveViewState
-import models.UnconfirmedRequestsForDriverItem
+import models.UnconfirmedRequestsItem
 import other.BaseSharedViewModel
 
 class DriverActiveViewModel :
@@ -24,8 +24,7 @@ class DriverActiveViewModel :
 
     private val activeRequestsRepository: ActiveRequestsForDriverRepository = Inject.instance()
 
-    private val unconfirmedRequestsRepository: UnconfirmedRequestsForDriverRepository =
-        Inject.instance()
+    private val unconfirmedRequestsRepository: UnconfirmedRequestsRepository = Inject.instance()
 
     init {
         getUnconfirmedRequests()
@@ -35,7 +34,11 @@ class DriverActiveViewModel :
     override fun obtainEvent(viewEvent: DriverActiveEvent) {
         when (viewEvent) {
             is DriverActiveEvent.OpenDialogCreateRequest -> openCreateRequestScreen()
-            is DriverActiveEvent.OpenDialogInfoRequest -> openInfoRequestScreen(requestId = viewEvent.requestId)
+            is DriverActiveEvent.OpenDialogInfoRequest -> openInfoRequestScreen(
+                requestId = viewEvent.requestId,
+                isActiveDialog = viewEvent.isActiveRequest
+            )
+
             is DriverActiveEvent.SelectedDateChanged -> getActiveRequestsByDate(date = viewEvent.value)
             is DriverActiveEvent.ErrorTextForRequestListChanged -> obtainErrorTextForRequestListChange(
                 errorMessage = viewEvent.value
@@ -43,7 +46,20 @@ class DriverActiveViewModel :
 
             is DriverActiveEvent.CloseCreateDialog -> obtainCloseCreateDialogChange()
             is DriverActiveEvent.CloseInfoDialog -> obtainCloseInfoDialogChange()
+            is DriverActiveEvent.PullRefresh -> {
+                getUnconfirmedRequests()
+                getActiveRequestsByDate()
+            }
         }
+    }
+
+    private fun changeLoadingForActiveRequests() {
+        viewState = viewState.copy(isLoadingActiveRequests = !viewState.isLoadingActiveRequests)
+    }
+
+    private fun changeLoadingForUnconfirmedRequests() {
+        viewState =
+            viewState.copy(isLoadingUnconfirmedRequests = !viewState.isLoadingUnconfirmedRequests)
     }
 
     private fun openCreateRequestScreen() {
@@ -51,23 +67,30 @@ class DriverActiveViewModel :
         viewState = viewState.copy(showCreateDialog = !viewState.showCreateDialog)
     }
 
-    private fun openInfoRequestScreen(requestId: Int) {
+    private fun openInfoRequestScreen(requestId: Int, isActiveDialog: Boolean) {
         log(tag = TAG) { "Navigate to info request screen" }
         viewState =
-            viewState.copy(requestIdForInfo = requestId, showInfoDialog = !viewState.showInfoDialog)
+            viewState.copy(
+                requestIdForInfo = requestId,
+                showInfoDialog = !viewState.showInfoDialog,
+                isActiveDialog = isActiveDialog
+            )
     }
 
     private fun getActiveRequestsByDate(date: String = "") {
         coroutineScope.launch {
+            changeLoadingForActiveRequests()
             val activeRequestsForDriverItem =
                 activeRequestsRepository.getRequestsByDate(date = date)
             if (activeRequestsForDriverItem is ActiveRequestsForDriverItem.Success) {
                 log(tag = TAG) { "Active requests by date" + activeRequestsForDriverItem.items.toString() }
+                changeLoadingForActiveRequests()
                 viewState = viewState.copy(
                     requests = activeRequestsForDriverItem.items
                 )
             } else if (activeRequestsForDriverItem is ActiveRequestsForDriverItem.Error) {
                 log(tag = TAG) { "Active Requests is failure" }
+                changeLoadingForActiveRequests()
                 obtainEvent(viewEvent = DriverActiveEvent.ErrorTextForRequestListChanged(value = activeRequestsForDriverItem.message))
             }
         }
@@ -75,14 +98,18 @@ class DriverActiveViewModel :
 
     private fun getUnconfirmedRequests() {
         coroutineScope.launch {
-            val unconfirmedRequestsForDriverItem = unconfirmedRequestsRepository.getRequests()
-            if (unconfirmedRequestsForDriverItem is UnconfirmedRequestsForDriverItem.Success) {
+            changeLoadingForUnconfirmedRequests()
+            val unconfirmedRequestsForDriverItem =
+                unconfirmedRequestsRepository.getRequests(isDriver = true)
+            if (unconfirmedRequestsForDriverItem is UnconfirmedRequestsItem.Success) {
                 log(tag = TAG) { "Unconfirmed requests" + unconfirmedRequestsForDriverItem.items.toString() }
+                changeLoadingForUnconfirmedRequests()
                 viewState = viewState.copy(
                     unconfirmedRequests = unconfirmedRequestsForDriverItem.items
                 )
-            } else if (unconfirmedRequestsForDriverItem is UnconfirmedRequestsForDriverItem.Error) {
+            } else if (unconfirmedRequestsForDriverItem is UnconfirmedRequestsItem.Error) {
                 log(tag = TAG) { "Unconfirmed Requests failure" }
+                changeLoadingForUnconfirmedRequests()
                 obtainEvent(viewEvent = DriverActiveEvent.ErrorTextForRequestListChanged(value = unconfirmedRequestsForDriverItem.message))
             }
         }

@@ -24,6 +24,8 @@ import theme.Theme
 fun SuccessCreateRequestDialog(
     onDismiss: () -> Unit,
     onExit: () -> Unit,
+    firstText:String,
+    secondText:String,
     modifier: Modifier = Modifier
 ) {
     Dialog(
@@ -41,13 +43,13 @@ fun SuccessCreateRequestDialog(
                 verticalArrangement = Arrangement.SpaceAround
             ) {
                 Text(
-                    text = MainRes.string.success_create_request_title,
+                    text = firstText,
                     color = Theme.colors.primaryTextColor,
                     fontSize = 16.sp
                 )
 
                 Text(
-                    text = MainRes.string.success_create_request_text,
+                    text = secondText,
                     color = Theme.colors.secondaryTextColor,
                     fontSize = 16.sp
                 )

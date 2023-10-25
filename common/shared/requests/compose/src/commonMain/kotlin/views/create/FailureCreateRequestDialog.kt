@@ -23,6 +23,7 @@ import theme.Theme
 fun FailureCreateRequestDialog(
     onDismiss: () -> Unit,
     onExit: () -> Unit,
+    firstText: String,
     modifier: Modifier = Modifier
 ) {
     Dialog(
@@ -39,7 +40,7 @@ fun FailureCreateRequestDialog(
                 modifier = Modifier.fillMaxWidth().padding(16.dp)
             ) {
                 Text(
-                    text = MainRes.string.failure_create_request_title,
+                    text = firstText,
                     color = Theme.colors.primaryTextColor,
                     fontSize = 16.sp
                 )

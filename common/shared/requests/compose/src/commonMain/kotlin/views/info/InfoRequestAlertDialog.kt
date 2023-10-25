@@ -35,6 +35,7 @@ import models.create.VehicleType
 import models.info.InfoRequestEvent
 import models.info.InfoRequestViewState
 import org.company.rado.core.MainRes
+import other.Position
 import other.observeAsState
 import platform.LocalPlatform
 import platform.Platform
@@ -46,6 +47,8 @@ import views.create.ImageMachineCells
 fun InfoRequestAlertDialog(
     onDismiss: () -> Unit,
     requestId: Int,
+    infoForPosition: Position,
+    isActiveRequest: Boolean,
     modifier: Modifier = Modifier,
     actionControl: @Composable (InfoRequestViewState) -> Unit = {},
 ) {
@@ -58,7 +61,13 @@ fun InfoRequestAlertDialog(
         if (isLargePlatform) (LocalDensity.current.density.dp * 70) else (LocalDensity.current.density.dp * 25)
 
     LaunchedEffect(key1 = Unit) {
-        viewModel.obtainEvent(InfoRequestEvent.UnconfirmedRequestGetInfo(requestId = requestId))
+        viewModel.obtainEvent(
+            InfoRequestEvent.RequestGetInfo(
+                requestId = requestId,
+                infoForPosition = infoForPosition,
+                isActiveRequest = isActiveRequest
+            )
+        )
     }
 
     Dialog(
@@ -109,7 +118,7 @@ fun InfoRequestAlertDialog(
 
                 Text(
                     text = MainRes.string.number_vehicle_title,
-                    fontSize = 8.sp,
+                    fontSize = 12.sp,
                     color = Theme.colors.primaryTextColor,
                     textAlign = TextAlign.Start,
                     fontWeight = FontWeight.Bold,
@@ -120,7 +129,7 @@ fun InfoRequestAlertDialog(
 
                 Text(
                     text = state.value.numberVehicle,
-                    fontSize = 8.sp,
+                    fontSize = 12.sp,
                     color = Theme.colors.primaryTextColor,
                     textAlign = TextAlign.Start,
                     modifier = Modifier.fillMaxWidth()
@@ -133,7 +142,7 @@ fun InfoRequestAlertDialog(
 
                     Text(
                         text = MainRes.string.fault_description_title,
-                        fontSize = 8.sp,
+                        fontSize = 12.sp,
                         color = Theme.colors.primaryTextColor,
                         textAlign = TextAlign.Start,
                         fontWeight = FontWeight.Bold,
@@ -144,7 +153,7 @@ fun InfoRequestAlertDialog(
 
                     Text(
                         text = state.value.faultDescription,
-                        fontSize = 8.sp,
+                        fontSize = 12.sp,
                         color = Theme.colors.primaryTextColor,
                         textAlign = TextAlign.Start,
                         modifier = Modifier.fillMaxWidth()
@@ -153,10 +162,10 @@ fun InfoRequestAlertDialog(
                     Spacer(modifier = Modifier.height(16.dp))
                 }
 
-                if (state.value.images.isNotEmpty()){
+                if (state.value.images.isNotEmpty()) {
                     Text(
                         text = MainRes.string.image_fault_unconfirmed_request,
-                        fontSize = 8.sp,
+                        fontSize = 12.sp,
                         color = Theme.colors.primaryTextColor,
                         textAlign = TextAlign.Start,
                         fontWeight = FontWeight.Bold,
@@ -171,7 +180,7 @@ fun InfoRequestAlertDialog(
                                 size = imageSize,
                                 isExpanded = state.value.imageIsExpanded,
                                 imageLink = state.value.images[it],
-                                modifier = Modifier.padding(start = 16.dp),
+                                modifier = Modifier.padding(start = 16.dp, bottom = 16.dp),
                                 eventHandler = {
                                     viewModel.obtainEvent(viewEvent = InfoRequestEvent.ImageRepairExpandedChanged)
                                 }
@@ -181,16 +190,27 @@ fun InfoRequestAlertDialog(
                 }
 
                 actionControl(state.value)
-            }
-        }
 
-        if (state.value.isLoading) {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator(
-                    modifier = Modifier.width(64.dp),
-                    color = Theme.colors.highlightColor,
-                    trackColor = Theme.colors.primaryAction
-                )
+                if (state.value.errorTitleMessage.isNotEmpty()) {
+                    Text(
+                        text = MainRes.string.base_error_message,
+                        fontSize = 24.sp,
+                        color = Theme.colors.primaryTextColor,
+                        textAlign = TextAlign.Center,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
+
+                if (state.value.isLoading) {
+                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.width(64.dp),
+                            color = Theme.colors.highlightColor,
+                            trackColor = Theme.colors.primaryAction
+                        )
+                    }
+                }
             }
         }
     }

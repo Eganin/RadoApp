@@ -11,10 +11,10 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 import kotlinx.coroutines.launch
 import models.AuthAction
-import models.Position
 import navigation.MainDriverSharedScreen
 import navigation.MainMechanicSharedScreen
 import navigation.MainObserverSharedScreen
+import other.Position
 import other.observeAsState
 
 object AuthScreen : Screen {

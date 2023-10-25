@@ -5,12 +5,14 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import models.FullRequestItem
 import models.UnconfirmedRequestInfoItem
 import models.create.toVehicleType
 import models.info.InfoRequestAction
 import models.info.InfoRequestEvent
 import models.info.InfoRequestViewState
 import other.BaseSharedViewModel
+import other.Position
 
 class InfoRequestViewModel :
     BaseSharedViewModel<InfoRequestViewState, InfoRequestAction, InfoRequestEvent>(
@@ -25,18 +27,42 @@ class InfoRequestViewModel :
     private val unconfirmedRequestsRepository: UnconfirmedRequestsRepository =
         Inject.instance()
 
+    private val activeRequestsRepository: ActiveRequestsRepository = Inject.instance()
+
     override fun obtainEvent(viewEvent: InfoRequestEvent) {
         when (viewEvent) {
-            is InfoRequestEvent.UnconfirmedRequestGetInfo -> getInfoForUnconfirmedRequest(requestId = viewEvent.requestId)
-            is InfoRequestEvent.ActiveRequestGetInfo -> {}
             is InfoRequestEvent.ImageRepairExpandedChanged -> obtainImageRepairExpandedChanged()
+            is InfoRequestEvent.RequestGetInfo -> getInfoForRequest(
+                requestId = viewEvent.requestId,
+                infoForPosition = viewEvent.infoForPosition,
+                isActiveRequest = viewEvent.isActiveRequest
+            )
+
             is InfoRequestEvent.PhoneClick -> {}
+        }
+    }
+
+    private fun getInfoForRequest(
+        requestId: Int,
+        infoForPosition: Position,
+        isActiveRequest: Boolean
+    ) {
+        when {
+            infoForPosition == Position.DRIVER && isActiveRequest -> getInfoForActiveRequest(
+                requestId = requestId
+            )
+
+            infoForPosition == Position.DRIVER && !isActiveRequest -> getInfoForUnconfirmedRequest(
+                requestId = requestId
+            )
+
+            infoForPosition == Position.MECHANIC -> getInfoForUnconfirmedRequest(requestId = requestId)
         }
     }
 
     private fun getInfoForUnconfirmedRequest(requestId: Int) {
         coroutineScope.launch {
-            viewState = viewState.copy(isLoading = !viewState.isLoading)
+            changeLoading()
             val unconfirmedRequestInfoItem =
                 unconfirmedRequestsRepository.getInfoForUnconfirmedRequest(requestId = requestId)
             if (unconfirmedRequestInfoItem is UnconfirmedRequestInfoItem.Success) {
@@ -55,8 +81,45 @@ class InfoRequestViewModel :
                     errorTitleMessage = unconfirmedRequestInfoItem.message
                 )
             }
-            viewState = viewState.copy(isLoading = !viewState.isLoading)
+            changeLoading()
         }
+    }
+
+    private fun getInfoForActiveRequest(requestId: Int) {
+        coroutineScope.launch {
+            changeLoading()
+            val fullRequestItem =
+                activeRequestsRepository.getActiveRequestInfo(requestId = requestId)
+            if (fullRequestItem is FullRequestItem.Success) {
+                log(tag = TAG) { "Get info for active request ${fullRequestItem.request}" }
+                val info = fullRequestItem.request
+                log(tag = "IMAGES") { info.images.toString() }
+                viewState = viewState.copy(
+                    numberVehicle = info.vehicleNumber,
+                    selectedVehicleType = info.vehicleType.toVehicleType(),
+                    driverName = info.driverName,
+                    driverPhone = info.driverPhone,
+                    statusRequest = info.statusRequest,
+                    faultDescription = info.faultDescription,
+                    mechanicName = info.mechanicName,
+                    mechanicPhone = info.mechanicPhone,
+                    datetime = info.date + ";" + info.time,
+                    statusRepair = info.statusRepair,
+                    commentMechanic = info.commentMechanic ?: "",
+                    images = info.images
+                )
+            } else if (fullRequestItem is FullRequestItem.Error) {
+                log(tag = TAG) { "Failure get info for active request" }
+                viewState = viewState.copy(
+                    errorTitleMessage = fullRequestItem.message
+                )
+            }
+            changeLoading()
+        }
+    }
+
+    private fun changeLoading() {
+        viewState = viewState.copy(isLoading = !viewState.isLoading)
     }
 
     private fun obtainImageRepairExpandedChanged() {

@@ -4,6 +4,7 @@ import io.github.aakira.napier.log
 import kotlinx.coroutines.*
 import models.*
 import other.BaseSharedViewModel
+import other.Position
 import usecases.ValidateFullName
 import usecases.ValidatePhone
 
