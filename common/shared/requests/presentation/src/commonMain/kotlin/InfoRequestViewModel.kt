@@ -5,6 +5,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import models.FullRequestItem
 import models.UnconfirmedRequestInfoItem
 import models.create.toVehicleType
 import models.info.InfoRequestAction
@@ -25,10 +26,12 @@ class InfoRequestViewModel :
     private val unconfirmedRequestsRepository: UnconfirmedRequestsRepository =
         Inject.instance()
 
+    private val activeRequestsRepository: ActiveRequestsRepository = Inject.instance()
+
     override fun obtainEvent(viewEvent: InfoRequestEvent) {
         when (viewEvent) {
             is InfoRequestEvent.UnconfirmedRequestGetInfo -> getInfoForUnconfirmedRequest(requestId = viewEvent.requestId)
-            is InfoRequestEvent.ActiveRequestGetInfo -> {}
+            is InfoRequestEvent.ActiveRequestGetInfo -> getInfoForActiveRequest(requestId = viewEvent.requestId)
             is InfoRequestEvent.ImageRepairExpandedChanged -> obtainImageRepairExpandedChanged()
             is InfoRequestEvent.PhoneClick -> {}
         }
@@ -36,7 +39,7 @@ class InfoRequestViewModel :
 
     private fun getInfoForUnconfirmedRequest(requestId: Int) {
         coroutineScope.launch {
-            viewState = viewState.copy(isLoading = !viewState.isLoading)
+            changeLoading()
             val unconfirmedRequestInfoItem =
                 unconfirmedRequestsRepository.getInfoForUnconfirmedRequest(requestId = requestId)
             if (unconfirmedRequestInfoItem is UnconfirmedRequestInfoItem.Success) {
@@ -55,8 +58,44 @@ class InfoRequestViewModel :
                     errorTitleMessage = unconfirmedRequestInfoItem.message
                 )
             }
-            viewState = viewState.copy(isLoading = !viewState.isLoading)
+            changeLoading()
         }
+    }
+
+    private fun getInfoForActiveRequest(requestId: Int) {
+        coroutineScope.launch {
+            changeLoading()
+            val fullRequestItem =
+                activeRequestsRepository.getActiveRequestInfo(requestId = requestId)
+            if (fullRequestItem is FullRequestItem.Success) {
+                log(tag = TAG) { "Get info for active request ${fullRequestItem.request}" }
+                val info = fullRequestItem.request
+                viewState = viewState.copy(
+                    numberVehicle = info.vehicleNumber,
+                    selectedVehicleType = info.vehicleType.toVehicleType(),
+                    driverName = info.driverName,
+                    driverPhone = info.driverPhone,
+                    statusRequest = info.statusRequest,
+                    faultDescription = info.faultDescription,
+                    mechanicName = info.mechanicName,
+                    mechanicPhone = info.mechanicPhone,
+                    datetime = info.date + ";" + info.time,
+                    statusRepair = info.statusRepair,
+                    commentMechanic = info.commentMechanic ?: "",
+                    images = info.images
+                )
+            } else if (fullRequestItem is FullRequestItem.Error) {
+                log(tag = TAG) { "Failure get info for active request" }
+                viewState = viewState.copy(
+                    errorTitleMessage = fullRequestItem.message
+                )
+            }
+            changeLoading()
+        }
+    }
+
+    private fun changeLoading() {
+        viewState = viewState.copy(isLoading = !viewState.isLoading)
     }
 
     private fun obtainImageRepairExpandedChanged() {

@@ -73,4 +73,5 @@
     <string name="success_request_confirmation_title">Заявка на ремонт одобрена</string>
     <string name="success_request_confirmation_text">Водитель будет уведомлен</string>
     <string name="failure_request_confirmation_title">Одобрение заявки не ремонт не выполнилось</string>
+    <string name="active_request_info_failure">Произошла ошибка при получении активной заявки</string>
 </resources>
