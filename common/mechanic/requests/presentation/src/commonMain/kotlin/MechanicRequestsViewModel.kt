@@ -51,6 +51,7 @@ class MechanicRequestsViewModel :
 
             is MechanicRequestsEvent.CloseSuccessDialog -> obtainShowSuccessDialog()
             is MechanicRequestsEvent.CloseFailureDialog -> obtainShowFailureDialog()
+            is MechanicRequestsEvent.PullRefresh -> getUnconfirmedRequests()
             is MechanicRequestsEvent.RejectRequest -> {}
             is MechanicRequestsEvent.DriverPhoneClick -> {}
         }
@@ -130,8 +131,8 @@ class MechanicRequestsViewModel :
             datetime = datetimeForView,
             datetimeForServer = datetimeForServer
         )
-        log(tag="DATE") { datetimeForView }
-        log(tag="DATE") { datetimeForServer.toString() }
+        log(tag = "DATE") { datetimeForView }
+        log(tag = "DATE") { datetimeForServer.toString() }
     }
 
     private fun obtainShowDatePickerChanged() {

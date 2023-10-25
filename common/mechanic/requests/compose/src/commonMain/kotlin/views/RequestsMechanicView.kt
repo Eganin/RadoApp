@@ -43,6 +43,13 @@ fun RequestsMechanicView(
         modifier = modifier.fillMaxSize().background(color = Theme.colors.primaryBackground)
             .padding(all = 16.dp)
     ) {
+        item {
+            ActionButton(
+                text = MainRes.string.update_date_title,
+                onClick = {
+                    eventHandler.invoke(MechanicRequestsEvent.PullRefresh)
+                })
+        }
         if (state.errorTextForRequestList.isNotEmpty()) {
             item {
                 Text(

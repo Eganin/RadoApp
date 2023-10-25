@@ -95,16 +95,16 @@ fun ActiveRequestsForDriverView(
                 textTitle = MainRes.string.active_requests_title,
                 modifier = Modifier.fillMaxWidth()
             )
-            if (state.requests.isNotEmpty()) {
-                if (state.isLoadingActiveRequests) {
-                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        CircularProgressIndicator(
-                            modifier = Modifier.width(64.dp),
-                            color = Theme.colors.highlightColor,
-                            trackColor = Theme.colors.primaryAction
-                        )
-                    }
+            if (state.isLoadingActiveRequests) {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.width(64.dp),
+                        color = Theme.colors.highlightColor,
+                        trackColor = Theme.colors.primaryAction
+                    )
                 }
+            }
+            if (state.requests.isNotEmpty()) {
                 state.requests.forEach {
                     RequestCells(
                         firstText = datetimeStringToPrettyString(dateTime = it.datetime),
@@ -131,16 +131,16 @@ fun ActiveRequestsForDriverView(
                 textTitle = MainRes.string.unconfirmed_requests_title,
                 modifier = Modifier.fillMaxWidth()
             )
-            if (state.unconfirmedRequests.isNotEmpty()) {
-                if (state.isLoadingUnconfirmedRequests) {
-                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        CircularProgressIndicator(
-                            modifier = Modifier.width(64.dp),
-                            color = Theme.colors.highlightColor,
-                            trackColor = Theme.colors.primaryAction
-                        )
-                    }
+            if (state.isLoadingUnconfirmedRequests) {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.width(64.dp),
+                        color = Theme.colors.highlightColor,
+                        trackColor = Theme.colors.primaryAction
+                    )
                 }
+            }
+            if (state.unconfirmedRequests.isNotEmpty()) {
                 state.unconfirmedRequests.forEach {
                     RequestCells(
                         firstText = it.vehicleType,

@@ -84,14 +84,15 @@ class DriverActiveViewModel :
                 activeRequestsRepository.getRequestsByDate(date = date)
             if (activeRequestsForDriverItem is ActiveRequestsForDriverItem.Success) {
                 log(tag = TAG) { "Active requests by date" + activeRequestsForDriverItem.items.toString() }
+                changeLoadingForActiveRequests()
                 viewState = viewState.copy(
                     requests = activeRequestsForDriverItem.items
                 )
             } else if (activeRequestsForDriverItem is ActiveRequestsForDriverItem.Error) {
                 log(tag = TAG) { "Active Requests is failure" }
+                changeLoadingForActiveRequests()
                 obtainEvent(viewEvent = DriverActiveEvent.ErrorTextForRequestListChanged(value = activeRequestsForDriverItem.message))
             }
-            changeLoadingForActiveRequests()
         }
     }
 
@@ -102,14 +103,15 @@ class DriverActiveViewModel :
                 unconfirmedRequestsRepository.getRequests(isDriver = true)
             if (unconfirmedRequestsForDriverItem is UnconfirmedRequestsItem.Success) {
                 log(tag = TAG) { "Unconfirmed requests" + unconfirmedRequestsForDriverItem.items.toString() }
+                changeLoadingForUnconfirmedRequests()
                 viewState = viewState.copy(
                     unconfirmedRequests = unconfirmedRequestsForDriverItem.items
                 )
             } else if (unconfirmedRequestsForDriverItem is UnconfirmedRequestsItem.Error) {
                 log(tag = TAG) { "Unconfirmed Requests failure" }
+                changeLoadingForUnconfirmedRequests()
                 obtainEvent(viewEvent = DriverActiveEvent.ErrorTextForRequestListChanged(value = unconfirmedRequestsForDriverItem.message))
             }
-            changeLoadingForUnconfirmedRequests()
         }
     }
 
