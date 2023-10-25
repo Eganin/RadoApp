@@ -90,6 +90,15 @@ fun ActiveRequestsForDriverView(
                 modifier = Modifier.fillMaxWidth()
             )
             if (state.requests.isNotEmpty()) {
+                if (state.isLoading) {
+                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.width(64.dp),
+                            color = Theme.colors.highlightColor,
+                            trackColor = Theme.colors.primaryAction
+                        )
+                    }
+                }
                 state.requests.forEach {
                     RequestCells(
                         firstText = datetimeStringToPrettyString(dateTime = it.datetime),
@@ -117,6 +126,15 @@ fun ActiveRequestsForDriverView(
                 modifier = Modifier.fillMaxWidth()
             )
             if (state.unconfirmedRequests.isNotEmpty()) {
+                if (state.isLoading) {
+                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.width(64.dp),
+                            color = Theme.colors.highlightColor,
+                            trackColor = Theme.colors.primaryAction
+                        )
+                    }
+                }
                 state.unconfirmedRequests.forEach {
                     RequestCells(
                         firstText = it.vehicleType,
@@ -195,16 +213,6 @@ fun ActiveRequestsForDriverView(
                         onClick = { eventHandler.invoke(DriverActiveEvent.CloseInfoDialog) })
                 }
             )
-        }
-
-        if (state.isLoading) {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator(
-                    modifier = Modifier.width(64.dp),
-                    color = Theme.colors.highlightColor,
-                    trackColor = Theme.colors.primaryAction
-                )
-            }
         }
     }
 }

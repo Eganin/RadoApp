@@ -180,7 +180,7 @@ fun InfoRequestAlertDialog(
                                 size = imageSize,
                                 isExpanded = state.value.imageIsExpanded,
                                 imageLink = state.value.images[it],
-                                modifier = Modifier.padding(start = 16.dp),
+                                modifier = Modifier.padding(start = 16.dp, bottom = 16.dp),
                                 eventHandler = {
                                     viewModel.obtainEvent(viewEvent = InfoRequestEvent.ImageRepairExpandedChanged)
                                 }
@@ -201,16 +201,16 @@ fun InfoRequestAlertDialog(
                         modifier = Modifier.fillMaxSize()
                     )
                 }
-            }
-        }
 
-        if (state.value.isLoading) {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator(
-                    modifier = Modifier.width(64.dp),
-                    color = Theme.colors.highlightColor,
-                    trackColor = Theme.colors.primaryAction
-                )
+                if (state.value.isLoading) {
+                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.width(64.dp),
+                            color = Theme.colors.highlightColor,
+                            trackColor = Theme.colors.primaryAction
+                        )
+                    }
+                }
             }
         }
     }
