@@ -9,5 +9,6 @@ data class DriverActiveViewState(
     val showInfoDialog: Boolean = false,
     val isActiveDialog:Boolean=false,
     val requestIdForInfo :Int=-1,
-    val isLoading: Boolean=false
+    val isLoadingUnconfirmedRequests: Boolean=false,
+    val isLoadingActiveRequests: Boolean=false
 )

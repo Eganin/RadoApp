@@ -66,6 +66,12 @@ fun ActiveRequestsForDriverView(
             .padding(all = 16.dp)
             .verticalScroll(rememberScrollState())
     ) {
+        ActionButton(
+            text = MainRes.string.update_date_title,
+            onClick = {
+                eventHandler.invoke(DriverActiveEvent.PullRefresh)
+            })
+
         CalendarView(
             state = datePickerState,
             modifier = Modifier
@@ -90,7 +96,7 @@ fun ActiveRequestsForDriverView(
                 modifier = Modifier.fillMaxWidth()
             )
             if (state.requests.isNotEmpty()) {
-                if (state.isLoading) {
+                if (state.isLoadingActiveRequests) {
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                         CircularProgressIndicator(
                             modifier = Modifier.width(64.dp),
@@ -126,7 +132,7 @@ fun ActiveRequestsForDriverView(
                 modifier = Modifier.fillMaxWidth()
             )
             if (state.unconfirmedRequests.isNotEmpty()) {
-                if (state.isLoading) {
+                if (state.isLoadingUnconfirmedRequests) {
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                         CircularProgressIndicator(
                             modifier = Modifier.width(64.dp),

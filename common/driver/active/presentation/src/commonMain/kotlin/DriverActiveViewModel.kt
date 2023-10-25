@@ -46,11 +46,20 @@ class DriverActiveViewModel :
 
             is DriverActiveEvent.CloseCreateDialog -> obtainCloseCreateDialogChange()
             is DriverActiveEvent.CloseInfoDialog -> obtainCloseInfoDialogChange()
+            is DriverActiveEvent.PullRefresh -> {
+                getUnconfirmedRequests()
+                getActiveRequestsByDate()
+            }
         }
     }
 
-    private fun changeLoading() {
-        viewState = viewState.copy(isLoading = !viewState.isLoading)
+    private fun changeLoadingForActiveRequests() {
+        viewState = viewState.copy(isLoadingActiveRequests = !viewState.isLoadingActiveRequests)
+    }
+
+    private fun changeLoadingForUnconfirmedRequests() {
+        viewState =
+            viewState.copy(isLoadingUnconfirmedRequests = !viewState.isLoadingUnconfirmedRequests)
     }
 
     private fun openCreateRequestScreen() {
@@ -70,7 +79,7 @@ class DriverActiveViewModel :
 
     private fun getActiveRequestsByDate(date: String = "") {
         coroutineScope.launch {
-            changeLoading()
+            changeLoadingForActiveRequests()
             val activeRequestsForDriverItem =
                 activeRequestsRepository.getRequestsByDate(date = date)
             if (activeRequestsForDriverItem is ActiveRequestsForDriverItem.Success) {
@@ -82,13 +91,13 @@ class DriverActiveViewModel :
                 log(tag = TAG) { "Active Requests is failure" }
                 obtainEvent(viewEvent = DriverActiveEvent.ErrorTextForRequestListChanged(value = activeRequestsForDriverItem.message))
             }
-            changeLoading()
+            changeLoadingForActiveRequests()
         }
     }
 
     private fun getUnconfirmedRequests() {
         coroutineScope.launch {
-            changeLoading()
+            changeLoadingForUnconfirmedRequests()
             val unconfirmedRequestsForDriverItem =
                 unconfirmedRequestsRepository.getRequests(isDriver = true)
             if (unconfirmedRequestsForDriverItem is UnconfirmedRequestsItem.Success) {
@@ -100,7 +109,7 @@ class DriverActiveViewModel :
                 log(tag = TAG) { "Unconfirmed Requests failure" }
                 obtainEvent(viewEvent = DriverActiveEvent.ErrorTextForRequestListChanged(value = unconfirmedRequestsForDriverItem.message))
             }
-            changeLoading()
+            changeLoadingForUnconfirmedRequests()
         }
     }
 
