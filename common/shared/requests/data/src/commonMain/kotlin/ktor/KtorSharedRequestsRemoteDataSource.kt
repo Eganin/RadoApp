@@ -4,6 +4,7 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.http.path
+import models.FullRequestResponse
 import models.FullUnconfirmedRequestResponse
 import models.SmallUnconfirmedRequestResponse
 
@@ -13,7 +14,7 @@ class KtorSharedRequestsRemoteDataSource(
     suspend fun fetchUnconfirmedRequestInfo(requestId: Int): FullUnconfirmedRequestResponse {
         return httpClient.get {
             url {
-                path("/request/unconfirmed/info/${requestId}")
+                path("request/unconfirmed/info/${requestId}")
             }
         }.body()
     }
@@ -21,7 +22,7 @@ class KtorSharedRequestsRemoteDataSource(
     suspend fun fetchUnconfirmedRequestsForDriver(driverId: Int): List<SmallUnconfirmedRequestResponse> {
         return httpClient.get {
             url {
-                path("/request/unconfirmed/driver/${driverId}")
+                path("request/unconfirmed/driver/${driverId}")
             }
         }.body()
     }
@@ -29,7 +30,15 @@ class KtorSharedRequestsRemoteDataSource(
     suspend fun fetchUnconfirmedRequestsForMechanic(): List<SmallUnconfirmedRequestResponse> {
         return httpClient.get {
             url {
-                path("/request/unconfirmed/mechanic")
+                path("request/unconfirmed/mechanic")
+            }
+        }.body()
+    }
+
+    suspend fun fetchActiveRequestInfo(requestId: Int): FullRequestResponse {
+        return httpClient.get {
+            url {
+                path("request/active/info/$requestId")
             }
         }.body()
     }

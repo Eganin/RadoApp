@@ -25,4 +25,10 @@ val sharedRequestsModule = DI.Module(name = "sharedRequestsModule") {
             localDataSource = instance()
         )
     }
+
+    bind<ActiveRequestsRepository>() with singleton {
+        ActiveRequestsRepositoryImpl(
+            remoteDataSource = instance()
+        )
+    }
 }
