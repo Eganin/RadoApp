@@ -111,7 +111,7 @@ fun ActiveRequestsForDriverView(
                 TextStickyHeader(
                     textTitle = MainRes.string.empty_title,
                     fontSize = 16,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth().padding(all=16.dp)
                 )
             }
             TextStickyHeader(
@@ -138,7 +138,7 @@ fun ActiveRequestsForDriverView(
                 TextStickyHeader(
                     textTitle = MainRes.string.empty_title,
                     fontSize = 16,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth().padding(all=16.dp)
                 )
             }
         } else {
@@ -187,6 +187,7 @@ fun ActiveRequestsForDriverView(
                             fontWeight = FontWeight.Bold,
                             modifier = Modifier.fillMaxWidth()
                         )
+                        Spacer(modifier = Modifier.height(16.dp))
                     }
 
                     ActionButton(

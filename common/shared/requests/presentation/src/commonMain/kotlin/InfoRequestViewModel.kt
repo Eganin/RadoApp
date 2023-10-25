@@ -93,6 +93,7 @@ class InfoRequestViewModel :
             if (fullRequestItem is FullRequestItem.Success) {
                 log(tag = TAG) { "Get info for active request ${fullRequestItem.request}" }
                 val info = fullRequestItem.request
+                log(tag = "IMAGES") { info.images.toString() }
                 viewState = viewState.copy(
                     numberVehicle = info.vehicleNumber,
                     selectedVehicleType = info.vehicleType.toVehicleType(),
