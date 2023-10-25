@@ -49,9 +49,18 @@ class MechanicRequestsViewModel :
                 minute = viewEvent.minute
             )
 
-            is MechanicRequestsEvent.CloseSuccessDialog -> obtainShowSuccessDialog()
-            is MechanicRequestsEvent.CloseFailureDialog -> obtainShowFailureDialog()
+            is MechanicRequestsEvent.CloseSuccessDialog -> {
+                clearState()
+                obtainShowSuccessDialog()
+            }
+
+            is MechanicRequestsEvent.CloseFailureDialog -> {
+                clearState()
+                obtainShowFailureDialog()
+            }
+
             is MechanicRequestsEvent.PullRefresh -> getUnconfirmedRequests()
+            is MechanicRequestsEvent.ClearState -> clearState()
             is MechanicRequestsEvent.RejectRequest -> {}
             is MechanicRequestsEvent.DriverPhoneClick -> {}
         }
@@ -93,6 +102,15 @@ class MechanicRequestsViewModel :
             getUnconfirmedRequests()
             changeLoading()
         }
+    }
+
+    private fun clearState() {
+        viewState = viewState.copy(
+            reopenDialog = !viewState.reopenDialog,
+            datetime = "",
+            datetimeForServer = Pair("", ""),
+            date = 0,
+        )
     }
 
     private fun obtainShowSuccessDialog() {

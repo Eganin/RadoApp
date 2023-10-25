@@ -20,11 +20,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
@@ -248,6 +250,16 @@ fun CreateRequestAlertDialog(
                         viewModel.obtainEvent(viewEvent = CreateRequestEvent.CreateRequest)
                     })
             }
+
+            if (state.value.isLoading) {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.width(64.dp),
+                        color = Theme.colors.highlightColor,
+                        trackColor = Theme.colors.primaryAction
+                    )
+                }
+            }
         }
 
         ImageFilePicker(
@@ -270,7 +282,8 @@ fun CreateRequestAlertDialog(
                     viewModel.obtainEvent(viewEvent = CreateRequestEvent.CloseSuccessDialog)
                 },
                 firstText = MainRes.string.success_create_request_title,
-                secondText = MainRes.string.success_create_request_text)
+                secondText = MainRes.string.success_create_request_text
+            )
         }
 
         if (state.value.showFailureCreateRequestDialog) {

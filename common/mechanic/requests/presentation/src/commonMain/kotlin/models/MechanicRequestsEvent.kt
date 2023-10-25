@@ -31,4 +31,6 @@ sealed class MechanicRequestsEvent {
     data object DriverPhoneClick : MechanicRequestsEvent()
 
     data object PullRefresh: MechanicRequestsEvent()
+
+    data object ClearState: MechanicRequestsEvent()
 }
