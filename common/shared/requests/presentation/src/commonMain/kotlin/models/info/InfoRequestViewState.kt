@@ -1,6 +1,7 @@
 package models.info
 
 import models.create.VehicleType
+import other.Position
 import other.StatusRequest
 
 data class InfoRequestViewState(
@@ -18,5 +19,7 @@ data class InfoRequestViewState(
     val commentMechanic: String = "",
     val errorTitleMessage: String = "",
     val imageIsExpanded: Boolean = false,
-    val isLoading: Boolean = false
+    val isLoading: Boolean = false,
+    val infoForPosition: Position=Position.DRIVER,
+    val isActiveRequest: Boolean=false,
 )

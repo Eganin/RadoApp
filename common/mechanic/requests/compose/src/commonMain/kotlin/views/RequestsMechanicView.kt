@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.sp
 import models.MechanicRequestsEvent
 import models.MechanicRequestsViewState
 import org.company.rado.core.MainRes
+import other.Position
 import theme.Theme
 import views.create.FailureCreateRequestDialog
 import views.create.RequestCells
@@ -69,6 +70,8 @@ fun RequestsMechanicView(
         InfoRequestAlertDialog(
             onDismiss = { eventHandler.invoke(MechanicRequestsEvent.CloseInfoDialog) },
             requestId = state.requestsIdForInfo,
+            infoForPosition = Position.MECHANIC,
+            isActiveRequest = false,
             actionControl = { infoRequestState ->
                 if (infoRequestState.driverPhone.isNotEmpty()) {
                     Text(

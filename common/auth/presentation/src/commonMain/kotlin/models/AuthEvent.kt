@@ -1,6 +1,7 @@
 package models
 
 import androidx.compose.ui.geometry.Size
+import other.Position
 
 sealed class AuthEvent {
 

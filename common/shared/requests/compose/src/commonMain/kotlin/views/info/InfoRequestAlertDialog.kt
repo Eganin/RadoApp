@@ -35,6 +35,7 @@ import models.create.VehicleType
 import models.info.InfoRequestEvent
 import models.info.InfoRequestViewState
 import org.company.rado.core.MainRes
+import other.Position
 import other.observeAsState
 import platform.LocalPlatform
 import platform.Platform
@@ -46,6 +47,8 @@ import views.create.ImageMachineCells
 fun InfoRequestAlertDialog(
     onDismiss: () -> Unit,
     requestId: Int,
+    infoForPosition: Position,
+    isActiveRequest: Boolean,
     modifier: Modifier = Modifier,
     actionControl: @Composable (InfoRequestViewState) -> Unit = {},
 ) {
@@ -58,7 +61,13 @@ fun InfoRequestAlertDialog(
         if (isLargePlatform) (LocalDensity.current.density.dp * 70) else (LocalDensity.current.density.dp * 25)
 
     LaunchedEffect(key1 = Unit) {
-        viewModel.obtainEvent(InfoRequestEvent.UnconfirmedRequestGetInfo(requestId = requestId))
+        viewModel.obtainEvent(
+            InfoRequestEvent.RequestGetInfo(
+                requestId = requestId,
+                infoForPosition = infoForPosition,
+                isActiveRequest = isActiveRequest
+            )
+        )
     }
 
     Dialog(

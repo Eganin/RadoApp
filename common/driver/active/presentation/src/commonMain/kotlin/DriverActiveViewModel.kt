@@ -34,7 +34,11 @@ class DriverActiveViewModel :
     override fun obtainEvent(viewEvent: DriverActiveEvent) {
         when (viewEvent) {
             is DriverActiveEvent.OpenDialogCreateRequest -> openCreateRequestScreen()
-            is DriverActiveEvent.OpenDialogInfoRequest -> openInfoRequestScreen(requestId = viewEvent.requestId)
+            is DriverActiveEvent.OpenDialogInfoRequest -> openInfoRequestScreen(
+                requestId = viewEvent.requestId,
+                isActiveDialog = viewEvent.isActiveRequest
+            )
+
             is DriverActiveEvent.SelectedDateChanged -> getActiveRequestsByDate(date = viewEvent.value)
             is DriverActiveEvent.ErrorTextForRequestListChanged -> obtainErrorTextForRequestListChange(
                 errorMessage = viewEvent.value
@@ -54,10 +58,14 @@ class DriverActiveViewModel :
         viewState = viewState.copy(showCreateDialog = !viewState.showCreateDialog)
     }
 
-    private fun openInfoRequestScreen(requestId: Int) {
+    private fun openInfoRequestScreen(requestId: Int, isActiveDialog: Boolean) {
         log(tag = TAG) { "Navigate to info request screen" }
         viewState =
-            viewState.copy(requestIdForInfo = requestId, showInfoDialog = !viewState.showInfoDialog)
+            viewState.copy(
+                requestIdForInfo = requestId,
+                showInfoDialog = !viewState.showInfoDialog,
+                isActiveDialog = isActiveDialog
+            )
     }
 
     private fun getActiveRequestsByDate(date: String = "") {

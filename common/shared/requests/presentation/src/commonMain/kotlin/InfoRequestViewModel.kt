@@ -12,6 +12,7 @@ import models.info.InfoRequestAction
 import models.info.InfoRequestEvent
 import models.info.InfoRequestViewState
 import other.BaseSharedViewModel
+import other.Position
 
 class InfoRequestViewModel :
     BaseSharedViewModel<InfoRequestViewState, InfoRequestAction, InfoRequestEvent>(
@@ -30,10 +31,32 @@ class InfoRequestViewModel :
 
     override fun obtainEvent(viewEvent: InfoRequestEvent) {
         when (viewEvent) {
-            is InfoRequestEvent.UnconfirmedRequestGetInfo -> getInfoForUnconfirmedRequest(requestId = viewEvent.requestId)
-            is InfoRequestEvent.ActiveRequestGetInfo -> getInfoForActiveRequest(requestId = viewEvent.requestId)
             is InfoRequestEvent.ImageRepairExpandedChanged -> obtainImageRepairExpandedChanged()
+            is InfoRequestEvent.RequestGetInfo -> getInfoForRequest(
+                requestId = viewEvent.requestId,
+                infoForPosition = viewEvent.infoForPosition,
+                isActiveRequest = viewEvent.isActiveRequest
+            )
+
             is InfoRequestEvent.PhoneClick -> {}
+        }
+    }
+
+    private fun getInfoForRequest(
+        requestId: Int,
+        infoForPosition: Position,
+        isActiveRequest: Boolean
+    ) {
+        when {
+            infoForPosition == Position.DRIVER && isActiveRequest -> getInfoForActiveRequest(
+                requestId = requestId
+            )
+
+            infoForPosition == Position.DRIVER && !isActiveRequest -> getInfoForUnconfirmedRequest(
+                requestId = requestId
+            )
+
+            infoForPosition == Position.MECHANIC -> getInfoForUnconfirmedRequest(requestId = requestId)
         }
     }
 

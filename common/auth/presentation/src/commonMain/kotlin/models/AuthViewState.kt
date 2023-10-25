@@ -1,6 +1,7 @@
 package models
 
 import androidx.compose.ui.geometry.Size
+import other.Position
 
 data class AuthViewState(
     val position: Position = Position.DRIVER,
@@ -20,14 +21,6 @@ data class AuthViewState(
     ),
     val isLoading : Boolean = false
 )
-
-enum class Position(
-    val positionName: String
-) {
-    DRIVER("Водитель"),
-    MECHANIC("Механик"),
-    OBSERVER("Наблюдатель")
-}
 
 fun String.fromPositionNameToPosition(): Position {
     return when (this) {
