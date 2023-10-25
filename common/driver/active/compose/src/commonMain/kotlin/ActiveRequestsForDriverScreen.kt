@@ -31,7 +31,10 @@ object ActiveRequestsForDriverScreen : Screen {
                 SnackbarHost(hostState = snackBarHostState)
             }
         ) {
-            ActiveRequestsForDriverView(state = state.value, modifier = Modifier.padding(bottom = 90.dp)) { event ->
+            ActiveRequestsForDriverView(
+                state = state.value,
+                modifier = Modifier.padding(bottom = 90.dp)
+            ) { event ->
                 viewModel.obtainEvent(viewEvent = event)
             }
         }
@@ -43,6 +46,7 @@ object ActiveRequestsForDriverScreen : Screen {
                     snackBarHostState.showSnackbar(message = snackBarAction.message)
                 }
             }
+
             null -> {}
         }
     }

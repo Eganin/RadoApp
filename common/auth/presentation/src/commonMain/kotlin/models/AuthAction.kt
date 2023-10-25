@@ -1,5 +1,7 @@
 package models
 
+import other.Position
+
 sealed class AuthAction {
 
     data class ShowErrorSnackBar(val message: String): AuthAction()

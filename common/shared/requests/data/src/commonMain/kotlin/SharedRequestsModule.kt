@@ -1,5 +1,8 @@
 import ktor.KtorSharedRequestsRemoteDataSource
+import mapper.FullRequestItemMapper
 import mapper.UnconfirmedRequestInfoItemMapper
+import models.FullRequestItem
+import models.FullRequestResponse
 import models.FullUnconfirmedRequestResponse
 import models.UnconfirmedRequestInfoItem
 import org.kodein.di.DI
@@ -21,7 +24,19 @@ val sharedRequestsModule = DI.Module(name = "sharedRequestsModule") {
     bind<UnconfirmedRequestsRepository>() with singleton {
         UnconfirmedRequestsRepositoryImpl(
             remoteDataSource = instance(),
-            unconfirmedRequestInfoItemMapper = instance()
+            unconfirmedRequestInfoItemMapper = instance(),
+            localDataSource = instance()
+        )
+    }
+
+    bind<Mapper<FullRequestResponse, FullRequestItem>>() with singleton {
+        FullRequestItemMapper()
+    }
+
+    bind<ActiveRequestsRepository>() with singleton {
+        ActiveRequestsRepositoryImpl(
+            remoteDataSource = instance(),
+            mapper = instance()
         )
     }
 }

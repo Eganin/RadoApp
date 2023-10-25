@@ -8,6 +8,7 @@ kotlin{
         commonMain{
             dependencies {
                 api(project(":common:driver:active:api"))
+                api(project(":common:shared:requests:api"))
                 implementation(project(":common:core"))
 
                 implementation(Dependencies.Navigation.MokoMVVM.core)

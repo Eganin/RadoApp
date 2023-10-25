@@ -35,7 +35,7 @@ fun RequestCells(
             Text(
                 text = firstText,
                 color = Theme.colors.primaryTextColor,
-                fontSize = 16.sp,
+                fontSize = 18.sp,
                 fontWeight = FontWeight.Bold
             )
 
@@ -44,7 +44,7 @@ fun RequestCells(
             Text(
                 text = secondText,
                 color = Theme.colors.secondaryTextColor,
-                fontSize = 8.sp,
+                fontSize = 14.sp,
                 fontWeight = FontWeight.Normal
             )
         }

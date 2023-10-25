@@ -37,6 +37,24 @@ compose.desktop {
             windows {
                 menuGroup = "Rado"
                 upgradeUuid = "9abd7638-ed9a-44ca-8680-98283941ef0a"
+                packageVersion = "1.0.0"
+                msiPackageVersion="1.0.0"
+                exePackageVersion="1.0.0"
+            }
+            macOS {
+                // a version for all macOS distributables
+                packageVersion = "1.0.0"
+                // a version only for the dmg package
+                dmgPackageVersion = "1.0.0"
+                // a version only for the pkg package
+                pkgPackageVersion = "1.0.0"
+
+                // a build version for all macOS distributables
+                packageBuildVersion = "1.0.0"
+                // a build version only for the dmg package
+                dmgPackageBuildVersion = "1.0.0"
+                // a build version only for the pkg package
+                pkgPackageBuildVersion = "1.0.0"
             }
         }
     }

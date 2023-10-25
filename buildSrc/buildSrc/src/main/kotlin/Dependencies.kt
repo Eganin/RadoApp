@@ -120,19 +120,13 @@ object Dependencies {
         }
     }
 
-    object UI {
-        object FlowLayout {
-            private const val version = "0.33.2-alpha"
-            const val core = "com.google.accompanist:accompanist-flowlayout:$version"
-        }
-    }
-
     object Navigation {
         object Voyager {
             private const val version = "1.0.0-rc07"
             const val navigator = "cafe.adriel.voyager:voyager-navigator:$version"
             const val kodeinIntegration = "cafe.adriel.voyager:voyager-kodein:$version"
-            const val bottomSheetNavigator = "cafe.adriel.voyager:voyager-bottom-sheet-navigator:$version"
+            const val bottomSheetNavigator =
+                "cafe.adriel.voyager:voyager-bottom-sheet-navigator:$version"
             const val tabNavigator = "cafe.adriel.voyager:voyager-tab-navigator:$version"
             const val transitions = "cafe.adriel.voyager:voyager-transitions:$version"
         }
@@ -155,13 +149,13 @@ object Dependencies {
             const val kotlinxDatetime = "org.jetbrains.kotlinx:kotlinx-datetime:$version"
         }
 
-        object FilePicker{
+        object FilePicker {
             private const val version = "2.1.0"
             const val core = "com.darkrockstudios:mpfilepicker:$version"
         }
 
-        object UUID{
-            private const val version ="0.8.1"
+        object UUID {
+            private const val version = "0.8.1"
             const val core = "com.benasher44:uuid:$version"
         }
     }
