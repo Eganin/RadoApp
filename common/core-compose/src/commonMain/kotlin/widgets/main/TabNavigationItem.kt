@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.Tab
+import theme.Theme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -26,7 +27,8 @@ fun RowScope.TabNavigationItem(tab: Tab) {
             defaultElevation = 2.dp,
             focusedElevation = 4.dp,
             pressedElevation = 6.dp
-        )
+        ),
+        colors = CardDefaults.cardColors(containerColor = Theme.colors.highlightColor)
     ) {
         tab.options.icon?.let { painterIcon ->
             Icon(

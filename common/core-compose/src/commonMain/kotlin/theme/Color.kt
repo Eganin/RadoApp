@@ -13,18 +13,18 @@ data class RadoColors(
     val thirdTextColor: Color,
     val tagColor: Color,
     val tagTextColor: Color,
-    val bottomBarColor:Color,
+    val bottomBarColor: Color,
     val calendarColor: Color,
-    val bottomCellsColor:Color,
-    val errorColor:Color
+    val bottomCellsColor: Color,
+    val errorColor: Color
 )
 
 val lightPalette = RadoColors(
     primaryBackground = Color(0xFFFFFFFF),
-    primaryAction = Color(0xFFF8D247),
+    primaryAction = Color(0xFFE31E23),
     primaryTextColor = Color(0xFF050B18),
     hintTextColor = Color(0xFF333232),
-    highlightColor = Color(0xFF6200EE),
+    highlightColor = Color(0xFF545A61),
     secondaryTextColor = Color(0xFF000000),
     thirdTextColor = Color(0xFF0047FF),
     tagColor = Color(0xFF6200EE),
@@ -36,11 +36,11 @@ val lightPalette = RadoColors(
 )
 
 val darkPalette = RadoColors(
-    primaryBackground = Color(0xFF24292E),
-    primaryAction = Color(0xFFF8D247),
+    primaryBackground = Color(0xFF545A61),
+    primaryAction = Color(0xFFE31E23),
     primaryTextColor = Color(0xFFFFFFFF),
     hintTextColor = Color(0xFFFFE8E8),
-    highlightColor = Color(0xFF6200EE),
+    highlightColor = Color(0xFFFFFFFF),
     secondaryTextColor = Color(0xFFFFE8E8),
     thirdTextColor = Color(0xFF0047FF),
     tagColor = Color(0xFF6200EE),
