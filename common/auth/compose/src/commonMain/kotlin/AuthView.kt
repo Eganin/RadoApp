@@ -38,6 +38,8 @@ import androidx.compose.ui.unit.toSize
 import models.AuthEvent
 import models.AuthViewState
 import org.company.rado.core.MainRes
+import platform.LocalPlatform
+import platform.Platform
 import theme.Theme
 import widgets.common.ActionButton
 
@@ -210,7 +212,7 @@ fun AuthView(
             })
     }
 
-    if (state.isLoading) {
+    if (state.isLoading && LocalPlatform.current != Platform.Web) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             CircularProgressIndicator(
                 modifier = Modifier.width(64.dp),
