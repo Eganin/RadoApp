@@ -34,6 +34,15 @@ compose.desktop {
             packageName = "org.company.rado.desktopApp"
             packageVersion = "1.0.0"
 
+            linux {
+                // a version for all Linux distributables
+                packageVersion = "1.0.0"
+                // a version only for the deb package
+                debPackageVersion = "1.0.0"
+                // a version only for the rpm package
+                rpmPackageVersion = "1.0.0"
+            }
+
             windows {
                 menuGroup = "Rado"
                 upgradeUuid = "9abd7638-ed9a-44ca-8680-98283941ef0a"

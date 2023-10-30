@@ -3,6 +3,7 @@ include(":jsApp")
 include(":composeApp")
 include(":androidApp")
 include(":desktopApp")
+include(":backend")
 
 include(":common:auth:api")
 include(":common:auth:data")
