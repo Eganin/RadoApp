@@ -1,7 +1,7 @@
 package ru.rado
 
-import dao.di.bindRepositories
-import features.di.bindControllers
+import org.company.rado.dao.di.bindRepositories
+import org.company.rado.features.di.bindControllers
 import io.ktor.client.request.*
 import io.ktor.client.request.forms.*
 import io.ktor.client.statement.*
@@ -9,10 +9,10 @@ import io.ktor.http.*
 import io.ktor.server.testing.*
 import org.jetbrains.exposed.sql.Database
 import org.kodein.di.ktor.di
-import plugins.configureRouting
-import plugins.configureSerialization
-import routes.images.configureImageRouting
-import services.di.bindServices
+import org.company.rado.plugins.configureRouting
+import org.company.rado.plugins.configureSerialization
+import org.company.rado.routes.resources.configureResourcesRouting
+import org.company.rado.services.di.bindServices
 import java.io.File
 import kotlin.test.*
 
@@ -34,7 +34,7 @@ class ApplicationTest {
                 bindControllers()
             }
             configureRouting{
-                configureImageRouting()
+                configureResourcesRouting()
             }
         }
 

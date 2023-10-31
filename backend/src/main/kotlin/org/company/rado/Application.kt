@@ -1,21 +1,30 @@
-package ru.rado
+package org.company.rado
 
-import dao.di.bindRepositories
-import features.di.bindControllers
-import io.ktor.server.application.*
-import io.ktor.server.engine.*
-import io.ktor.server.netty.*
+import org.company.rado.dao.di.bindRepositories
+import org.company.rado.features.di.bindControllers
+import io.ktor.server.application.Application
+import io.ktor.server.engine.embeddedServer
+import io.ktor.server.netty.Netty
 import org.jetbrains.exposed.sql.Database
 import org.kodein.di.ktor.di
-import plugins.*
-import routes.requests.*
-import routes.resources.configureResourcesRouting
-import routes.users.configureDeleteUserRouting
-import routes.users.configureLoginRouting
-import routes.users.configureRegisterRouting
-import routes.vehicles.configureDeleteVehiclesRouting
-import services.di.bindServices
-import utils.configureTestRouting
+import org.company.rado.plugins.configureCompression
+import org.company.rado.plugins.configureCors
+import org.company.rado.plugins.configureException
+import org.company.rado.plugins.configureRouting
+import org.company.rado.plugins.configureSerialization
+import org.company.rado.routes.requests.configureActiveRequestRouting
+import org.company.rado.routes.requests.configureArchiveRequestRouting
+import org.company.rado.routes.requests.configureDeleteRequestRouting
+import org.company.rado.routes.requests.configureRejectedRequestRouting
+import org.company.rado.routes.requests.configureRequestRouting
+import org.company.rado.routes.requests.configureUnconfirmedRequestRouting
+import org.company.rado.routes.resources.configureResourcesRouting
+import org.company.rado.routes.users.configureDeleteUserRouting
+import org.company.rado.routes.users.configureLoginRouting
+import org.company.rado.routes.users.configureRegisterRouting
+import org.company.rado.routes.vehicles.configureDeleteVehiclesRouting
+import org.company.rado.services.di.bindServices
+import org.company.rado.utils.configureTestRouting
 
 fun main() {
     Database.connect(
@@ -30,19 +39,6 @@ fun main() {
         port = System.getenv("SERVER_PORT").toInt(),
         module = Application::module
     ).start(wait = true)
-
-//    Database.connect(
-//        url = "jdbc:postgresql://db:5432/rado",
-//        driver = "org.postgresql.Driver",
-//        user = "postgres",
-//        password = "Zaharin0479"
-//    )
-//
-//    embeddedServer(
-//        Netty,
-//        port = 8080,
-//        module = Application::module
-//    ).start(wait = true)
 }
 
 fun Application.module() {

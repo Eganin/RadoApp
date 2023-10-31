@@ -83,7 +83,7 @@ CREATE TABLE fault_videos
     video_path character varying(100) COLLATE pg_catalog."default" NOT NULL,
     request_id integer NOT NULL,
     CONSTRAINT fault_videos_pkey PRIMARY KEY (id),
-    CONSTRAINT fault_video_path UNIQUE (image_path),
+    CONSTRAINT fault_video_path UNIQUE (video_path),
     CONSTRAINT video_request_id FOREIGN KEY (request_id)
         REFERENCES public.requests (id) MATCH SIMPLE
         ON UPDATE NO ACTION

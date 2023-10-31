@@ -10,17 +10,16 @@ repositories {
 
 plugins {
     application
-    //kotlin("jvm") version "1.9.10"
+    kotlin("jvm")
     id("io.ktor.plugin") version "2.3.4"
     kotlin("plugin.serialization")
 }
 
-group = "ru.rado"
+group = "org.company.rado"
 version = "0.0.13"
 
 application {
     mainClass.set("org.company.rado.ApplicationKt")
-
     val isDevelopment: Boolean = project.ext.has("development")
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
 }
@@ -56,14 +55,6 @@ dependencies {
     implementation("io.ktor:ktor-server-cors:$ktor_version")
     implementation("com.koriit.kotlin:ktor-logging:0.4.0")
     implementation("io.ktor:ktor-server-compression:$ktor_version")
-}
-
-tasks {
-    shadowJar {
-        manifest {
-            //attributes(Pair("Main-Class", "backend.src.main.kotlin.org.company.rado.ApplicationKt"))
-        }
-    }
 }
 
 ktor {

@@ -4,9 +4,9 @@ services:
     build: backend/.
     container_name: backend-container
     ports:
-      - "8080:8080"
+      - "8081:8081"
     environment:
-      - SERVER_PORT=8080
+      - SERVER_PORT=8081
       - DATABASE_CONNECTION_STRING=jdbc:postgresql://db:5432/rado
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=Rado0479
@@ -33,8 +33,8 @@ services:
     networks:
       - db_network
     volumes:
-      - ./db-data:/var/lib/postgresql/data
-      - ./sql/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+      - ./backend/db-data:/var/lib/postgresql/data
+      - ./backend/sql/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
     restart: always
 
 networks:
