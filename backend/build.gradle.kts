@@ -19,7 +19,7 @@ group = "ru.rado"
 version = "0.0.13"
 
 application {
-    mainClass.set("backend.src.main.kotlin.org.company.rado.ApplicationKt")
+    mainClass.set("org.company.rado.ApplicationKt")
 
     val isDevelopment: Boolean = project.ext.has("development")
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
@@ -61,7 +61,7 @@ dependencies {
 tasks {
     shadowJar {
         manifest {
-            attributes(Pair("Main-Class", "backend.src.main.kotlin.org.company.rado.ApplicationKt"))
+            //attributes(Pair("Main-Class", "backend.src.main.kotlin.org.company.rado.ApplicationKt"))
         }
     }
 }

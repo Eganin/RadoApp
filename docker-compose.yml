@@ -1,7 +1,7 @@
 version: "3.9"
 services:
   server:
-    build: .
+    build: backend/.
     container_name: backend-container
     ports:
       - "8080:8080"
@@ -15,6 +15,11 @@ services:
     networks:
       - db_network
     restart: always
+
+  frontend:
+    build: frontend/.
+    ports:
+      - "9091:80"
 
   db:
     container_name: postgresql-container
