@@ -250,15 +250,15 @@ fun CreateRequestAlertDialog(
                         viewModel.obtainEvent(viewEvent = CreateRequestEvent.CreateRequest)
                     })
             }
+        }
 
-            if (state.value.isLoading) {
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.width(64.dp),
-                        color = Theme.colors.highlightColor,
-                        trackColor = Theme.colors.primaryAction
-                    )
-                }
+        if (state.value.isLoading) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator(
+                    modifier = Modifier.width(64.dp),
+                    color = Theme.colors.highlightColor,
+                    trackColor = Theme.colors.primaryAction
+                )
             }
         }
 
