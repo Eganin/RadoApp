@@ -90,9 +90,3 @@ CREATE TABLE fault_videos
         ON DELETE NO ACTION
         NOT VALID
 );
-
-CREATE TABLE test_table
-(
-    id serial,
-    test_text character varying(100) NOT NULL
-);
