@@ -1,0 +1,42 @@
+version: "3.9"
+services:
+  server:
+    build: backend/.
+    container_name: backend-container
+    ports:
+      - "8081:8081"
+    environment:
+      - SERVER_PORT=8081
+      - DATABASE_CONNECTION_STRING=jdbc:postgresql://db:5432/rado
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=Rado0479
+    depends_on:
+      - db
+    networks:
+      - db_network
+    restart: always
+
+  frontend:
+    build: frontend/.
+    ports:
+      - "9091:80"
+
+  db:
+    container_name: postgresql-container
+    image: "postgres:latest"
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: "rado"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "Rado0479"
+    networks:
+      - db_network
+    volumes:
+      - ./backend/db-data:/var/lib/postgresql/data
+      - ./backend/sql/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+    restart: always
+
+networks:
+  db_network:
+    driver: bridge
