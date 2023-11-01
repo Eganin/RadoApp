@@ -13,6 +13,7 @@ plugins {
     kotlin("jvm")
     id("io.ktor.plugin") version "2.3.4"
     kotlin("plugin.serialization")
+    id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
 group = "org.company.rado"
