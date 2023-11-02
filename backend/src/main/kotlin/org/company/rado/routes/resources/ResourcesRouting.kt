@@ -1,10 +1,15 @@
 package org.company.rado.routes.resources
 
+import io.ktor.http.HttpStatusCode
+import io.ktor.server.application.Application
+import io.ktor.server.application.call
+import io.ktor.server.response.respond
+import io.ktor.server.response.respondFile
+import io.ktor.server.routing.delete
+import io.ktor.server.routing.get
+import io.ktor.server.routing.post
+import io.ktor.server.routing.routing
 import org.company.rado.features.resources.ResourcesController
-import io.ktor.http.*
-import io.ktor.server.application.*
-import io.ktor.server.response.*
-import io.ktor.server.routing.*
 import org.kodein.di.instance
 import org.kodein.di.ktor.closestDI
 import java.io.File
@@ -26,9 +31,9 @@ fun Application.configureResourcesRouting() {
             resourcesController.createImages(call = call)
         }
 
-        post(path="/videos/create") {
+        post(path = "/videos/create") {
             val resourcesController by closestDI().instance<ResourcesController>()
-            resourcesController.createVideos(call=call)
+            resourcesController.createVideos(call = call)
         }
 
         get(path = "/images/{name}") {
@@ -45,6 +50,12 @@ fun Application.configureResourcesRouting() {
             if (file.exists()) {
                 call.respondFile(file)
             } else call.respond(HttpStatusCode.NotFound)
+        }
+
+        delete(path = "/resources/delete/{name}") {
+            val resourceName = call.parameters["name"]!!
+            val resourcesController by closestDI().instance<ResourcesController>()
+            resourcesController.deleteResource(call = call, resourceName = resourceName)
         }
 
         delete(path = "/videos/delete/{requestId}") {

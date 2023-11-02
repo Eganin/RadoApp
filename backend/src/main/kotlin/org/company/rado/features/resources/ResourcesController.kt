@@ -39,19 +39,19 @@ class ResourcesController(
             }
             part.dispose()
         }
-        call.respond(HttpStatusCode.OK, message = "Files Uploaded ✅")
+        call.respond(HttpStatusCode.OK, message = "File Uploaded ✅")
     }
 
     suspend fun createImages(call: ApplicationCall) {
         val multipartData = call.receiveMultipart()
         resourceService.createImageAndVideo(data = multipartData, isImage = true)
-        call.respond(HttpStatusCode.OK, message = "Files Uploaded ✅")
+        call.respond(HttpStatusCode.OK, message = "File Uploaded ✅")
     }
 
     suspend fun createVideos(call:ApplicationCall){
         val multipartData = call.receiveMultipart()
         resourceService.createImageAndVideo(data = multipartData, isImage = false)
-        call.respond(HttpStatusCode.OK, message = "Files Uploaded ✅")
+        call.respond(HttpStatusCode.OK, message = "File Uploaded ✅")
     }
 
     suspend fun deleteVideos(call:ApplicationCall,requestId: Int){
@@ -70,5 +70,11 @@ class ResourcesController(
         }else{
             call.respond(HttpStatusCode.BadRequest, message = "The images has not been deleted")
         }
+    }
+
+    suspend fun deleteResource(call: ApplicationCall,resourceName:String){
+        val file = File("app/resources/${resourceName}")
+        file.delete()
+        call.respond(HttpStatusCode.OK, message = "File Deleted✅")
     }
 }
