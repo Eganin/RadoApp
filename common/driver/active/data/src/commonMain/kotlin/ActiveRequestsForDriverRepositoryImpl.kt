@@ -1,4 +1,4 @@
-import io.github.aakira.napier.log
+import io.ktor.http.HttpStatusCode
 import ktor.KtorDriverActiveRemoteDataSource
 import ktor.models.KtorActiveRequest
 import ktor.models.KtorCreateRequest
@@ -7,12 +7,14 @@ import models.CreateRequestIdItem
 import models.CreateRequestIdResponse
 import org.company.rado.core.MainRes
 import other.Mapper
+import other.WrapperForResponse
 import settings.SettingsAuthDataSource
 
 class ActiveRequestsForDriverRepositoryImpl(
     private val localDataSource: SettingsAuthDataSource,
     private val remoteDataSource: KtorDriverActiveRemoteDataSource,
-    private val createRequestMapper: Mapper<CreateRequestIdResponse, CreateRequestIdItem>
+    private val createRequestMapper: Mapper<CreateRequestIdResponse, CreateRequestIdItem>,
+    private val httpStatusCodeMapper: Mapper<HttpStatusCode, WrapperForResponse>
 ) : ActiveRequestsForDriverRepository {
     override suspend fun createRequest(
         typeVehicle: String,
@@ -53,17 +55,33 @@ class ActiveRequestsForDriverRepositoryImpl(
         return activeRequestsForDriverItem
     }
 
-    override suspend fun createImagesForRequest(
+    override suspend fun createResourceForRequest(
         requestId: Int,
-        images: List<Pair<String, ByteArray>>
-    ) {
-        try {
-            images.forEach {image->
-                remoteDataSource.uploadImagesForRequest(requestId = requestId, image = image)
-            }
+        resource: Triple<String, Boolean, ByteArray>
+    ): WrapperForResponse {
+        return try {
+            val statusCode = remoteDataSource.uploadImageOrVideoForRequest(
+                requestId = requestId,
+                resourcePath = resource.first,
+                isImage = resource.second,
+                resourceData = resource.third
+            )
+            httpStatusCodeMapper.map(source = statusCode)
         } catch (e: Exception) {
-            e.printStackTrace()
-            log(tag = TAG) { e.printStackTrace().toString() }
+            WrapperForResponse.Failure(message = MainRes.string.base_error_message)
+        }
+    }
+
+    override suspend fun createResourceForCache(resource: Triple<String, Boolean, ByteArray>): WrapperForResponse {
+        return try {
+            val statusCode = remoteDataSource.uploadImageOrVideoForCache(
+                resourcePath = resource.first,
+                isImage = resource.second,
+                resourceData = resource.third
+            )
+            httpStatusCodeMapper.map(source = statusCode)
+        } catch (e: Exception) {
+            WrapperForResponse.Failure(message = MainRes.string.base_error_message)
         }
     }
 

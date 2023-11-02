@@ -1,5 +1,6 @@
 package mapper
 
+import ktor.BASE_URL
 import models.FullUnconfirmedRequestResponse
 import models.UnconfirmedRequestInfoItem
 import org.company.rado.core.MainRes
@@ -10,7 +11,7 @@ class UnconfirmedRequestInfoItemMapper :
     override fun map(source: FullUnconfirmedRequestResponse): UnconfirmedRequestInfoItem {
         return try {
             val unconfirmedRequestInfo = source.copy(images = source.images.map {
-                "https://radoapp.serveo.net/images/" + it.split("/").last()
+                "$BASE_URL/images/" + it.split("/").last()
             })
             UnconfirmedRequestInfoItem.Success(requestInfo = unconfirmedRequestInfo)
         } catch (e: Exception) {

@@ -9,6 +9,7 @@ import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.Headers
 import io.ktor.http.HttpHeaders
+import io.ktor.http.HttpStatusCode
 import io.ktor.http.path
 import ktor.models.KtorActiveRequest
 import ktor.models.KtorCreateRequest
@@ -37,29 +38,105 @@ class KtorDriverActiveRemoteDataSource(
         }.body()
     }
 
-    suspend fun uploadImagesForRequest(requestId: Int, image: Pair<String, ByteArray>) {
-        httpClient.post {
+    suspend fun uploadImageOrVideoForRequest(
+        requestId: Int,
+        isImage: Boolean,
+        resourcePath:String,
+        resourceData:ByteArray
+    ): HttpStatusCode {
+        return httpClient.post {
             url {
-                path("images/create")
-                setBody(
-                    MultiPartFormDataContent(
-                        formData {
-                            append("description", requestId)
-                            append(
-                                "image",
-                                image.second,
-                                Headers.build {
-                                    append(HttpHeaders.ContentType, "image/png")
-                                    append(
-                                        HttpHeaders.ContentDisposition,
-                                        "filename=\"${uuid4().mostSignificantBits}.jpg\""
-                                    )
-                                })
-                        },
-                        boundary = "WebAppBoundary"
+                if (isImage) {
+                    path("images/create")
+                    setBody(
+                        MultiPartFormDataContent(
+                            formData {
+                                append("description", requestId)
+                                append(
+                                    "image",
+                                    resourceData,
+                                    Headers.build {
+                                        append(HttpHeaders.ContentType, "image/png")
+                                        append(
+                                            HttpHeaders.ContentDisposition,
+                                            "filename=\"${resourcePath}-${uuid4().mostSignificantBits}.png\""
+                                        )
+                                    })
+                            },
+                            boundary = "WebAppBoundary"
+                        )
                     )
-                )
+                } else {
+                    path("videos/create")
+                    setBody(
+                        MultiPartFormDataContent(
+                            formData {
+                                append("description", requestId)
+                                append(
+                                    "video",
+                                    resourceData,
+                                    Headers.build {
+                                        append(HttpHeaders.ContentType, "video/mp4")
+                                        append(
+                                            HttpHeaders.ContentDisposition,
+                                            "filename=\"${resourcePath}-${uuid4().mostSignificantBits}.mp4\""
+                                        )
+                                    })
+                            },
+                            boundary = "WebAppBoundary"
+                        )
+                    )
+                }
             }
-        }
+        }.status
+    }
+
+    suspend fun uploadImageOrVideoForCache(
+        isImage: Boolean,
+        resourcePath:String,
+        resourceData:ByteArray
+    ): HttpStatusCode {
+        return httpClient.post {
+            url {
+                path("resources/create")
+                if (isImage) {
+                    setBody(
+                        MultiPartFormDataContent(
+                            formData {
+                                append(
+                                    "image",
+                                    resourceData,
+                                    Headers.build {
+                                        append(HttpHeaders.ContentType, "image/png")
+                                        append(
+                                            HttpHeaders.ContentDisposition,
+                                            "filename=\"${resourcePath}\""
+                                        )
+                                    })
+                            },
+                            boundary = "WebAppBoundary"
+                        )
+                    )
+                } else {
+                    setBody(
+                        MultiPartFormDataContent(
+                            formData {
+                                append(
+                                    "video",
+                                    resourceData,
+                                    Headers.build {
+                                        append(HttpHeaders.ContentType, "video/mp4")
+                                        append(
+                                            HttpHeaders.ContentDisposition,
+                                            "filename=\"${resourcePath}\""
+                                        )
+                                    })
+                            },
+                            boundary = "WebAppBoundary"
+                        )
+                    )
+                }
+            }
+        }.status
     }
 }

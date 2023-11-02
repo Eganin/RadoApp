@@ -22,5 +22,5 @@ sealed class CreateRequestEvent {
 
     data object FilePickerVisibilityChanged : CreateRequestEvent()
 
-    data class SetImage(val filePath: String, val imageByteArray: ByteArray) : CreateRequestEvent()
+    data class SetResource(val filePath: String,val isImage: Boolean, val imageByteArray: ByteArray) : CreateRequestEvent()
 }

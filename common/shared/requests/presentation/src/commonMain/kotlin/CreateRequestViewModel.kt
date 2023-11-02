@@ -5,9 +5,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import models.CreateRequestIdItem
 import models.create.CreateRequestAction
 import models.create.CreateRequestEvent
-import models.CreateRequestIdItem
 import models.create.CreateRequestViewState
 import models.create.VehicleType
 import other.BaseSharedViewModel
@@ -40,9 +40,11 @@ class CreateRequestViewModel :
             is CreateRequestEvent.CloseSuccessDialog -> closeSuccessDialog()
             is CreateRequestEvent.CloseFailureDialog -> closeFailureDialog()
             is CreateRequestEvent.FilePickerVisibilityChanged -> obtainFilePickerVisibilityChange()
-            is CreateRequestEvent.SetImage -> saveImageToStateList(
-                image = Pair(
-                    first = viewEvent.filePath, second = viewEvent.imageByteArray
+            is CreateRequestEvent.SetResource -> saveResourceToStateList(
+                resource = Triple(
+                    first = viewEvent.filePath,
+                    second = viewEvent.isImage,
+                    third = viewEvent.imageByteArray
                 )
             )
 
@@ -63,10 +65,13 @@ class CreateRequestViewModel :
                 if (createRequestIdItem is CreateRequestIdItem.Success) {
                     log(tag = TAG) { "Create request is success" }
                     //save images
-                    if (viewState.images.isNotEmpty()) {
-                        activeRequestsRepository.createImagesForRequest(
-                            requestId = createRequestIdItem.requestId, images = viewState.images
-                        )
+                    if (viewState.resources.isNotEmpty()) {
+                        viewState.resources.forEach { resource ->
+                            activeRequestsRepository.createResourceForRequest(
+                                requestId = createRequestIdItem.requestId,
+                                resource = resource
+                            )
+                        }
                     }
                     viewState =
                         viewState.copy(showSuccessCreateRequestDialog = !viewState.showSuccessCreateRequestDialog)
@@ -96,12 +101,16 @@ class CreateRequestViewModel :
         log(tag = TAG) { "Create request failure dialog close" }
     }
 
-    private fun saveImageToStateList(image: Pair<String, ByteArray>) {
-        val newImagesList = mutableListOf(image)
-        newImagesList.addAll(viewState.images)
-        log(tag = TAG) { "Count images ${newImagesList.size}" }
-        viewState = viewState.copy(images = newImagesList)
-        log(tag = TAG) { "Add image ${viewState.images}" }
+    private fun saveResourceToStateList(resource: Triple<String, Boolean, ByteArray>) {
+        viewModelScope.launch {
+            //save image for cache
+            activeRequestsRepository.createResourceForCache(resource = resource)
+            val newImagesList = mutableListOf(resource)
+            newImagesList.addAll(viewState.resources)
+            log(tag = TAG) { "Count resources ${newImagesList.size}" }
+            viewState = viewState.copy(resources = newImagesList)
+            log(tag = TAG) { "Add resource ${viewState.resources}" }
+        }
     }
 
     private fun obtainFilePickerVisibilityChange() {

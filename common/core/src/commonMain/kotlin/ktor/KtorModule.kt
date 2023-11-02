@@ -31,7 +31,7 @@ internal val ktorModule = DI.Module(name = "ktorModule") {
             }
 
             defaultRequest {
-                url("https://radoapp.serveo.net")
+                url(BASE_URL)
                 //url("http://127.0.0.1:8080")
                 header("Content-Type", "application/json; charset=UTF-8")
             }

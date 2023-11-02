@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import dev.icerock.moko.mvvm.compose.viewModelFactory
+import ktor.BASE_URL
 import models.create.VehicleType
 import models.info.InfoRequestEvent
 import models.info.InfoRequestViewState
@@ -102,14 +103,14 @@ fun InfoRequestAlertDialog(
                     ImageMachineCells(
                         imageSize = imageSize,
                         title = MainRes.string.tractor_title,
-                        imageLink = "https://radoapp.serveo.net/resources/tractor.jpg",
+                        imageLink = "$BASE_URL/resources/tractor.jpg",
                         isExpanded = state.value.selectedVehicleType == VehicleType.Tractor
                     )
 
                     ImageMachineCells(
                         imageSize = imageSize,
                         title = MainRes.string.trailer_title,
-                        imageLink = "https://radoapp.serveo.net/resources/trailer.jpg",
+                        imageLink = "$BASE_URL/resources/trailer.jpg",
                         isExpanded = state.value.selectedVehicleType == VehicleType.Trailer
                     )
                 }

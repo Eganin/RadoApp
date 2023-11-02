@@ -40,6 +40,7 @@ import compose.icons.feathericons.ArrowLeft
 import compose.icons.feathericons.Plus
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 import io.github.aakira.napier.log
+import ktor.BASE_URL
 import models.create.CreateRequestAction
 import models.create.CreateRequestEvent
 import models.create.VehicleType
@@ -113,7 +114,7 @@ fun CreateRequestAlertDialog(
                     ImageMachineCells(
                         imageSize = imageSize,
                         title = MainRes.string.tractor_title,
-                        imageLink = "https://radoapp.serveo.net/resources/tractor.jpg",
+                        imageLink = "$BASE_URL/resources/tractor.jpg",
                         isExpanded = state.value.tractorIsExpanded,
                         eventHandler = {
                             viewModel.obtainEvent(
@@ -128,7 +129,7 @@ fun CreateRequestAlertDialog(
                     ImageMachineCells(
                         imageSize = imageSize,
                         title = MainRes.string.trailer_title,
-                        imageLink = "https://radoapp.serveo.net/resources/trailer.jpg",
+                        imageLink = "$BASE_URL/resources/trailer.jpg",
                         isExpanded = state.value.trailerIsExpanded,
                         eventHandler = {
                             viewModel.obtainEvent(
@@ -228,11 +229,11 @@ fun CreateRequestAlertDialog(
                             )
                         }
                     }
-                    items(state.value.images.count()) {
+                    items(state.value.resources.count()) {
                         ImageCells(
                             size = imageSize,
                             isExpanded = state.value.imageIsExpanded,
-                            imageLink = state.value.images[it].first,
+                            imageLink = "$BASE_URL/resources/${state.value.resources[it].first}",
                             modifier = Modifier.padding(start = 16.dp, bottom = 16.dp),
                             eventHandler = {
                                 viewModel.obtainEvent(viewEvent = CreateRequestEvent.ImageRepairExpandedChanged)
@@ -262,14 +263,15 @@ fun CreateRequestAlertDialog(
             }
         }
 
-        ImageFilePicker(
+        ResourceFilePicker(
             showFilePicker = state.value.showFilePicker,
             closeFilePicker = { viewModel.obtainEvent(viewEvent = CreateRequestEvent.FilePickerVisibilityChanged) },
-            receiveFilePathAndByteArray = { filePath, imageBytearray ->
+            receiveFilePathAndByteArray = { filePath, isImage, imageBytearray ->
                 viewModel.obtainEvent(
-                    viewEvent = CreateRequestEvent.SetImage(
+                    viewEvent = CreateRequestEvent.SetResource(
                         filePath = filePath,
-                        imageByteArray = imageBytearray
+                        imageByteArray = imageBytearray,
+                        isImage = isImage
                     )
                 )
             })
