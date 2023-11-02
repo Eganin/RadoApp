@@ -3,6 +3,7 @@ package ktor
 import com.benasher44.uuid.uuid4
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.request.delete
 import io.ktor.client.request.forms.MultiPartFormDataContent
 import io.ktor.client.request.forms.formData
 import io.ktor.client.request.post
@@ -136,6 +137,14 @@ class KtorDriverActiveRemoteDataSource(
                         )
                     )
                 }
+            }
+        }.status
+    }
+
+    suspend fun deleteResourceCache(resourceName:String): HttpStatusCode{
+        return httpClient.delete {
+            url {
+                path("resources/delete/${resourceName}")
             }
         }.status
     }

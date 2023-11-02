@@ -68,7 +68,10 @@ fun CreateRequestAlertDialog(
         if (isLargePlatform) (LocalDensity.current.density.dp * 70) else (LocalDensity.current.density.dp * 25)
 
     Dialog(
-        onDismissRequest = onDismiss,
+        onDismissRequest = {
+            viewModel.obtainEvent(viewEvent = CreateRequestEvent.OnBackClick)
+            onDismiss.invoke()
+        },
         properties = DialogProperties(dismissOnBackPress = true, dismissOnClickOutside = true)
     ) {
         Card(

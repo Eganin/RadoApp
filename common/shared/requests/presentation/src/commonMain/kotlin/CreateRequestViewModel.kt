@@ -11,6 +11,7 @@ import models.create.CreateRequestEvent
 import models.create.CreateRequestViewState
 import models.create.VehicleType
 import other.BaseSharedViewModel
+import other.WrapperForResponse
 
 class CreateRequestViewModel :
     BaseSharedViewModel<CreateRequestViewState, CreateRequestAction, CreateRequestEvent>(
@@ -49,6 +50,7 @@ class CreateRequestViewModel :
             )
 
             is CreateRequestEvent.ImageRepairExpandedChanged -> obtainImageIsExpandedChange()
+            is CreateRequestEvent.OnBackClick -> removeCacheResources()
         }
     }
 
@@ -64,27 +66,54 @@ class CreateRequestViewModel :
                 )
                 if (createRequestIdItem is CreateRequestIdItem.Success) {
                     log(tag = TAG) { "Create request is success" }
-                    //save images
-                    if (viewState.resources.isNotEmpty()) {
-                        viewState.resources.forEach { resource ->
-                            activeRequestsRepository.createResourceForRequest(
-                                requestId = createRequestIdItem.requestId,
-                                resource = resource
-                            )
-                        }
-                    }
-                    viewState =
-                        viewState.copy(showSuccessCreateRequestDialog = !viewState.showSuccessCreateRequestDialog)
+                    saveResources(requestId = createRequestIdItem.requestId)
+
+                    removeCacheResources()
+
+                    obtainShowSuccessDialog()
                 } else if (createRequestIdItem is CreateRequestIdItem.Error) {
                     log(tag = TAG) { "Create request is failure" }
-                    viewState =
-                        viewState.copy(showFailureCreateRequestDialog = !viewState.showFailureCreateRequestDialog)
+                    obtainShowFailureDialog(value=!viewState.showFailureCreateRequestDialog)
                 }
             } else {
                 viewState = viewState.copy(notVehicleNumber = true)
             }
             viewState = viewState.copy(isLoading = !viewState.isLoading)
         }
+    }
+
+    private fun saveResources(requestId:Int) = viewModelScope.launch{
+        //save images
+        if (viewState.resources.isNotEmpty()) {
+            viewState.resources.forEach { resource ->
+                val response = activeRequestsRepository.createResourceForRequest(
+                    requestId = requestId,
+                    resource = resource
+                )
+                if(response is WrapperForResponse.Failure){
+                    obtainShowFailureDialog(value = true)
+                }
+            }
+        }
+    }
+
+    private fun removeCacheResources() = viewModelScope.launch {
+        //remove cache images
+        viewState.resources.forEach {
+            val response =activeRequestsRepository.deleteResourceForCache(resourceName = it.first)
+            if(response is WrapperForResponse.Failure){
+                obtainShowFailureDialog(value = true)
+            }
+        }
+        clearResourceList()
+    }
+
+    private fun obtainShowSuccessDialog(){
+        viewState = viewState.copy(showSuccessCreateRequestDialog = !viewState.showSuccessCreateRequestDialog)
+    }
+
+    private fun obtainShowFailureDialog(value:Boolean){
+        viewState = viewState.copy(showFailureCreateRequestDialog = value)
     }
 
     private fun closeSuccessDialog() {
@@ -111,6 +140,10 @@ class CreateRequestViewModel :
             viewState = viewState.copy(resources = newImagesList)
             log(tag = TAG) { "Add resource ${viewState.resources}" }
         }
+    }
+
+    private fun clearResourceList() {
+        viewState = viewState.copy(resources = emptyList())
     }
 
     private fun obtainFilePickerVisibilityChange() {

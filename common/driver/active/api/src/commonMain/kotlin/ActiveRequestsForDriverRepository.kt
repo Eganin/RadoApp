@@ -11,4 +11,6 @@ interface ActiveRequestsForDriverRepository {
     suspend fun createResourceForRequest(requestId:Int,resource: Triple<String, Boolean, ByteArray>): WrapperForResponse
 
     suspend fun createResourceForCache(resource: Triple<String, Boolean, ByteArray>): WrapperForResponse
+
+    suspend fun deleteResourceForCache(resourceName:String): WrapperForResponse
 }

@@ -85,6 +85,15 @@ class ActiveRequestsForDriverRepositoryImpl(
         }
     }
 
+    override suspend fun deleteResourceForCache(resourceName: String): WrapperForResponse {
+        return try {
+            val statusCode = remoteDataSource.deleteResourceCache(resourceName=resourceName)
+            httpStatusCodeMapper.map(source = statusCode)
+        }catch (e: Exception){
+            WrapperForResponse.Failure(message = MainRes.string.base_error_message)
+        }
+    }
+
     private companion object {
         const val TAG = "ActiveRequestsForDriverRepository"
     }
