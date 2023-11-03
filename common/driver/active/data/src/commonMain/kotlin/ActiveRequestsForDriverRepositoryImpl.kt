@@ -1,3 +1,4 @@
+import io.github.aakira.napier.log
 import io.ktor.http.HttpStatusCode
 import ktor.KtorDriverActiveRemoteDataSource
 import ktor.models.KtorActiveRequest
@@ -33,6 +34,7 @@ class ActiveRequestsForDriverRepositoryImpl(
             )
             createRequestMapper.map(source = response)
         } catch (e: Exception) {
+            log(tag = TAG) { "Error for create request" }
             CreateRequestIdItem.Error(message = MainRes.string.request_is_not_create)
         }
         return createRequestItem
@@ -50,6 +52,7 @@ class ActiveRequestsForDriverRepositoryImpl(
                 )
             ActiveRequestsForDriverItem.Success(items = response)
         } catch (e: Exception) {
+            log(tag = TAG) { "Error for get resource by date: $date" }
             ActiveRequestsForDriverItem.Error(message = MainRes.string.requests_by_date_is_not_fetch)
         }
         return activeRequestsForDriverItem
@@ -68,6 +71,7 @@ class ActiveRequestsForDriverRepositoryImpl(
             )
             httpStatusCodeMapper.map(source = statusCode)
         } catch (e: Exception) {
+            log(tag = TAG) { "Error for create resource for request" }
             WrapperForResponse.Failure(message = MainRes.string.base_error_message)
         }
     }
@@ -81,15 +85,27 @@ class ActiveRequestsForDriverRepositoryImpl(
             )
             httpStatusCodeMapper.map(source = statusCode)
         } catch (e: Exception) {
+            log(tag = TAG) { "Error for create resource" }
             WrapperForResponse.Failure(message = MainRes.string.base_error_message)
         }
     }
 
     override suspend fun deleteResourceForCache(resourceName: String): WrapperForResponse {
         return try {
-            val statusCode = remoteDataSource.deleteResourceCache(resourceName=resourceName)
+            val statusCode = remoteDataSource.deleteResourceCache(resourceName = resourceName)
             httpStatusCodeMapper.map(source = statusCode)
-        }catch (e: Exception){
+        } catch (e: Exception) {
+            log(tag = TAG) { "Error for delete resource" }
+            WrapperForResponse.Failure(message = MainRes.string.base_error_message)
+        }
+    }
+
+    override suspend fun deleteRequest(requestId: Int): WrapperForResponse {
+        return try {
+            val statusCode = remoteDataSource.deleteRequest(requestId = requestId)
+            httpStatusCodeMapper.map(source = statusCode)
+        } catch (e: Exception) {
+            log(tag = TAG) { "Error for delete request" }
             WrapperForResponse.Failure(message = MainRes.string.base_error_message)
         }
     }

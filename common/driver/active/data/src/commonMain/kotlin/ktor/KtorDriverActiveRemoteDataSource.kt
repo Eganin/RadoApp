@@ -30,6 +30,14 @@ class KtorDriverActiveRemoteDataSource(
         }.body()
     }
 
+    suspend fun deleteRequest(requestId: Int): HttpStatusCode{
+        return httpClient.delete {
+            url {
+                path("requests/delete/${requestId}")
+            }
+        }.status
+    }
+
     suspend fun fetchRequestsByDate(request: KtorActiveRequest): List<SmallActiveRequestForDriverResponse> {
         return httpClient.post {
             url {

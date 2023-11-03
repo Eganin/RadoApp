@@ -68,12 +68,12 @@ class CreateRequestViewModel :
                     log(tag = TAG) { "Create request is success" }
                     saveResources(requestId = createRequestIdItem.requestId)
 
-                    removeCacheResources()
+                    removeCacheResources(requestId = createRequestIdItem.requestId)
 
-                    obtainShowSuccessDialog()
+                    if (!viewState.isRemoveRequest) obtainShowSuccessDialog()
                 } else if (createRequestIdItem is CreateRequestIdItem.Error) {
                     log(tag = TAG) { "Create request is failure" }
-                    obtainShowFailureDialog(value=!viewState.showFailureCreateRequestDialog)
+                    obtainShowFailureDialog(value = !viewState.showFailureCreateRequestDialog)
                 }
             } else {
                 viewState = viewState.copy(notVehicleNumber = true)
@@ -82,7 +82,7 @@ class CreateRequestViewModel :
         }
     }
 
-    private fun saveResources(requestId:Int) = viewModelScope.launch{
+    private fun saveResources(requestId: Int) = viewModelScope.launch {
         //save images
         if (viewState.resources.isNotEmpty()) {
             viewState.resources.forEach { resource ->
@@ -90,29 +90,38 @@ class CreateRequestViewModel :
                     requestId = requestId,
                     resource = resource
                 )
-                if(response is WrapperForResponse.Failure){
+                if (response is WrapperForResponse.Failure) {
+                    removeRequest(requestId = requestId)
                     obtainShowFailureDialog(value = true)
                 }
             }
         }
     }
 
-    private fun removeCacheResources() = viewModelScope.launch {
+    private fun removeCacheResources(requestId: Int? = null) = viewModelScope.launch {
         //remove cache images
         viewState.resources.forEach {
-            val response =activeRequestsRepository.deleteResourceForCache(resourceName = it.first)
-            if(response is WrapperForResponse.Failure){
+            val response = activeRequestsRepository.deleteResourceForCache(resourceName = it.first)
+            if (response is WrapperForResponse.Failure) {
+                requestId?.let {
+                    removeRequest(requestId = it)
+                }
                 obtainShowFailureDialog(value = true)
             }
         }
         clearResourceList()
     }
 
-    private fun obtainShowSuccessDialog(){
-        viewState = viewState.copy(showSuccessCreateRequestDialog = !viewState.showSuccessCreateRequestDialog)
+    private fun removeRequest(requestId: Int) = viewModelScope.launch {
+        activeRequestsRepository.deleteRequest(requestId = requestId)
     }
 
-    private fun obtainShowFailureDialog(value:Boolean){
+    private fun obtainShowSuccessDialog() {
+        viewState =
+            viewState.copy(showSuccessCreateRequestDialog = !viewState.showSuccessCreateRequestDialog)
+    }
+
+    private fun obtainShowFailureDialog(value: Boolean) {
         viewState = viewState.copy(showFailureCreateRequestDialog = value)
     }
 
