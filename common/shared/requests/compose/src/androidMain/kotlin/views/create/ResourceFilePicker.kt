@@ -24,7 +24,7 @@ actual fun ResourceFilePicker(
             val imageByteArray = context.contentResolver.openInputStream(newFile.platformFile)
                 ?.use { it.buffered().readBytes() }
             val isImage = newFile.path.split("/").last().split("%").first() == "image"
-            val path = newFile.path.split("%").last() + ".png"
+            val path = newFile.path.split("%").last() + if (isImage) ".png" else ".mp4"
             imageByteArray?.let {
                 receiveFilePathAndByteArray.invoke(
                     path,

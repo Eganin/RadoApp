@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -26,6 +27,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
@@ -49,6 +51,7 @@ import other.observeAsState
 import platform.LocalPlatform
 import platform.Platform
 import theme.Theme
+import views.shared.VideoPlayerCell
 import widgets.common.ActionButton
 
 @Composable
@@ -235,11 +238,11 @@ fun CreateRequestAlertDialog(
                             )
                         }
                     }
-                    items(state.value.resourcesImages.count()) {
+                    items(state.value.resources.filter { it.second }) {
                         ImageCells(
                             size = imageSize,
                             isExpanded = state.value.imageIsExpanded,
-                            imageLink = "$BASE_URL/resources/${state.value.resourcesImages[it].first}",
+                            imageLink = "$BASE_URL/resources/${it.first}",
                             modifier = Modifier.padding(start = 16.dp, bottom = 16.dp),
                             eventHandler = {
                                 viewModel.obtainEvent(viewEvent = CreateRequestEvent.ImageRepairExpandedChanged)
@@ -247,7 +250,20 @@ fun CreateRequestAlertDialog(
                         )
                     }
 
-
+                    items(state.value.resources.filter { !it.second }) {
+                        SideEffect{
+                            log(tag="VIDEO") { "$BASE_URL/resources/${it.first}" }
+                        }
+                        VideoPlayerCell(
+                            size = imageSize,
+                            isExpanded = state.value.imageIsExpanded,
+                            url = "$BASE_URL/resources/${it.first}",
+                            modifier = Modifier.padding(start = 16.dp, bottom = 16.dp),
+                            eventHandler = {
+                                viewModel.obtainEvent(viewEvent = CreateRequestEvent.ImageRepairExpandedChanged)
+                            }
+                        )
+                    }
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))

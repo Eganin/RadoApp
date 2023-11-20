@@ -5,19 +5,16 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import theme.Theme
+import io.github.aakira.napier.log
 
 @Composable
 fun VideoPlayerCell(
@@ -25,10 +22,14 @@ fun VideoPlayerCell(
     isExpanded: Boolean,
     url: String,
     eventHandler: () -> Unit,
-    modifier: Modifier=Modifier
+    modifier: Modifier = Modifier
 ) {
 
     val sizeExpansion = 100.dp
+
+    SideEffect {
+        log(tag = "VIDEO") { url }
+    }
 
     Box(
         modifier = modifier
@@ -43,13 +44,6 @@ fun VideoPlayerCell(
             .aspectRatio(1f)
             .clip(shape = RoundedCornerShape(size = 10.dp))
     ) {
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            CircularProgressIndicator(
-                modifier = Modifier.width(64.dp),
-                color = Theme.colors.highlightColor,
-                trackColor = Theme.colors.primaryAction
-            )
-        }
         VideoPlayerImpl(url = url)
     }
 }

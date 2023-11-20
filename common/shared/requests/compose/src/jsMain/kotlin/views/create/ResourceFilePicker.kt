@@ -26,10 +26,11 @@ actual fun ResourceFilePicker(
         file?.let {file->
             val newFile = file as WebFile
             val isImage = fileTypeImage.any { it == newFile.path.split(".").last() }
+            val path = newFile.path.split("/").last()
             scope.launch {
                 val byteArray = readFileAsArrayBuffer(file = newFile.platformFile).toByteArray()
                 receiveFilePathAndByteArray.invoke(
-                    newFile.path.split("/").last(),
+                    path,
                     isImage,
                     byteArray
                 )
