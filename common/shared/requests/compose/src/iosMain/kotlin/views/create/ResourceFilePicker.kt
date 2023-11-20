@@ -3,6 +3,7 @@ package views.create
 import androidx.compose.runtime.Composable
 import com.darkrockstudios.libraries.mpfilepicker.FilePicker
 import com.darkrockstudios.libraries.mpfilepicker.IosFile
+import io.github.aakira.napier.log
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.addressOf
 import kotlinx.cinterop.usePinned
@@ -26,6 +27,8 @@ actual fun ResourceFilePicker(
             val isImage = fileTypeImage.any { it == newFile.path.split(".").last() }
             val path = newFile.path.split("/").last()
             val byteArray = newFile.platformFile.dataRepresentation.toByteArray()
+            log(tag="IMAGE") { isImage.toString() }
+            log(tag="IMAGE") { newFile.path }
             receiveFilePathAndByteArray.invoke(
                 path,
                 isImage,

@@ -85,7 +85,10 @@ fun CreateRequestAlertDialog(
                 modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState())
                     .padding(16.dp)
             ) {
-                Row(modifier = Modifier.clickable { onExit.invoke() }) {
+                Row(modifier = Modifier.clickable {
+                    viewModel.obtainEvent(viewEvent = CreateRequestEvent.OnBackClick)
+                    onExit.invoke()
+                }) {
                     Icon(imageVector = FeatherIcons.ArrowLeft, contentDescription = null)
 
                     Spacer(modifier = Modifier.width(4.dp))
