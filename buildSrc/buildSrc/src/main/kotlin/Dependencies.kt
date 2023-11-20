@@ -66,6 +66,20 @@ object Dependencies {
             const val icons = "androidx.compose.material:material-icons-core:$version"
             const val iconsExtended = "androidx.compose.material:material-icons-extended:$version"
         }
+
+        object ExoPlayer{
+            private const val version = "1.1.0"
+            const val core = "androidx.media3:media3-exoplayer:$version"
+            const val dash = "androidx.media3:media3-exoplayer-dash:$version"
+            const val ui = "androidx.media3:media3-ui:$version"
+        }
+    }
+
+    object Desktop{
+        object VLC{
+            private const val version = "4.7.0"
+            const val core = "uk.co.caprica:vlcj:$version"
+        }
     }
 
     object Resources {

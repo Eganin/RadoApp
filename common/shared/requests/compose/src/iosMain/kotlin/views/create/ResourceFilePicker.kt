@@ -21,6 +21,7 @@ actual fun ResourceFilePicker(
     val fileTypeVideo = listOf("MP4", "MOV", "AVI", "MKV")
     val fileType = fileTypeImage + fileTypeVideo
     FilePicker(showFilePicker, fileExtensions = fileType) { file ->
+        //TODO fix it
         closeFilePicker.invoke()
         file?.let {file->
             val newFile = file as IosFile

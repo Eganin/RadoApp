@@ -235,17 +235,19 @@ fun CreateRequestAlertDialog(
                             )
                         }
                     }
-                    items(state.value.resources.count()) {
+                    items(state.value.resourcesImages.count()) {
                         ImageCells(
                             size = imageSize,
                             isExpanded = state.value.imageIsExpanded,
-                            imageLink = "$BASE_URL/resources/${state.value.resources[it].first}",
+                            imageLink = "$BASE_URL/resources/${state.value.resourcesImages[it].first}",
                             modifier = Modifier.padding(start = 16.dp, bottom = 16.dp),
                             eventHandler = {
                                 viewModel.obtainEvent(viewEvent = CreateRequestEvent.ImageRepairExpandedChanged)
                             }
                         )
                     }
+
+
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))

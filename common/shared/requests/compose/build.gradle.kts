@@ -22,5 +22,19 @@ kotlin{
                 implementation(Dependencies.Other.FilePicker.core)
             }
         }
+
+        desktopMain{
+            dependencies {
+                implementation(Dependencies.Desktop.VLC.core)
+            }
+        }
+
+        androidMain{
+            dependencies {
+                implementation(Dependencies.Android.ExoPlayer.core)
+                implementation(Dependencies.Android.ExoPlayer.ui)
+                implementation(Dependencies.Android.ExoPlayer.dash)
+            }
+        }
     }
 }
