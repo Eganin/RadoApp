@@ -27,7 +27,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
@@ -251,9 +250,6 @@ fun CreateRequestAlertDialog(
                     }
 
                     items(state.value.resources.filter { !it.second }) {
-                        SideEffect{
-                            log(tag="VIDEO") { "$BASE_URL/resources/${it.first}" }
-                        }
                         VideoPlayerCell(
                             size = imageSize,
                             isExpanded = state.value.imageIsExpanded,

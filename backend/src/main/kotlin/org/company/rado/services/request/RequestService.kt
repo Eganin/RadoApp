@@ -6,6 +6,7 @@ import org.company.rado.dao.register.mechanic.MechanicDaoFacade
 import org.company.rado.dao.request.RequestDaoFacade
 import org.company.rado.dao.vehicles.VehicleDaoFacade
 import io.ktor.server.plugins.*
+import org.company.rado.dao.videos.VideosDaoFacade
 import org.company.rado.models.requests.FullRequest
 import org.company.rado.models.requests.RequestDTO
 import org.company.rado.models.requests.StatusRequest
@@ -16,7 +17,8 @@ class RequestService(
     private val vehicleRepository: VehicleDaoFacade,
     private val mechanicRepository: MechanicDaoFacade,
     private val driverRepository: DriverDaoFacade,
-    private val imageRepository: ImagesDaoFacade
+    private val imageRepository: ImagesDaoFacade,
+    private val videoRepository : VideosDaoFacade
 ) {
 
     suspend fun createRequest(
@@ -108,6 +110,7 @@ class RequestService(
         val mechanic = mechanicRepository.findById(mechanicId = requestDTO.mechanicId!!)
             ?: throw NotFoundException("Mechanic is not found")
         val images = imageRepository.findByRequestId(requestId = requestDTO.id)
+        val videos = videoRepository.findVideoByRequestId(requestId=requestDTO.id)
 
         return FullRequest(
             id = requestDTO.id,
@@ -122,7 +125,8 @@ class RequestService(
             date = requestDTO.date ?: "",
             time = requestDTO.time ?: "",
             statusRepair = requestDTO.statusRepair ?: false,
-            images = images
+            images = images,
+            videos = videos
         )
     }
 }

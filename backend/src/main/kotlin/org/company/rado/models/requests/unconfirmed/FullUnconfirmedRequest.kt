@@ -12,5 +12,6 @@ data class FullUnconfirmedRequest(
     val driverPhone: String,
     val statusRequest: StatusRequest = StatusRequest.UNCONFIRMED,
     val faultDescription: String,
-    val images: List<String>
+    val images: List<String>,
+    val videos: List<String>
 )

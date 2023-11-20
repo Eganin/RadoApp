@@ -33,5 +33,7 @@ data class FullRequestResponse(
     @SerialName("commentMechanic")
     val commentMechanic: String?,
     @SerialName("images")
-    val images: List<String>
+    val images: List<String>,
+    @SerialName("videos")
+    val videos: List<String>
 )

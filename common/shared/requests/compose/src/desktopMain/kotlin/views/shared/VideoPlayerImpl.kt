@@ -11,8 +11,8 @@ import androidx.compose.ui.graphics.Color
 import uk.co.caprica.vlcj.factory.discovery.NativeDiscovery
 import uk.co.caprica.vlcj.player.component.CallbackMediaPlayerComponent
 import uk.co.caprica.vlcj.player.component.EmbeddedMediaPlayerComponent
+import views.isMacOS
 import java.awt.Component
-import java.util.Locale
 
 @Composable
 actual fun VideoPlayerImpl(url: String) {
@@ -43,11 +43,4 @@ private fun Component.mediaPlayer() = when (this) {
     is CallbackMediaPlayerComponent -> mediaPlayer()
     is EmbeddedMediaPlayerComponent -> mediaPlayer()
     else -> error("mediaPlayer() can only be called on vlcj player components")
-}
-
-private fun isMacOS(): Boolean {
-    val os = System
-        .getProperty("os.name", "generic")
-        .lowercase(Locale.ENGLISH)
-    return "mac" in os || "darwin" in os
 }

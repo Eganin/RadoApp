@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -43,6 +44,7 @@ import platform.Platform
 import theme.Theme
 import views.create.ImageCells
 import views.create.ImageMachineCells
+import views.shared.VideoPlayerCell
 
 @Composable
 fun InfoRequestAlertDialog(
@@ -176,11 +178,34 @@ fun InfoRequestAlertDialog(
                     Spacer(modifier = Modifier.height(4.dp))
 
                     LazyRow(modifier = Modifier.fillMaxWidth()) {
-                        items(state.value.images.count()) {
+                        item {
+                            VideoPlayerCell(
+                                size = imageSize,
+                                isExpanded = state.value.imageIsExpanded,
+                                url = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+                                modifier = Modifier.padding(start = 16.dp, bottom = 16.dp),
+                                eventHandler = {
+                                    viewModel.obtainEvent(viewEvent = InfoRequestEvent.ImageRepairExpandedChanged)
+                                }
+                            )
+                        }
+                        items(state.value.images) {
                             ImageCells(
                                 size = imageSize,
                                 isExpanded = state.value.imageIsExpanded,
-                                imageLink = state.value.images[it],
+                                imageLink = it,
+                                modifier = Modifier.padding(start = 16.dp, bottom = 16.dp),
+                                eventHandler = {
+                                    viewModel.obtainEvent(viewEvent = InfoRequestEvent.ImageRepairExpandedChanged)
+                                }
+                            )
+                        }
+
+                        items(state.value.videos) {
+                            VideoPlayerCell(
+                                size = imageSize,
+                                isExpanded = state.value.imageIsExpanded,
+                                url = it,
                                 modifier = Modifier.padding(start = 16.dp, bottom = 16.dp),
                                 eventHandler = {
                                     viewModel.obtainEvent(viewEvent = InfoRequestEvent.ImageRepairExpandedChanged)
