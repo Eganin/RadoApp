@@ -15,12 +15,16 @@ actual fun ResourceFilePicker(
     val fileType = fileTypeImage + fileTypeVideo
     FilePicker(showFilePicker, fileExtensions = fileType) { file ->
         closeFilePicker.invoke()
-        val newFile = file as JvmFile
-        val isImage = fileTypeImage.any { it == newFile.path.split(".").last() }
-        receiveFilePathAndByteArray.invoke(
-            newFile.path.split("/").last(),
-            isImage,
-            newFile.platformFile.readBytes()
-        )
+        file?.let {file->
+            val newFile = file as JvmFile
+            val isImage = fileTypeImage.any { it == newFile.path.split(".").last() }
+            val path = newFile.path.split("/").last()
+            val byteArray = newFile.platformFile.readBytes()
+            receiveFilePathAndByteArray.invoke(
+                path,
+                isImage,
+                byteArray
+            )
+        }
     }
 }

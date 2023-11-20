@@ -150,7 +150,7 @@ object Dependencies {
         }
 
         object FilePicker {
-            private const val version = "2.1.0"
+            private const val version = "3.0.0"
             const val core = "com.darkrockstudios:mpfilepicker:$version"
         }
 

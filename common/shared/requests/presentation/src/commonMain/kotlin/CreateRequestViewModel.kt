@@ -86,6 +86,7 @@ class CreateRequestViewModel :
         //save images
         if (viewState.resources.isNotEmpty()) {
             viewState.resources.forEach { resource ->
+                log(tag= TAG) { resource.first }
                 val response = activeRequestsRepository.createResourceForRequest(
                     requestId = requestId,
                     resource = resource
@@ -142,12 +143,14 @@ class CreateRequestViewModel :
     private fun saveResourceToStateList(resource: Triple<String, Boolean, ByteArray>) {
         viewModelScope.launch {
             //save image for cache
+            viewState = viewState.copy(isLoading = !viewState.isLoading)
             activeRequestsRepository.createResourceForCache(resource = resource)
             val newImagesList = mutableListOf(resource)
             newImagesList.addAll(viewState.resources)
             log(tag = TAG) { "Count resources ${newImagesList.size}" }
             viewState = viewState.copy(resources = newImagesList)
             log(tag = TAG) { "Add resource ${viewState.resources}" }
+            viewState = viewState.copy(isLoading = !viewState.isLoading)
         }
     }
 

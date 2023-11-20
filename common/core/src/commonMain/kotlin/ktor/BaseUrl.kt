@@ -1,3 +1,3 @@
 package ktor
 
-const val BASE_URL="https://radoapp.serveo.net"
+const val BASE_URL="https://radoappbackend.serveo.net"
