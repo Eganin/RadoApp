@@ -1,5 +1,6 @@
 import models.ActiveRequestsForDriverItem
 import models.CreateRequestIdItem
+import other.WrapperForResponse
 
 interface ActiveRequestsForDriverRepository {
 
@@ -7,5 +8,11 @@ interface ActiveRequestsForDriverRepository {
 
     suspend fun getRequestsByDate(date: String): ActiveRequestsForDriverItem
 
-    suspend fun createImagesForRequest(requestId:Int,images: List<Pair<String,ByteArray>>)
+    suspend fun createResourceForRequest(requestId:Int,resource: Triple<String, Boolean, ByteArray>): WrapperForResponse
+
+    suspend fun createResourceForCache(resource: Triple<String, Boolean, ByteArray>): WrapperForResponse
+
+    suspend fun deleteResourceForCache(resourceName:String): WrapperForResponse
+
+    suspend fun deleteRequest(requestId: Int): WrapperForResponse
 }

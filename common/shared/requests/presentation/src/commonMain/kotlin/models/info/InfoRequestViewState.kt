@@ -9,6 +9,7 @@ data class InfoRequestViewState(
     val numberVehicle: String = "",
     val faultDescription: String = "",
     val images: List<String> = emptyList(),
+    val videos: List<String> = emptyList(),
     val mechanicPhone: String = "",
     val mechanicName: String = "",
     val driverPhone: String = "",

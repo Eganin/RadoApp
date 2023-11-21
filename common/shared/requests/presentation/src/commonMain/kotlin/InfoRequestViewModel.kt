@@ -73,6 +73,7 @@ class InfoRequestViewModel :
                     numberVehicle = info.vehicleNumber,
                     faultDescription = info.faultDescription,
                     images = info.images,
+                    videos=info.videos,
                     driverPhone = info.driverPhone
                 )
             } else if (unconfirmedRequestInfoItem is UnconfirmedRequestInfoItem.Error) {
@@ -106,7 +107,8 @@ class InfoRequestViewModel :
                     datetime = info.date + ";" + info.time,
                     statusRepair = info.statusRepair,
                     commentMechanic = info.commentMechanic ?: "",
-                    images = info.images
+                    images = info.images,
+                    videos = info.videos
                 )
             } else if (fullRequestItem is FullRequestItem.Error) {
                 log(tag = TAG) { "Failure get info for active request" }

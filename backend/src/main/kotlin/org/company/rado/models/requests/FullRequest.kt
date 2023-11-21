@@ -17,5 +17,6 @@ data class FullRequest(
     val time: String,
     val statusRepair: Boolean,
     val commentMechanic: String? = null,
-    val images: List<String>
+    val images: List<String>,
+    val videos: List<String>
 )

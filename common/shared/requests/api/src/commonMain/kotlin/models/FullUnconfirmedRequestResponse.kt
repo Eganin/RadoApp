@@ -21,5 +21,7 @@ data class FullUnconfirmedRequestResponse(
     @SerialName("faultDescription")
     val faultDescription: String,
     @SerialName("images")
-    val images: List<String>
+    val images: List<String>,
+    @SerialName("videos")
+    val videos: List<String>
 )

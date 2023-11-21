@@ -22,7 +22,8 @@ val driverActiveModule = DI.Module(name = "driverActiveModule") {
         ActiveRequestsForDriverRepositoryImpl(
             localDataSource = instance(),
             remoteDataSource = instance(),
-            createRequestMapper = instance()
+            createRequestMapper = instance(),
+            httpStatusCodeMapper = instance()
         )
     }
 }

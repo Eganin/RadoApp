@@ -1,14 +1,15 @@
 package ktor
 
-import com.benasher44.uuid.uuid4
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.request.delete
 import io.ktor.client.request.forms.MultiPartFormDataContent
 import io.ktor.client.request.forms.formData
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.Headers
 import io.ktor.http.HttpHeaders
+import io.ktor.http.HttpStatusCode
 import io.ktor.http.path
 import ktor.models.KtorActiveRequest
 import ktor.models.KtorCreateRequest
@@ -28,6 +29,14 @@ class KtorDriverActiveRemoteDataSource(
         }.body()
     }
 
+    suspend fun deleteRequest(requestId: Int): HttpStatusCode {
+        return httpClient.delete {
+            url {
+                path("requests/delete/${requestId}")
+            }
+        }.status
+    }
+
     suspend fun fetchRequestsByDate(request: KtorActiveRequest): List<SmallActiveRequestForDriverResponse> {
         return httpClient.post {
             url {
@@ -37,29 +46,113 @@ class KtorDriverActiveRemoteDataSource(
         }.body()
     }
 
-    suspend fun uploadImagesForRequest(requestId: Int, image: Pair<String, ByteArray>) {
-        httpClient.post {
+    suspend fun uploadImageOrVideoForRequest(
+        requestId: Int,
+        isImage: Boolean,
+        resourcePath: String,
+        resourceData: ByteArray
+    ): HttpStatusCode {
+        return httpClient.post {
             url {
-                path("images/create")
-                setBody(
-                    MultiPartFormDataContent(
-                        formData {
-                            append("description", requestId)
-                            append(
-                                "image",
-                                image.second,
-                                Headers.build {
-                                    append(HttpHeaders.ContentType, "image/png")
-                                    append(
-                                        HttpHeaders.ContentDisposition,
-                                        "filename=\"${uuid4().mostSignificantBits}.jpg\""
-                                    )
-                                })
-                        },
-                        boundary = "WebAppBoundary"
+                if (isImage) {
+                    path("images/create")
+                    setBody(
+                        MultiPartFormDataContent(
+                            formData {
+                                append("description", requestId)
+                                append(
+                                    "image",
+                                    resourceData,
+                                    Headers.build {
+                                        append(HttpHeaders.ContentType, "image/png")
+                                        append(
+                                            HttpHeaders.ContentDisposition,
+                                            "filename=\"${resourcePath}\""
+                                        )
+                                    })
+                            },
+                            boundary = "WebAppBoundary"
+                        )
                     )
-                )
+                } else {
+                    path("videos/create")
+                    setBody(
+                        MultiPartFormDataContent(
+                            formData {
+                                append("description", requestId)
+                                append(
+                                    "video",
+                                    resourceData,
+                                    Headers.build {
+                                        append(HttpHeaders.ContentType, "video/mp4")
+                                        append(
+                                            HttpHeaders.ContentDisposition,
+                                            "filename=\"${resourcePath}\""
+                                        )
+                                    })
+                            },
+                            boundary = "WebAppBoundary"
+                        )
+                    )
+                }
             }
-        }
+        }.status
+    }
+
+    suspend fun uploadImageOrVideoForCache(
+        isImage: Boolean,
+        resourcePath: String,
+        resourceData: ByteArray
+    ): HttpStatusCode {
+        return httpClient.post {
+            url {
+                path("resources/create")
+                if (isImage) {
+                    setBody(
+                        MultiPartFormDataContent(
+                            formData {
+                                append(
+                                    "image",
+                                    resourceData,
+                                    Headers.build {
+                                        append(HttpHeaders.ContentType, "image/png")
+                                        append(
+                                            HttpHeaders.ContentDisposition,
+                                            "filename=\"${resourcePath}\""
+                                        )
+                                    })
+                            },
+                            boundary = "WebAppBoundary"
+                        )
+                    )
+                } else {
+                    setBody(
+                        MultiPartFormDataContent(
+                            formData {
+                                append(
+                                    "video",
+                                    resourceData,
+                                    Headers.build {
+                                        append(HttpHeaders.ContentType, "video/mp4")
+                                        append(
+                                            HttpHeaders.ContentDisposition,
+                                            "filename=\"${resourcePath}\""
+                                        )
+                                    })
+                            },
+                            boundary = "WebAppBoundary"
+                        )
+                    )
+                }
+            }
+        }.status
+    }
+
+    suspend fun deleteResourceCache(resourceName: String): HttpStatusCode {
+        return httpClient.delete {
+            url {
+                path("resources/delete/${resourceName}")
+            }
+        }.status
     }
 }

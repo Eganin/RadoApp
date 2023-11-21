@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -31,6 +32,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import dev.icerock.moko.mvvm.compose.viewModelFactory
+import ktor.BASE_URL
 import models.create.VehicleType
 import models.info.InfoRequestEvent
 import models.info.InfoRequestViewState
@@ -42,6 +44,7 @@ import platform.Platform
 import theme.Theme
 import views.create.ImageCells
 import views.create.ImageMachineCells
+import views.shared.VideoPlayerCell
 
 @Composable
 fun InfoRequestAlertDialog(
@@ -102,14 +105,14 @@ fun InfoRequestAlertDialog(
                     ImageMachineCells(
                         imageSize = imageSize,
                         title = MainRes.string.tractor_title,
-                        imageLink = "https://radoapp.serveo.net/resources/tractor.jpg",
+                        imageLink = "$BASE_URL/resources/images/tractor.jpg",
                         isExpanded = state.value.selectedVehicleType == VehicleType.Tractor
                     )
 
                     ImageMachineCells(
                         imageSize = imageSize,
                         title = MainRes.string.trailer_title,
-                        imageLink = "https://radoapp.serveo.net/resources/trailer.jpg",
+                        imageLink = "$BASE_URL/resources/images/trailer.jpg",
                         isExpanded = state.value.selectedVehicleType == VehicleType.Trailer
                     )
                 }
@@ -175,11 +178,23 @@ fun InfoRequestAlertDialog(
                     Spacer(modifier = Modifier.height(4.dp))
 
                     LazyRow(modifier = Modifier.fillMaxWidth()) {
-                        items(state.value.images.count()) {
+                        items(state.value.images) {
                             ImageCells(
                                 size = imageSize,
                                 isExpanded = state.value.imageIsExpanded,
-                                imageLink = state.value.images[it],
+                                imageLink = it,
+                                modifier = Modifier.padding(start = 16.dp, bottom = 16.dp),
+                                eventHandler = {
+                                    viewModel.obtainEvent(viewEvent = InfoRequestEvent.ImageRepairExpandedChanged)
+                                }
+                            )
+                        }
+
+                        items(state.value.videos) {
+                            VideoPlayerCell(
+                                size = imageSize,
+                                isExpanded = state.value.imageIsExpanded,
+                                url = it,
                                 modifier = Modifier.padding(start = 16.dp, bottom = 16.dp),
                                 eventHandler = {
                                     viewModel.obtainEvent(viewEvent = InfoRequestEvent.ImageRepairExpandedChanged)

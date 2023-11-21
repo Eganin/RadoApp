@@ -13,8 +13,9 @@ data class CreateRequestViewState(
     val tractorIsExpanded: Boolean = true,
     val imageIsExpanded: Boolean = false,
     val showFilePicker: Boolean = false,
-    val images: List<Pair<String, ByteArray>> = emptyList(),
-    val isLoading:Boolean = false
+    val resources: List<Triple<String,Boolean, ByteArray>> = emptyList(),
+    val isLoading:Boolean = false,
+    val isRemoveRequest: Boolean=false
 )
 
 

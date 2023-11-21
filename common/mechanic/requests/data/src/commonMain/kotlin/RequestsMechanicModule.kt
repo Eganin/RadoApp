@@ -13,7 +13,8 @@ val requestsMechanicModule = DI.Module(name = "requestsMechanicModule") {
     bind<RequestsForMechanicRepository>() with singleton {
         RequestsForMechanicRepositoryImpl(
             localDataSource = instance(),
-            remoteDataSource = instance()
+            remoteDataSource = instance(),
+            httpStatusCodeMapper = instance()
         )
     }
 }

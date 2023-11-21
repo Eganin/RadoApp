@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -40,6 +41,7 @@ import compose.icons.feathericons.ArrowLeft
 import compose.icons.feathericons.Plus
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 import io.github.aakira.napier.log
+import ktor.BASE_URL
 import models.create.CreateRequestAction
 import models.create.CreateRequestEvent
 import models.create.VehicleType
@@ -48,6 +50,7 @@ import other.observeAsState
 import platform.LocalPlatform
 import platform.Platform
 import theme.Theme
+import views.shared.VideoPlayerCell
 import widgets.common.ActionButton
 
 @Composable
@@ -67,7 +70,10 @@ fun CreateRequestAlertDialog(
         if (isLargePlatform) (LocalDensity.current.density.dp * 70) else (LocalDensity.current.density.dp * 25)
 
     Dialog(
-        onDismissRequest = onDismiss,
+        onDismissRequest = {
+            viewModel.obtainEvent(viewEvent = CreateRequestEvent.OnBackClick)
+            onDismiss.invoke()
+        },
         properties = DialogProperties(dismissOnBackPress = true, dismissOnClickOutside = true)
     ) {
         Card(
@@ -81,7 +87,10 @@ fun CreateRequestAlertDialog(
                 modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState())
                     .padding(16.dp)
             ) {
-                Row(modifier = Modifier.clickable { onExit.invoke() }) {
+                Row(modifier = Modifier.clickable {
+                    viewModel.obtainEvent(viewEvent = CreateRequestEvent.OnBackClick)
+                    onExit.invoke()
+                }) {
                     Icon(imageVector = FeatherIcons.ArrowLeft, contentDescription = null)
 
                     Spacer(modifier = Modifier.width(4.dp))
@@ -113,7 +122,7 @@ fun CreateRequestAlertDialog(
                     ImageMachineCells(
                         imageSize = imageSize,
                         title = MainRes.string.tractor_title,
-                        imageLink = "https://radoapp.serveo.net/resources/tractor.jpg",
+                        imageLink = "$BASE_URL/resources/images/tractor.jpg",
                         isExpanded = state.value.tractorIsExpanded,
                         eventHandler = {
                             viewModel.obtainEvent(
@@ -128,7 +137,7 @@ fun CreateRequestAlertDialog(
                     ImageMachineCells(
                         imageSize = imageSize,
                         title = MainRes.string.trailer_title,
-                        imageLink = "https://radoapp.serveo.net/resources/trailer.jpg",
+                        imageLink = "$BASE_URL/resources/images/trailer.jpg",
                         isExpanded = state.value.trailerIsExpanded,
                         eventHandler = {
                             viewModel.obtainEvent(
@@ -228,11 +237,23 @@ fun CreateRequestAlertDialog(
                             )
                         }
                     }
-                    items(state.value.images.count()) {
+                    items(state.value.resources.filter { it.second }) {
                         ImageCells(
                             size = imageSize,
                             isExpanded = state.value.imageIsExpanded,
-                            imageLink = state.value.images[it].first,
+                            imageLink = "$BASE_URL/resources/images/${it.first}",
+                            modifier = Modifier.padding(start = 16.dp, bottom = 16.dp),
+                            eventHandler = {
+                                viewModel.obtainEvent(viewEvent = CreateRequestEvent.ImageRepairExpandedChanged)
+                            }
+                        )
+                    }
+
+                    items(state.value.resources.filter { !it.second }) {
+                        VideoPlayerCell(
+                            size = imageSize,
+                            isExpanded = state.value.imageIsExpanded,
+                            url = "$BASE_URL/resources/videos/${it.first}",
                             modifier = Modifier.padding(start = 16.dp, bottom = 16.dp),
                             eventHandler = {
                                 viewModel.obtainEvent(viewEvent = CreateRequestEvent.ImageRepairExpandedChanged)
@@ -262,14 +283,15 @@ fun CreateRequestAlertDialog(
             }
         }
 
-        ImageFilePicker(
+        ResourceFilePicker(
             showFilePicker = state.value.showFilePicker,
             closeFilePicker = { viewModel.obtainEvent(viewEvent = CreateRequestEvent.FilePickerVisibilityChanged) },
-            receiveFilePathAndByteArray = { filePath, imageBytearray ->
+            receiveFilePathAndByteArray = { filePath, isImage, imageBytearray ->
                 viewModel.obtainEvent(
-                    viewEvent = CreateRequestEvent.SetImage(
+                    viewEvent = CreateRequestEvent.SetResource(
                         filePath = filePath,
-                        imageByteArray = imageBytearray
+                        imageByteArray = imageBytearray,
+                        isImage = isImage
                     )
                 )
             })

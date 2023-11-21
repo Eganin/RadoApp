@@ -10,6 +10,8 @@ import org.kodein.di.ktor.di
 import org.company.rado.plugins.configureCompression
 import org.company.rado.plugins.configureCors
 import org.company.rado.plugins.configureException
+import org.company.rado.plugins.configurePartialContent
+import org.company.rado.plugins.configureResources
 import org.company.rado.plugins.configureRouting
 import org.company.rado.plugins.configureSerialization
 import org.company.rado.routes.requests.configureActiveRequestRouting
@@ -46,6 +48,8 @@ fun Application.module() {
     configureSerialization()
     configureException()
     configureCors()
+    configureResources()
+    configurePartialContent()
     di {
         bindRepositories()
         bindServices()
