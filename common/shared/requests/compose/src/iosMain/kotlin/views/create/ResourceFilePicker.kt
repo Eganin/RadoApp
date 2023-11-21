@@ -17,19 +17,19 @@ actual fun ResourceFilePicker(
     closeFilePicker: () -> Unit,
     receiveFilePathAndByteArray: (String, Boolean, ByteArray) -> Unit
 ) {
-    val fileTypeImage = listOf("JPG", "JPEG","PNG")
+    val fileTypeImage = listOf("JPG", "JPEG", "PNG")
     val fileTypeVideo = listOf("MP4", "MOV", "AVI", "MKV")
     val fileType = fileTypeImage + fileTypeVideo
     FilePicker(showFilePicker, fileExtensions = fileType) { file ->
         //TODO fix it
         closeFilePicker.invoke()
-        file?.let {file->
+        file?.let { file ->
             val newFile = file as IosFile
             val isImage = fileTypeImage.any { it == newFile.path.split(".").last() }
             val path = newFile.path.split("/").last()
             val byteArray = newFile.platformFile.dataRepresentation.toByteArray()
-            log(tag="IMAGE") { isImage.toString() }
-            log(tag="IMAGE") { newFile.path }
+            log(tag = "IMAGE") { isImage.toString() }
+            log(tag = "IMAGE") { newFile.path }
             receiveFilePathAndByteArray.invoke(
                 path,
                 isImage,
@@ -40,10 +40,8 @@ actual fun ResourceFilePicker(
 }
 
 @OptIn(ExperimentalForeignApi::class)
-fun NSData.toByteArray(): ByteArray {
-    return ByteArray(length.toInt()).apply {
-        usePinned {
-            memcpy(it.addressOf(0), bytes, length)
-        }
+fun NSData.toByteArray(): ByteArray = ByteArray(this@toByteArray.length.toInt()).apply {
+    usePinned {
+        memcpy(it.addressOf(0), this@toByteArray.bytes, this@toByteArray.length)
     }
 }

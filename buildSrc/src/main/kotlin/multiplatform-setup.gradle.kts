@@ -50,6 +50,8 @@ kotlin{
         named("jsMain") {
             dependencies {
                 implementation(compose.html.core)
+                implementation(compose.web.core)
+                implementation(compose.runtime)
             }
         }
 
