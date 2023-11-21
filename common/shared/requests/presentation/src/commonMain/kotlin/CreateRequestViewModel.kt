@@ -5,12 +5,13 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import models.CreateRequestIdItem
 import models.create.CreateRequestAction
 import models.create.CreateRequestEvent
-import models.CreateRequestIdItem
 import models.create.CreateRequestViewState
 import models.create.VehicleType
 import other.BaseSharedViewModel
+import other.WrapperForResponse
 
 class CreateRequestViewModel :
     BaseSharedViewModel<CreateRequestViewState, CreateRequestAction, CreateRequestEvent>(
@@ -40,13 +41,16 @@ class CreateRequestViewModel :
             is CreateRequestEvent.CloseSuccessDialog -> closeSuccessDialog()
             is CreateRequestEvent.CloseFailureDialog -> closeFailureDialog()
             is CreateRequestEvent.FilePickerVisibilityChanged -> obtainFilePickerVisibilityChange()
-            is CreateRequestEvent.SetImage -> saveImageToStateList(
-                image = Pair(
-                    first = viewEvent.filePath, second = viewEvent.imageByteArray
+            is CreateRequestEvent.SetResource -> saveResourceToStateList(
+                resource = Triple(
+                    first = viewEvent.filePath,
+                    second = viewEvent.isImage,
+                    third = viewEvent.imageByteArray
                 )
             )
 
             is CreateRequestEvent.ImageRepairExpandedChanged -> obtainImageIsExpandedChange()
+            is CreateRequestEvent.OnBackClick -> removeCacheResources()
         }
     }
 
@@ -62,24 +66,64 @@ class CreateRequestViewModel :
                 )
                 if (createRequestIdItem is CreateRequestIdItem.Success) {
                     log(tag = TAG) { "Create request is success" }
-                    //save images
-                    if (viewState.images.isNotEmpty()) {
-                        activeRequestsRepository.createImagesForRequest(
-                            requestId = createRequestIdItem.requestId, images = viewState.images
-                        )
-                    }
-                    viewState =
-                        viewState.copy(showSuccessCreateRequestDialog = !viewState.showSuccessCreateRequestDialog)
+                    saveResources(requestId = createRequestIdItem.requestId)
+
+                    removeCacheResources(requestId = createRequestIdItem.requestId)
+
+                    if (!viewState.isRemoveRequest) obtainShowSuccessDialog()
                 } else if (createRequestIdItem is CreateRequestIdItem.Error) {
                     log(tag = TAG) { "Create request is failure" }
-                    viewState =
-                        viewState.copy(showFailureCreateRequestDialog = !viewState.showFailureCreateRequestDialog)
+                    obtainShowFailureDialog(value = !viewState.showFailureCreateRequestDialog)
                 }
             } else {
                 viewState = viewState.copy(notVehicleNumber = true)
             }
             viewState = viewState.copy(isLoading = !viewState.isLoading)
         }
+    }
+
+    private fun saveResources(requestId: Int) = viewModelScope.launch {
+        //save images
+        if (viewState.resources.isNotEmpty()) {
+            viewState.resources.forEach { resource ->
+                log(tag= TAG) { resource.first }
+                val response = activeRequestsRepository.createResourceForRequest(
+                    requestId = requestId,
+                    resource = resource
+                )
+                if (response is WrapperForResponse.Failure) {
+                    removeRequest(requestId = requestId)
+                    obtainShowFailureDialog(value = true)
+                }
+            }
+        }
+    }
+
+    private fun removeCacheResources(requestId: Int? = null) = viewModelScope.launch {
+        //remove cache images
+        viewState.resources.forEach {
+            val response = activeRequestsRepository.deleteResourceForCache(resourceName = it.first)
+            if (response is WrapperForResponse.Failure) {
+                requestId?.let {
+                    removeRequest(requestId = it)
+                }
+                obtainShowFailureDialog(value = true)
+            }
+        }
+        clearResourceList()
+    }
+
+    private fun removeRequest(requestId: Int) = viewModelScope.launch {
+        activeRequestsRepository.deleteRequest(requestId = requestId)
+    }
+
+    private fun obtainShowSuccessDialog() {
+        viewState =
+            viewState.copy(showSuccessCreateRequestDialog = !viewState.showSuccessCreateRequestDialog)
+    }
+
+    private fun obtainShowFailureDialog(value: Boolean) {
+        viewState = viewState.copy(showFailureCreateRequestDialog = value)
     }
 
     private fun closeSuccessDialog() {
@@ -96,12 +140,22 @@ class CreateRequestViewModel :
         log(tag = TAG) { "Create request failure dialog close" }
     }
 
-    private fun saveImageToStateList(image: Pair<String, ByteArray>) {
-        val newImagesList = mutableListOf(image)
-        newImagesList.addAll(viewState.images)
-        log(tag = TAG) { "Count images ${newImagesList.size}" }
-        viewState = viewState.copy(images = newImagesList)
-        log(tag = TAG) { "Add image ${viewState.images}" }
+    private fun saveResourceToStateList(resource: Triple<String, Boolean, ByteArray>) {
+        viewModelScope.launch {
+            //save image for cache
+            viewState = viewState.copy(isLoading = !viewState.isLoading)
+            activeRequestsRepository.createResourceForCache(resource = resource)
+            val newImagesList = mutableListOf(resource)
+            newImagesList.addAll(viewState.resources)
+            log(tag = TAG) { "Count resources ${newImagesList.size}" }
+            viewState = viewState.copy(resources = newImagesList)
+            log(tag = TAG) { "Add resource ${viewState.resources}" }
+            viewState = viewState.copy(isLoading = !viewState.isLoading)
+        }
+    }
+
+    private fun clearResourceList() {
+        viewState = viewState.copy(resources = emptyList())
     }
 
     private fun obtainFilePickerVisibilityChange() {

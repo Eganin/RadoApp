@@ -56,6 +56,8 @@ dependencies {
     implementation("io.ktor:ktor-server-cors:$ktor_version")
     implementation("com.koriit.kotlin:ktor-logging:0.4.0")
     implementation("io.ktor:ktor-server-compression:$ktor_version")
+    implementation("io.ktor:ktor-server-resources:$ktor_version")
+    implementation("io.ktor:ktor-server-partial-content:$ktor_version")
 }
 
 ktor {

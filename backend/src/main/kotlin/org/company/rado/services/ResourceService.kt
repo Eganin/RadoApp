@@ -1,9 +1,14 @@
 package org.company.rado.services
 
+import io.ktor.http.content.MultiPartData
+import io.ktor.http.content.PartData
+import io.ktor.http.content.forEachPart
+import io.ktor.http.content.streamProvider
 import org.company.rado.dao.images.ImagesDaoFacade
 import org.company.rado.dao.videos.VideosDaoFacade
-import io.ktor.http.content.*
+import org.company.rado.features.resources.ResourcesController.Companion.copyToSuspend
 import java.io.File
+import java.util.UUID
 import kotlin.properties.Delegates
 
 class ResourceService(
@@ -16,11 +21,13 @@ class ResourceService(
         data.forEachPart { part ->
             when (part) {
                 is PartData.FileItem -> {
-                    val fileBytes = part.streamProvider().readBytes()
                     val resourcePath =
-                        if (isImage) "app/images/${part.originalFileName}" else "app/videos/${part.originalFileName}"
+                        if (isImage) "app/images/${System.currentTimeMillis()}-${UUID.randomUUID()}-${part.originalFileName}"
+                        else "app/videos/${System.currentTimeMillis()}-${UUID.randomUUID()}-${part.originalFileName}"
                     val mFile = File(resourcePath)
-                    mFile.writeBytes(fileBytes)
+                    part.streamProvider().use { its ->
+                        mFile.outputStream().buffered().use { its.copyToSuspend(it) }
+                    }
                     if (isImage) {
                         imageRepository.createImage(imagePath = resourcePath, requestId = requestId)
                     } else {

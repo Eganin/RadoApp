@@ -18,24 +18,22 @@ kotlin{
                 implementation(Dependencies.Resources.Libres.libresCompose)
                 implementation(Dependencies.Resources.Image.composeImageLoader)
                 implementation(Dependencies.Resources.ComposeIcons.composeIconsFeatherIcons)
-            }
-        }
 
-        androidMain{
-            dependencies{
                 implementation(Dependencies.Other.FilePicker.core)
             }
         }
 
         desktopMain{
-            dependencies{
-                implementation(Dependencies.Other.FilePicker.core)
+            dependencies {
+                implementation(Dependencies.Desktop.VLC.core)
             }
         }
 
-        jsMain{
-            dependencies{
-                implementation(Dependencies.Other.FilePicker.core)
+        androidMain{
+            dependencies {
+                implementation(Dependencies.Android.ExoPlayer.core)
+                implementation(Dependencies.Android.ExoPlayer.ui)
+                implementation(Dependencies.Android.ExoPlayer.dash)
             }
         }
     }
