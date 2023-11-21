@@ -2,10 +2,16 @@ package ktor
 
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.request.delete
 import io.ktor.client.request.get
+import io.ktor.client.request.put
+import io.ktor.client.request.setBody
+import io.ktor.http.HttpStatusCode
 import io.ktor.http.path
+import ktor.models.RecreateRequest
 import models.FullRequestResponse
 import models.FullUnconfirmedRequestResponse
+import models.RecreateRequestResponse
 import models.SmallUnconfirmedRequestResponse
 
 class KtorSharedRequestsRemoteDataSource(
@@ -41,5 +47,39 @@ class KtorSharedRequestsRemoteDataSource(
                 path("request/active/info/$requestId")
             }
         }.body()
+    }
+
+    suspend fun updateRecreateRequest(
+        requestId: Int,
+        driverId: Int,
+        typeVehicle: String,
+        numberVehicle: String,
+        oldTypeVehicle: String,
+        oldNumberVehicle: String,
+        faultDescription: String
+    ): RecreateRequestResponse {
+        val request = RecreateRequest(
+            driverId = driverId,
+            typeVehicle = typeVehicle,
+            numberVehicle = numberVehicle,
+            oldTypeVehicle = oldTypeVehicle,
+            oldNumberVehicle = oldNumberVehicle,
+            faultDescription = faultDescription
+        )
+        return httpClient.put {
+            url {
+                path("request/recreate/$requestId")
+                setBody(request)
+            }
+        }.body()
+    }
+
+
+    suspend fun deleteRemoveRequest(requestId:Int): HttpStatusCode{
+        return httpClient.delete {
+            url {
+                path("requests/delete/$requestId")
+            }
+        }.status
     }
 }
