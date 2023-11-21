@@ -178,17 +178,6 @@ fun InfoRequestAlertDialog(
                     Spacer(modifier = Modifier.height(4.dp))
 
                     LazyRow(modifier = Modifier.fillMaxWidth()) {
-                        item {
-                            VideoPlayerCell(
-                                size = imageSize,
-                                isExpanded = state.value.imageIsExpanded,
-                                url = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-                                modifier = Modifier.padding(start = 16.dp, bottom = 16.dp),
-                                eventHandler = {
-                                    viewModel.obtainEvent(viewEvent = InfoRequestEvent.ImageRepairExpandedChanged)
-                                }
-                            )
-                        }
                         items(state.value.images) {
                             ImageCells(
                                 size = imageSize,

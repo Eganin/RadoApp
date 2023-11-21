@@ -3,11 +3,11 @@ package views.create
 import androidx.compose.runtime.Composable
 import com.darkrockstudios.libraries.mpfilepicker.FilePicker
 import com.darkrockstudios.libraries.mpfilepicker.IosFile
-import io.github.aakira.napier.log
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.addressOf
 import kotlinx.cinterop.usePinned
 import platform.Foundation.NSData
+import platform.Foundation.dataWithContentsOfURL
 import platform.posix.memcpy
 
 
@@ -21,27 +21,26 @@ actual fun ResourceFilePicker(
     val fileTypeVideo = listOf("MP4", "MOV", "AVI", "MKV")
     val fileType = fileTypeImage + fileTypeVideo
     FilePicker(showFilePicker, fileExtensions = fileType) { file ->
-        //TODO fix it
         closeFilePicker.invoke()
         file?.let { file ->
             val newFile = file as IosFile
-            val isImage = fileTypeImage.any { it == newFile.path.split(".").last() }
-            val path = newFile.path.split("/").last()
-            val byteArray = newFile.platformFile.dataRepresentation.toByteArray()
-            log(tag = "IMAGE") { isImage.toString() }
-            log(tag = "IMAGE") { newFile.path }
-            receiveFilePathAndByteArray.invoke(
-                path,
-                isImage,
-                byteArray
-            )
+            NSData.dataWithContentsOfURL(url = newFile.platformFile)?.let { nsData ->
+                val isImage = fileTypeImage.any { it == newFile.path.split(".").last() }
+                val path = newFile.path.split("/").last()
+                val byteArray = nsData.toByteArray()
+                receiveFilePathAndByteArray.invoke(
+                    path,
+                    isImage,
+                    byteArray
+                )
+            }
         }
     }
 }
 
 @OptIn(ExperimentalForeignApi::class)
-fun NSData.toByteArray(): ByteArray = ByteArray(this@toByteArray.length.toInt()).apply {
+fun NSData.toByteArray(): ByteArray = ByteArray(length.toInt()).apply {
     usePinned {
-        memcpy(it.addressOf(0), this@toByteArray.bytes, this@toByteArray.length)
+        memcpy(it.addressOf(0), bytes, length)
     }
 }
