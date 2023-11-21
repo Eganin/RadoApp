@@ -43,6 +43,8 @@
     <string name="fault_description_label">Опишите неисправность(максимум 1000 символов)</string>
     <string name="image_fault_title">Вы можете вложить фотографии неисправности ТС</string>
     <string name="send_repair_request_title">Отправить заявку на ремонт</string>
+    <string name="send_recreate_request_title">Переоформить заявку</string>
+    <string name="send_delete_request_title">Удалить заявку</string>
     <string name="number_vehicle_error_message">Неправильно введен номер ТС</string>
     <string name="success_create_request_title">Заявка отправлена</string>
     <string name="success_create_request_text">Ожидайте принятие решения по вашей заявке и назначенния даты ремонта</string>

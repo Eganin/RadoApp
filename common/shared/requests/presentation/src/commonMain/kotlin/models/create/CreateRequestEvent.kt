@@ -14,7 +14,7 @@ sealed class CreateRequestEvent {
 
     data object TractorIsExpandedChanged : CreateRequestEvent()
 
-    data object ImageRepairExpandedChanged: CreateRequestEvent()
+    data object ImageRepairExpandedChanged : CreateRequestEvent()
 
     data object CloseSuccessDialog : CreateRequestEvent()
 
@@ -22,7 +22,11 @@ sealed class CreateRequestEvent {
 
     data object FilePickerVisibilityChanged : CreateRequestEvent()
 
-    data class SetResource(val filePath: String,val isImage: Boolean, val imageByteArray: ByteArray) : CreateRequestEvent()
+    data class SetResource(
+        val filePath: String,
+        val isImage: Boolean,
+        val imageByteArray: ByteArray
+    ) : CreateRequestEvent()
 
-    data object OnBackClick: CreateRequestEvent()
+    data object OnBackClick : CreateRequestEvent()
 }

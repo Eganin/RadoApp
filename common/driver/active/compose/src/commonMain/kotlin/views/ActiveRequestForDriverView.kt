@@ -91,15 +91,7 @@ fun ActiveRequestsForDriverView(
                 textTitle = MainRes.string.active_requests_title,
                 modifier = Modifier.fillMaxWidth()
             )
-//            if (state.isLoadingActiveRequests) {
-//                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-//                    CircularProgressIndicator(
-//                        modifier = Modifier.width(64.dp),
-//                        color = Theme.colors.highlightColor,
-//                        trackColor = Theme.colors.primaryAction
-//                    )
-//                }
-//            }
+
             if (state.requests.isNotEmpty()) {
                 state.requests.forEach {
                     RequestCells(
@@ -113,7 +105,10 @@ fun ActiveRequestsForDriverView(
                                 )
                             )
                         },
-                        isReissueRequest = false
+                        isReissueRequest = true,
+                        onReissueRequest = {
+                            eventHandler.invoke(DriverActiveEvent.OpenDialogRecreateRequest)
+                        }
                     )
                 }
             } else {
@@ -123,19 +118,12 @@ fun ActiveRequestsForDriverView(
                     modifier = Modifier.fillMaxWidth().padding(all = 16.dp)
                 )
             }
+
             TextStickyHeader(
                 textTitle = MainRes.string.unconfirmed_requests_title,
                 modifier = Modifier.fillMaxWidth()
             )
-//            if (state.isLoadingUnconfirmedRequests) {
-//                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-//                    CircularProgressIndicator(
-//                        modifier = Modifier.width(64.dp),
-//                        color = Theme.colors.highlightColor,
-//                        trackColor = Theme.colors.primaryAction
-//                    )
-//                }
-//            }
+
             if (state.unconfirmedRequests.isNotEmpty()) {
                 state.unconfirmedRequests.forEach {
                     RequestCells(
@@ -150,7 +138,9 @@ fun ActiveRequestsForDriverView(
                             )
                         },
                         isReissueRequest = true,
-                        onReissueRequest = {}
+                        onReissueRequest = {
+                            eventHandler.invoke(DriverActiveEvent.OpenDialogRecreateRequest)
+                        }
                     )
                 }
             } else {
@@ -173,7 +163,11 @@ fun ActiveRequestsForDriverView(
         if (state.showCreateDialog) {
             CreateRequestAlertDialog(
                 onDismiss = { eventHandler.invoke(DriverActiveEvent.CloseCreateDialog) },
-                onExit = { eventHandler.invoke(DriverActiveEvent.CloseCreateDialog) })
+                onExit = { eventHandler.invoke(DriverActiveEvent.CloseCreateDialog) },)
+        }
+
+        if(state.showRecreateDialog){
+
         }
 
         if (state.showInfoDialog) {

@@ -53,7 +53,7 @@ fun InfoRequestAlertDialog(
     infoForPosition: Position,
     isActiveRequest: Boolean,
     modifier: Modifier = Modifier,
-    actionControl: @Composable (InfoRequestViewState) -> Unit = {},
+    actionControl: @Composable (InfoRequestViewState) -> Unit = {}
 ) {
     val viewModel = viewModelFactory { InfoRequestViewModel() }.createViewModel()
     val state = viewModel.viewStates().observeAsState()

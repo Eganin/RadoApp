@@ -6,6 +6,7 @@ data class DriverActiveViewState(
     val unconfirmedRequests: List<SmallUnconfirmedRequestResponse> = emptyList(),
     val errorTextForRequestList : String ="",
     val showCreateDialog : Boolean = false,
+    val showRecreateDialog: Boolean=false,
     val showInfoDialog: Boolean = false,
     val isActiveDialog:Boolean=false,
     val requestIdForInfo :Int=-1,
