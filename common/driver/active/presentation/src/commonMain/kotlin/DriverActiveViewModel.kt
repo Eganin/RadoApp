@@ -34,7 +34,7 @@ class DriverActiveViewModel :
     override fun obtainEvent(viewEvent: DriverActiveEvent) {
         when (viewEvent) {
             is DriverActiveEvent.OpenDialogCreateRequest -> openCreateRequestScreen()
-            is DriverActiveEvent.OpenDialogRecreateRequest -> openReCreateRequestScreen()
+            is DriverActiveEvent.OpenDialogRecreateRequest -> obtainShowRecreateDialogChange()
             is DriverActiveEvent.OpenDialogInfoRequest -> openInfoRequestScreen(
                 requestId = viewEvent.requestId,
                 isActiveDialog = viewEvent.isActiveRequest
@@ -47,6 +47,7 @@ class DriverActiveViewModel :
 
             is DriverActiveEvent.CloseCreateDialog -> obtainCloseCreateDialogChange()
             is DriverActiveEvent.CloseInfoDialog -> obtainCloseInfoDialogChange()
+            is DriverActiveEvent.CloseRecreateDialog->obtainShowRecreateDialogChange()
             is DriverActiveEvent.PullRefresh -> {
                 getUnconfirmedRequests()
                 getActiveRequestsByDate()
@@ -68,8 +69,8 @@ class DriverActiveViewModel :
         viewState = viewState.copy(showCreateDialog = !viewState.showCreateDialog)
     }
 
-    private fun openReCreateRequestScreen() {
-        log(tag = TAG) { "Navigate to recreate request screen" }
+    private fun obtainShowRecreateDialogChange() {
+        log(tag = TAG) { "show recreate dialog changed" }
         viewState = viewState.copy(showRecreateDialog = !viewState.showRecreateDialog)
     }
 

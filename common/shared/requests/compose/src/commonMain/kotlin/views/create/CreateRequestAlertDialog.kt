@@ -50,7 +50,7 @@ import other.observeAsState
 import platform.LocalPlatform
 import platform.Platform
 import theme.Theme
-import views.shared.VideoPlayerCell
+import views.shared.videoplayer.VideoPlayerCell
 import widgets.common.ActionButton
 
 @Composable

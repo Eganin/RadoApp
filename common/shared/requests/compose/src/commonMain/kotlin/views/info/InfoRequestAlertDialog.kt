@@ -44,7 +44,7 @@ import platform.Platform
 import theme.Theme
 import views.create.ImageCells
 import views.create.ImageMachineCells
-import views.shared.VideoPlayerCell
+import views.shared.videoplayer.VideoPlayerCell
 
 @Composable
 fun InfoRequestAlertDialog(

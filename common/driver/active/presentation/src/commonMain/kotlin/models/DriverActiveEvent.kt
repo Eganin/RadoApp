@@ -17,5 +17,7 @@ sealed class DriverActiveEvent {
 
     data object CloseInfoDialog : DriverActiveEvent()
 
+    data object CloseRecreateDialog: DriverActiveEvent()
+
     data object PullRefresh : DriverActiveEvent()
 }

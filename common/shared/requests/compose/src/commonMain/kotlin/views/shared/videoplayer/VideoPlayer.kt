@@ -1,4 +1,4 @@
-package views.shared
+package views.shared.videoplayer
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable

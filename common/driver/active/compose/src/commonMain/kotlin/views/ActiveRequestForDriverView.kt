@@ -32,6 +32,7 @@ import views.create.CalendarView
 import views.create.CreateRequestAlertDialog
 import views.create.RequestCells
 import views.info.InfoRequestAlertDialog
+import views.recreate.RecreateRequestAlertDialog
 import widgets.common.ActionButton
 import widgets.common.TextStickyHeader
 
@@ -163,11 +164,14 @@ fun ActiveRequestsForDriverView(
         if (state.showCreateDialog) {
             CreateRequestAlertDialog(
                 onDismiss = { eventHandler.invoke(DriverActiveEvent.CloseCreateDialog) },
-                onExit = { eventHandler.invoke(DriverActiveEvent.CloseCreateDialog) },)
+                onExit = { eventHandler.invoke(DriverActiveEvent.CloseCreateDialog) })
         }
 
-        if(state.showRecreateDialog){
-
+        if (state.showRecreateDialog) {
+            RecreateRequestAlertDialog(
+                onDismiss = { eventHandler.invoke(DriverActiveEvent.CloseRecreateDialog) },
+                onExit = { eventHandler.invoke(DriverActiveEvent.CloseRecreateDialog) }
+            )
         }
 
         if (state.showInfoDialog) {

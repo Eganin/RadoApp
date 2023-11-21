@@ -1,4 +1,4 @@
-package views.shared
+package views.shared.videoplayer
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable

@@ -1,4 +1,4 @@
-package views.shared
+package views.shared.videoplayer
 
 import android.widget.MediaController
 import android.widget.VideoView
