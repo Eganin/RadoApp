@@ -39,4 +39,12 @@ val sharedRequestsModule = DI.Module(name = "sharedRequestsModule") {
             mapper = instance()
         )
     }
+
+    bind<OperationsOnRequestsRepository>() with singleton {
+        OperationsOnRequestsRepositoryImpl(
+            remoteDataSource = instance(),
+            localDataSource = instance(),
+            httpStatusCodeMapper = instance()
+        )
+    }
 }

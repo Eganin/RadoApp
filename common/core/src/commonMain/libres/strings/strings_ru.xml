@@ -77,4 +77,6 @@
     <string name="failure_request_confirmation_title">Одобрение заявки не ремонт не выполнилось</string>
     <string name="active_request_info_failure">Произошла ошибка при получении активной заявки</string>
     <string name="update_date_title">Обновить данные</string>
+    <string name="remove_request_error">Произошла ошибка при удалении запроса</string>
+    <string name="recreate_request_error">Произошла ошибка при пересоздании запроса</string>
 </resources>
