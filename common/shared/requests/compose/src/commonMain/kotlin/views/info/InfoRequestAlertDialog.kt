@@ -105,14 +105,14 @@ fun InfoRequestAlertDialog(
                     ImageMachineCells(
                         imageSize = imageSize,
                         title = MainRes.string.tractor_title,
-                        imageLink = "$BASE_URL/resources/tractor.jpg",
+                        imageLink = "$BASE_URL/resources/images/tractor.jpg",
                         isExpanded = state.value.selectedVehicleType == VehicleType.Tractor
                     )
 
                     ImageMachineCells(
                         imageSize = imageSize,
                         title = MainRes.string.trailer_title,
-                        imageLink = "$BASE_URL/resources/trailer.jpg",
+                        imageLink = "$BASE_URL/resources/images/trailer.jpg",
                         isExpanded = state.value.selectedVehicleType == VehicleType.Trailer
                     )
                 }

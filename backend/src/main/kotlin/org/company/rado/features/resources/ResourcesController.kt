@@ -1,22 +1,31 @@
 package org.company.rado.features.resources
 
-import io.ktor.http.*
-import io.ktor.http.content.*
-import io.ktor.server.application.*
-import io.ktor.server.request.*
-import io.ktor.server.response.*
+import io.ktor.http.ContentType
+import io.ktor.http.HttpStatusCode
+import io.ktor.http.content.PartData
+import io.ktor.http.content.forEachPart
+import io.ktor.http.content.streamProvider
+import io.ktor.server.application.ApplicationCall
+import io.ktor.server.http.content.LocalFileContent
+import io.ktor.server.request.receiveMultipart
 import io.ktor.server.response.respond
+import io.ktor.server.response.respondFile
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.yield
 import org.company.rado.services.ResourceService
 import java.io.File
+import java.io.InputStream
+import java.io.OutputStream
 
 class ResourcesController(
     private val resourceService: ResourceService
 ) {
 
-    suspend fun getImageFromName(resourceName: String, call: ApplicationCall) {
+    suspend fun getResourceImageFromName(resourceName: String, call: ApplicationCall) {
         try {
             val filename = "app/resources/${resourceName}"
-            println(filename)
             val file = File(filename)
             call.respondFile(file)
         } catch (e: Exception) {
@@ -25,16 +34,29 @@ class ResourcesController(
         }
     }
 
-    suspend fun createImagesForResources(call: ApplicationCall) {
+    suspend fun getResourceVideoFromName(resourceName: String, call: ApplicationCall) {
+        try {
+            val filename = "app/resources/${resourceName}"
+            val file = File(filename)
+            call.respond(LocalFileContent(file, contentType = ContentType.Video.MP4))
+        } catch (e: Exception) {
+            e.printStackTrace()
+            call.respond(HttpStatusCode.BadRequest)
+        }
+    }
+
+    suspend fun createResources(call: ApplicationCall) {
         val multipartData = call.receiveMultipart()
         multipartData.forEachPart { part ->
             when (part) {
                 is PartData.FileItem -> {
-                    val fileBytes = part.streamProvider().readBytes()
                     val imagePath = "app/resources/${part.originalFileName}"
                     val mFile = File(imagePath)
-                    mFile.writeBytes(fileBytes)
+                    part.streamProvider().use { its ->
+                        mFile.outputStream().buffered().use { its.copyToSuspend(it) }
+                    }
                 }
+
                 else -> {}
             }
             part.dispose()
@@ -48,33 +70,59 @@ class ResourcesController(
         call.respond(HttpStatusCode.OK, message = "File Uploaded ✅")
     }
 
-    suspend fun createVideos(call:ApplicationCall){
+    suspend fun createVideos(call: ApplicationCall) {
         val multipartData = call.receiveMultipart()
         resourceService.createImageAndVideo(data = multipartData, isImage = false)
         call.respond(HttpStatusCode.OK, message = "File Uploaded ✅")
     }
 
-    suspend fun deleteVideos(call:ApplicationCall,requestId: Int){
-        val response = resourceService.deleteImageAndVideo(requestId=requestId, isImage = false)
-        if (response){
+    suspend fun deleteVideos(call: ApplicationCall, requestId: Int) {
+        val response = resourceService.deleteImageAndVideo(requestId = requestId, isImage = false)
+        if (response) {
             call.respond(HttpStatusCode.OK, message = "The videos has been deleted")
-        }else{
+        } else {
             call.respond(HttpStatusCode.BadRequest, message = "The videos has not been deleted")
         }
     }
 
-    suspend fun deleteImages(call: ApplicationCall,requestId:Int){
-        val response = resourceService.deleteImageAndVideo(requestId=requestId, isImage = true)
-        if (response){
+    suspend fun deleteImages(call: ApplicationCall, requestId: Int) {
+        val response = resourceService.deleteImageAndVideo(requestId = requestId, isImage = true)
+        if (response) {
             call.respond(HttpStatusCode.OK, message = "The images has been deleted")
-        }else{
+        } else {
             call.respond(HttpStatusCode.BadRequest, message = "The images has not been deleted")
         }
     }
 
-    suspend fun deleteResource(call: ApplicationCall,resourceName:String){
+    suspend fun deleteResource(call: ApplicationCall, resourceName: String) {
         val file = File("app/resources/${resourceName}")
         file.delete()
         call.respond(HttpStatusCode.OK, message = "File Deleted✅")
+    }
+
+    companion object{
+        suspend fun InputStream.copyToSuspend(
+            out: OutputStream,
+            bufferSize: Int = DEFAULT_BUFFER_SIZE,
+            yieldSize: Int = 4 * 1024 * 1024,
+            dispatcher: CoroutineDispatcher = Dispatchers.IO
+        ): Long {
+            return withContext(dispatcher) {
+                val buffer = ByteArray(bufferSize)
+                var bytesCopied = 0L
+                var bytesAfterYield = 0L
+                while (true) {
+                    val bytes = read(buffer).takeIf { it >= 0 } ?: break
+                    out.write(buffer, 0, bytes)
+                    if (bytesAfterYield >= yieldSize) {
+                        yield()
+                        bytesAfterYield %= yieldSize
+                    }
+                    bytesCopied += bytes
+                    bytesAfterYield += bytes
+                }
+                return@withContext bytesCopied
+            }
+        }
     }
 }

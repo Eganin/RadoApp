@@ -122,7 +122,7 @@ fun CreateRequestAlertDialog(
                     ImageMachineCells(
                         imageSize = imageSize,
                         title = MainRes.string.tractor_title,
-                        imageLink = "$BASE_URL/resources/tractor.jpg",
+                        imageLink = "$BASE_URL/resources/images/tractor.jpg",
                         isExpanded = state.value.tractorIsExpanded,
                         eventHandler = {
                             viewModel.obtainEvent(
@@ -137,7 +137,7 @@ fun CreateRequestAlertDialog(
                     ImageMachineCells(
                         imageSize = imageSize,
                         title = MainRes.string.trailer_title,
-                        imageLink = "$BASE_URL/resources/trailer.jpg",
+                        imageLink = "$BASE_URL/resources/images/trailer.jpg",
                         isExpanded = state.value.trailerIsExpanded,
                         eventHandler = {
                             viewModel.obtainEvent(
@@ -241,7 +241,7 @@ fun CreateRequestAlertDialog(
                         ImageCells(
                             size = imageSize,
                             isExpanded = state.value.imageIsExpanded,
-                            imageLink = "$BASE_URL/resources/${it.first}",
+                            imageLink = "$BASE_URL/resources/images/${it.first}",
                             modifier = Modifier.padding(start = 16.dp, bottom = 16.dp),
                             eventHandler = {
                                 viewModel.obtainEvent(viewEvent = CreateRequestEvent.ImageRepairExpandedChanged)
@@ -253,7 +253,7 @@ fun CreateRequestAlertDialog(
                         VideoPlayerCell(
                             size = imageSize,
                             isExpanded = state.value.imageIsExpanded,
-                            url = "$BASE_URL/resources/${it.first}",
+                            url = "$BASE_URL/resources/videos/${it.first}",
                             modifier = Modifier.padding(start = 16.dp, bottom = 16.dp),
                             eventHandler = {
                                 viewModel.obtainEvent(viewEvent = CreateRequestEvent.ImageRepairExpandedChanged)

@@ -1,6 +1,5 @@
 package ktor
 
-import com.benasher44.uuid.uuid4
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.delete
@@ -30,7 +29,7 @@ class KtorDriverActiveRemoteDataSource(
         }.body()
     }
 
-    suspend fun deleteRequest(requestId: Int): HttpStatusCode{
+    suspend fun deleteRequest(requestId: Int): HttpStatusCode {
         return httpClient.delete {
             url {
                 path("requests/delete/${requestId}")
@@ -50,8 +49,8 @@ class KtorDriverActiveRemoteDataSource(
     suspend fun uploadImageOrVideoForRequest(
         requestId: Int,
         isImage: Boolean,
-        resourcePath:String,
-        resourceData:ByteArray
+        resourcePath: String,
+        resourceData: ByteArray
     ): HttpStatusCode {
         return httpClient.post {
             url {
@@ -68,7 +67,7 @@ class KtorDriverActiveRemoteDataSource(
                                         append(HttpHeaders.ContentType, "image/png")
                                         append(
                                             HttpHeaders.ContentDisposition,
-                                            "filename=\"${resourcePath}-${uuid4().mostSignificantBits}.png\""
+                                            "filename=\"${resourcePath}\""
                                         )
                                     })
                             },
@@ -88,7 +87,7 @@ class KtorDriverActiveRemoteDataSource(
                                         append(HttpHeaders.ContentType, "video/mp4")
                                         append(
                                             HttpHeaders.ContentDisposition,
-                                            "filename=\"${resourcePath}-${uuid4().mostSignificantBits}.mp4\""
+                                            "filename=\"${resourcePath}\""
                                         )
                                     })
                             },
@@ -102,8 +101,8 @@ class KtorDriverActiveRemoteDataSource(
 
     suspend fun uploadImageOrVideoForCache(
         isImage: Boolean,
-        resourcePath:String,
-        resourceData:ByteArray
+        resourcePath: String,
+        resourceData: ByteArray
     ): HttpStatusCode {
         return httpClient.post {
             url {
@@ -149,7 +148,7 @@ class KtorDriverActiveRemoteDataSource(
         }.status
     }
 
-    suspend fun deleteResourceCache(resourceName:String): HttpStatusCode{
+    suspend fun deleteResourceCache(resourceName: String): HttpStatusCode {
         return httpClient.delete {
             url {
                 path("resources/delete/${resourceName}")

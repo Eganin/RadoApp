@@ -8,13 +8,11 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import io.github.aakira.napier.log
 
 @Composable
 fun VideoPlayerCell(
@@ -26,10 +24,6 @@ fun VideoPlayerCell(
 ) {
 
     val sizeExpansion = 100.dp
-
-    SideEffect {
-        log(tag = "VIDEO") { url }
-    }
 
     Box(
         modifier = modifier
