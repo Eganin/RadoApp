@@ -70,7 +70,7 @@ class CreateRequestViewModel :
 
                     removeCacheResources(requestId = createRequestIdItem.requestId)
 
-                    if (!viewState.isRemoveRequest) obtainShowSuccessDialog()
+                    obtainShowSuccessDialog()
                 } else if (createRequestIdItem is CreateRequestIdItem.Error) {
                     log(tag = TAG) { "Create request is failure" }
                     obtainShowFailureDialog(value = !viewState.showFailureCreateRequestDialog)
