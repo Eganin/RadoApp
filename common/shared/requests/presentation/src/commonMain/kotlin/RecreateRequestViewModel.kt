@@ -87,6 +87,7 @@ class RecreateRequestViewModel :
                 if (recreateRequestItem is RecreateRequestItem.Success) {
                     log(tag = TAG) { "request recreate success" }
                     saveResources(requestId = viewState.requestId)
+                    removeCacheResources(requestId = viewState.requestId)
                     obtainShowSuccessDialog()
                 } else if (recreateRequestItem is RecreateRequestItem.Error) {
                     log(tag = TAG) { "request recreate failure" }

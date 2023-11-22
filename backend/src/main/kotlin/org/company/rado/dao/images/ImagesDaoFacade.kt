@@ -7,4 +7,6 @@ interface ImagesDaoFacade {
     suspend fun findByRequestId(requestId: Int): List<String>
 
     suspend fun deleteImages(requestId: Int): Pair<Boolean,List<String>>
+
+    suspend fun deleteImageByName(imageName:String) : Pair<Boolean,String>
 }
