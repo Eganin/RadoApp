@@ -116,6 +116,7 @@ fun CreateRequestAlertDialog(
                     imageSize = imageSize,
                     resources = state.value.resources,
                     resourceIsExpanded = state.value.imageIsExpanded,
+                    isRemoveImageAndVideo = false,
                     addResource = {
                         viewModel.obtainEvent(viewEvent = CreateRequestEvent.FilePickerVisibilityChanged)
                     },

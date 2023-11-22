@@ -141,6 +141,7 @@ fun RecreateRequestAlertDialog(
                     resourceIsExpanded = state.value.imageIsExpanded,
                     createdImages = state.value.images,
                     createdVideos = state.value.videos,
+                    isRemoveImageAndVideo = true,
                     addResource = {
                         viewModel.obtainEvent(viewEvent = RecreateRequestEvent.FilePickerVisibilityChanged)
                     },

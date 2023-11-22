@@ -184,6 +184,7 @@ fun InfoRequestAlertDialog(
                                 isExpanded = state.value.imageIsExpanded,
                                 imageLink = it,
                                 modifier = Modifier.padding(start = 16.dp, bottom = 16.dp),
+                                isRemove = false,
                                 eventHandler = {
                                     viewModel.obtainEvent(viewEvent = InfoRequestEvent.ImageRepairExpandedChanged)
                                 }
@@ -198,7 +199,8 @@ fun InfoRequestAlertDialog(
                                 modifier = Modifier.padding(start = 16.dp, bottom = 16.dp),
                                 eventHandler = {
                                     viewModel.obtainEvent(viewEvent = InfoRequestEvent.ImageRepairExpandedChanged)
-                                }
+                                },
+                                isRemove = false
                             )
                         }
                     }

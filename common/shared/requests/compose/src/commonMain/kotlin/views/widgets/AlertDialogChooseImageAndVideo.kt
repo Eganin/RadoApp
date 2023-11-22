@@ -37,6 +37,9 @@ internal fun AlertDialogChooseImageAndVideo(
     videoOnClick: () -> Unit,
     createdImages:List<String> = emptyList(),
     createdVideos: List<String> = emptyList(),
+    isRemoveImageAndVideo:Boolean,
+    removeVideoAction: ()->Unit={},
+    removeImageAction:()->Unit={},
     modifier: Modifier = Modifier
 ) {
     Text(
@@ -67,7 +70,9 @@ internal fun AlertDialogChooseImageAndVideo(
                 isExpanded = resourceIsExpanded,
                 imageLink = it,
                 modifier = Modifier.padding(start = 16.dp, bottom = 16.dp),
-                eventHandler = imageOnClick::invoke
+                isRemove = isRemoveImageAndVideo,
+                eventHandler = imageOnClick::invoke,
+                onRemove = removeImageAction::invoke
             )
         }
 
@@ -77,6 +82,7 @@ internal fun AlertDialogChooseImageAndVideo(
                 isExpanded = resourceIsExpanded,
                 imageLink = "$BASE_URL/resources/images/${it.first}",
                 modifier = Modifier.padding(start = 16.dp, bottom = 16.dp),
+                isRemove = false,
                 eventHandler = imageOnClick::invoke
             )
         }
@@ -87,7 +93,9 @@ internal fun AlertDialogChooseImageAndVideo(
                 isExpanded = resourceIsExpanded,
                 url = it,
                 modifier = Modifier.padding(start = 16.dp, bottom = 16.dp),
-                eventHandler = videoOnClick::invoke
+                eventHandler = videoOnClick::invoke,
+                isRemove = isRemoveImageAndVideo,
+                onRemove = removeVideoAction::invoke
             )
         }
 
@@ -97,7 +105,8 @@ internal fun AlertDialogChooseImageAndVideo(
                 isExpanded = resourceIsExpanded,
                 url = "$BASE_URL/resources/videos/${it.first}",
                 modifier = Modifier.padding(start = 16.dp, bottom = 16.dp),
-                eventHandler = videoOnClick::invoke
+                eventHandler = videoOnClick::invoke,
+                isRemove = false
             )
         }
     }
