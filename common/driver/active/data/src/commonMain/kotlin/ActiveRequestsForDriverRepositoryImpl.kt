@@ -106,7 +106,7 @@ class ActiveRequestsForDriverRepositoryImpl(
             httpStatusCodeMapper.map(source = statusCode)
         } catch (e: Exception) {
             log(tag = TAG) { "Error for delete request" }
-            WrapperForResponse.Failure(message = MainRes.string.base_error_message)
+            WrapperForResponse.Failure(message = MainRes.string.remove_request_error)
         }
     }
 

@@ -82,7 +82,7 @@ class CreateRequestViewModel :
         }
     }
 
-    private fun saveResources(requestId: Int) = viewModelScope.launch {
+    private fun saveResources(requestId: Int) = coroutineScope.launch {
         //save images
         if (viewState.resources.isNotEmpty()) {
             viewState.resources.forEach { resource ->
@@ -99,7 +99,7 @@ class CreateRequestViewModel :
         }
     }
 
-    private fun removeCacheResources(requestId: Int? = null) = viewModelScope.launch {
+    private fun removeCacheResources(requestId: Int? = null) = coroutineScope.launch {
         //remove cache images
         viewState.resources.forEach {
             val response = activeRequestsRepository.deleteResourceForCache(resourceName = it.first)
@@ -113,7 +113,7 @@ class CreateRequestViewModel :
         clearResourceList()
     }
 
-    private fun removeRequest(requestId: Int) = viewModelScope.launch {
+    private fun removeRequest(requestId: Int) = coroutineScope.launch {
         activeRequestsRepository.deleteRequest(requestId = requestId)
     }
 
@@ -141,14 +141,14 @@ class CreateRequestViewModel :
     }
 
     private fun saveResourceToStateList(resource: Triple<String, Boolean, ByteArray>) {
-        viewModelScope.launch {
+        coroutineScope.launch {
             //save image for cache
             viewState = viewState.copy(isLoading = !viewState.isLoading)
             activeRequestsRepository.createResourceForCache(resource = resource)
-            val newImagesList = mutableListOf(resource)
-            newImagesList.addAll(viewState.resources)
-            log(tag = TAG) { "Count resources ${newImagesList.size}" }
-            viewState = viewState.copy(resources = newImagesList)
+            val newResourcesList = mutableListOf(resource)
+            newResourcesList.addAll(viewState.resources)
+            log(tag = TAG) { "Count resources ${newResourcesList.size}" }
+            viewState = viewState.copy(resources = newResourcesList)
             log(tag = TAG) { "Add resource ${viewState.resources}" }
             viewState = viewState.copy(isLoading = !viewState.isLoading)
         }
