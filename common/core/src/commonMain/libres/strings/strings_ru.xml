@@ -79,4 +79,6 @@
     <string name="update_date_title">Обновить данные</string>
     <string name="remove_request_error">Произошла ошибка при удалении запроса</string>
     <string name="recreate_request_error">Произошла ошибка при пересоздании запроса</string>
+    <string name="recreate_request_success">Переоформление заявки прошло успешно</string>
+    <string name="base_success_message">Операция прошла успешно</string>
 </resources>

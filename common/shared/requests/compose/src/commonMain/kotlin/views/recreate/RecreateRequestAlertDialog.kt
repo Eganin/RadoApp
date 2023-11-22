@@ -13,6 +13,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
@@ -55,6 +56,21 @@ fun RecreateRequestAlertDialog(
     val imageSize =
         if (isLargePlatform) (LocalDensity.current.density.dp * 70) else (LocalDensity.current.density.dp * 25)
 
+    LaunchedEffect(key1 = Unit) {
+        if (!isActiveRequest) {
+            viewModel.obtainEvent(
+                viewEvent = RecreateRequestEvent.GetInfoForOldUnconfirmedRequest(
+                    requestId = requestId
+                )
+            )
+        } else {
+            viewModel.obtainEvent(
+                viewEvent = RecreateRequestEvent.GetInfoForOldActiveRequest(
+                    requestId = requestId
+                )
+            )
+        }
+    }
 
     Dialog(
         onDismissRequest = {
@@ -174,8 +190,8 @@ fun RecreateRequestAlertDialog(
                 }, onExit = {
                     viewModel.obtainEvent(viewEvent = RecreateRequestEvent.CloseSuccessDialog)
                 },
-                firstText = MainRes.string.success_create_request_title,
-                secondText = MainRes.string.success_create_request_text
+                firstText = "",
+                secondText = MainRes.string.base_success_message
             )
         }
 
@@ -183,7 +199,7 @@ fun RecreateRequestAlertDialog(
             FailureRequestDialog(
                 onDismiss = { viewModel.obtainEvent(viewEvent = RecreateRequestEvent.CloseFailureDialog) },
                 onExit = { viewModel.obtainEvent(viewEvent = RecreateRequestEvent.CloseFailureDialog) },
-                firstText = MainRes.string.failure_create_request_title
+                firstText = MainRes.string.base_error_message
             )
         }
     }

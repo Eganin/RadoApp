@@ -67,7 +67,7 @@ class RecreateRequestViewModel :
             )
 
             is RecreateRequestEvent.OnBackClick -> removeCacheResources()
-            is RecreateRequestEvent.DeleteRequest -> removeRequest(requestId = viewState.requestId)
+            is RecreateRequestEvent.DeleteRequest -> removeRequestWrapper(requestId = viewState.requestId)
         }
     }
 
@@ -112,8 +112,14 @@ class RecreateRequestViewModel :
                     oldNumberVehicle = info.vehicleNumber,
                     faultDescription = info.faultDescription,
                     images = info.images,
-                    videos = info.videos
+                    videos = info.videos,
+                    numberVehicle = info.vehicleNumber
                 )
+                if (viewState.oldSelectedVehicleType == VehicleType.Tractor) {
+                    obtainTractorIsExpandedChange()
+                } else {
+                    obtainTrailerIsExpandedChange()
+                }
             } else if (unconfirmedRequestInfoItem is UnconfirmedRequestInfoItem.Error) {
                 log(tag = TAG) { "get info for unconfirmed request is failure" }
                 obtainShowFailureDialog(value = !viewState.showFailureDialog)
@@ -136,13 +142,33 @@ class RecreateRequestViewModel :
                     oldNumberVehicle = info.vehicleNumber,
                     faultDescription = info.faultDescription,
                     images = info.images,
-                    videos = info.videos
+                    videos = info.videos,
+                    numberVehicle = info.vehicleNumber
                 )
+                if (viewState.oldSelectedVehicleType == VehicleType.Tractor) {
+                    obtainTractorIsExpandedChange()
+                } else {
+                    obtainTrailerIsExpandedChange()
+                }
             } else if (fullRequestItem is FullRequestItem.Error) {
                 log(tag = TAG) { "get info fo active request is failure" }
                 obtainShowFailureDialog(value = !viewState.showFailureDialog)
             }
             obtainIsLoadingChange()
+        }
+    }
+
+    private fun removeRequestWrapper(requestId: Int) {
+        coroutineScope.launch {
+            val wrapperForResponse =
+                activeRequestsRepositoryForDriver.deleteRequest(requestId = requestId)
+            if (wrapperForResponse is WrapperForResponse.Success) {
+                log(tag = TAG) { "request remove success" }
+                obtainShowSuccessDialog()
+            } else if (wrapperForResponse is WrapperForResponse.Failure) {
+                log(tag = TAG) { "There was a deleteion request error" }
+                obtainShowFailureDialog(value = !viewState.showFailureDialog)
+            }
         }
     }
 
