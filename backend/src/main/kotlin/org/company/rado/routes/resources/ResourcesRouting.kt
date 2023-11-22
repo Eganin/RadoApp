@@ -67,8 +67,6 @@ fun Application.configureResourcesRouting() {
             val file = File("app/videos/$filename")
             if (file.exists()) {
                 call.respond(LocalFileContent(file, contentType = ContentType.Video.MP4))
-                //call.respondBytes(bytes = file.readBytes(), contentType = ContentType.Video.MP4)
-                //call.respondFile(file)
             } else call.respond(HttpStatusCode.NotFound)
         }
 

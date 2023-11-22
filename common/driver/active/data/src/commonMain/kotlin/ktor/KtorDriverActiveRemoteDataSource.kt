@@ -155,4 +155,20 @@ class KtorDriverActiveRemoteDataSource(
             }
         }.status
     }
+
+    suspend fun deleteImagesFromRequest(requestId: Int): HttpStatusCode{
+        return httpClient.delete {
+            url{
+                path("images/delete/$requestId")
+            }
+        }.status
+    }
+
+    suspend fun deleteVideosFromRequest(requestId: Int): HttpStatusCode{
+        return httpClient.delete {
+            url{
+                path("videos/delete/$requestId")
+            }
+        }.status
+    }
 }

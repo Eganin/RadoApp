@@ -160,13 +160,19 @@ class RecreateRequestViewModel :
 
     private fun removeRequestWrapper(requestId: Int) {
         coroutineScope.launch {
-            val wrapperForResponse =
-                activeRequestsRepositoryForDriver.deleteRequest(requestId = requestId)
-            if (wrapperForResponse is WrapperForResponse.Success) {
-                log(tag = TAG) { "request remove success" }
-                obtainShowSuccessDialog()
-            } else if (wrapperForResponse is WrapperForResponse.Failure) {
-                log(tag = TAG) { "There was a deleteion request error" }
+            val wrapperForDeleteResources = activeRequestsRepositoryForDriver.deleteResourcesForRequest(requestId=requestId)
+            if (wrapperForDeleteResources is WrapperForResponse.Success){
+                val wrapperForResponse =
+                    activeRequestsRepositoryForDriver.deleteRequest(requestId = requestId)
+                if (wrapperForResponse is WrapperForResponse.Success) {
+                    log(tag = TAG) { "request remove success" }
+                    obtainShowSuccessDialog()
+                } else if (wrapperForResponse is WrapperForResponse.Failure) {
+                    log(tag = TAG) { "request remove failure" }
+                    obtainShowFailureDialog(value = !viewState.showFailureDialog)
+                }
+            }else if(wrapperForDeleteResources is WrapperForResponse.Failure){
+                log(tag = TAG) { "resources remove failure" }
                 obtainShowFailureDialog(value = !viewState.showFailureDialog)
             }
         }

@@ -14,5 +14,7 @@ interface ActiveRequestsForDriverRepository {
 
     suspend fun deleteResourceForCache(resourceName:String): WrapperForResponse
 
+    suspend fun deleteResourcesForRequest(requestId: Int):WrapperForResponse
+
     suspend fun deleteRequest(requestId: Int): WrapperForResponse
 }
