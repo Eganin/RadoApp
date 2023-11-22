@@ -68,6 +68,8 @@ class RecreateRequestViewModel :
 
             is RecreateRequestEvent.OnBackClick -> removeCacheResources()
             is RecreateRequestEvent.DeleteRequest -> removeRequestWrapper(requestId = viewState.requestId)
+            is RecreateRequestEvent.RemoveImage->{}
+            is RecreateRequestEvent.RemoveVideo->{}
         }
     }
 

@@ -129,6 +129,34 @@ class ActiveRequestsForDriverRepositoryImpl(
         }
     }
 
+    override suspend fun deleteImageByPathForRequest(imagePath: String): WrapperForResponse {
+        return try {
+            val imagePathSplit = "app/images/" + imagePath.split("/images/").last()
+            val statusCode = remoteDataSource.deleteImageAndVideoByPath(
+                isImage = true,
+                resourcePath = imagePathSplit
+            )
+            httpStatusCodeMapper.map(source = statusCode)
+        } catch (e: Exception) {
+            log(tag = TAG) { "Delete resource by path failure" }
+            WrapperForResponse.Failure(message = MainRes.string.base_error_message)
+        }
+    }
+
+    override suspend fun deleteVideoByPathForRequest(videoPath: String): WrapperForResponse {
+        return try {
+            val videoUrlSplit = "app/videos/" + videoPath.split("/videos/").last()
+            val statusCode = remoteDataSource.deleteImageAndVideoByPath(
+                isImage = false,
+                resourcePath = videoUrlSplit
+            )
+            httpStatusCodeMapper.map(source = statusCode)
+        } catch (e: Exception) {
+            log(tag = TAG) { "Delete resource by path failure" }
+            WrapperForResponse.Failure(message = MainRes.string.base_error_message)
+        }
+    }
+
     private companion object {
         const val TAG = "ActiveRequestsForDriverRepository"
     }

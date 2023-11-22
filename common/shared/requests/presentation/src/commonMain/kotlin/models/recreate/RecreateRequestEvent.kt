@@ -35,4 +35,8 @@ sealed class RecreateRequestEvent {
     data object OnBackClick : RecreateRequestEvent()
 
     data object DeleteRequest : RecreateRequestEvent()
+
+    data class RemoveImage(val imagePath: String) : RecreateRequestEvent()
+
+    data class RemoveVideo(val videoPath: String) : RecreateRequestEvent()
 }

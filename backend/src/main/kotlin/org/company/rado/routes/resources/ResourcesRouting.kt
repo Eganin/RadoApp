@@ -88,13 +88,13 @@ fun Application.configureResourcesRouting() {
             resourcesController.deleteImages(call = call, requestId = requestId)
         }
 
-        delete(path = "/videos/onedelete/byname/{name}") {
+        delete(path = "/videos/bypath/{name}") {
             val videoName = call.parameters["name"]!!
             val resourcesController by closestDI().instance<ResourcesController>()
             resourcesController.deleteVideoByName(call = call, videoName = videoName)
         }
 
-        delete(path = "/images/onedelete/byname/{name}") {
+        delete(path = "/images/bypath/{name}") {
             val imageName = call.parameters["name"]!!
             val resourcesController by closestDI().instance<ResourcesController>()
             resourcesController.deleteImageByName(call = call, imageName = imageName)

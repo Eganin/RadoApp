@@ -35,11 +35,11 @@ internal fun AlertDialogChooseImageAndVideo(
     addResource: () -> Unit,
     imageOnClick: () -> Unit,
     videoOnClick: () -> Unit,
-    createdImages:List<String> = emptyList(),
+    createdImages: List<String> = emptyList(),
     createdVideos: List<String> = emptyList(),
-    isRemoveImageAndVideo:Boolean,
-    removeVideoAction: ()->Unit={},
-    removeImageAction:()->Unit={},
+    isRemoveImageAndVideo: Boolean,
+    removeVideoAction: (String) -> Unit = {},
+    removeImageAction: (String) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     Text(
@@ -64,7 +64,7 @@ internal fun AlertDialogChooseImageAndVideo(
             }
         }
 
-        items(createdImages){
+        items(createdImages) {
             ImageCells(
                 size = imageSize,
                 isExpanded = resourceIsExpanded,
@@ -72,7 +72,9 @@ internal fun AlertDialogChooseImageAndVideo(
                 modifier = Modifier.padding(start = 16.dp, bottom = 16.dp),
                 isRemove = isRemoveImageAndVideo,
                 eventHandler = imageOnClick::invoke,
-                onRemove = removeImageAction::invoke
+                onRemove = {
+                    removeImageAction.invoke(it)
+                }
             )
         }
 
@@ -95,7 +97,9 @@ internal fun AlertDialogChooseImageAndVideo(
                 modifier = Modifier.padding(start = 16.dp, bottom = 16.dp),
                 eventHandler = videoOnClick::invoke,
                 isRemove = isRemoveImageAndVideo,
-                onRemove = removeVideoAction::invoke
+                onRemove = {
+                    removeVideoAction.invoke(it)
+                }
             )
         }
 

@@ -150,6 +150,12 @@ fun RecreateRequestAlertDialog(
                     },
                     videoOnClick = {
                         viewModel.obtainEvent(viewEvent = RecreateRequestEvent.ImageRepairExpandedChanged)
+                    },
+                    removeImageAction = { imagePath ->
+                        viewModel.obtainEvent(viewEvent = RecreateRequestEvent.RemoveImage(imagePath = imagePath))
+                    },
+                    removeVideoAction = { videoPath ->
+                        viewModel.obtainEvent(viewEvent = RecreateRequestEvent.RemoveVideo(videoPath = videoPath))
                     }
                 )
 

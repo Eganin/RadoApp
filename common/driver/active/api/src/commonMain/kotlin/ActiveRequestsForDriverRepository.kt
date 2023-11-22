@@ -17,4 +17,8 @@ interface ActiveRequestsForDriverRepository {
     suspend fun deleteResourcesForRequest(requestId: Int):WrapperForResponse
 
     suspend fun deleteRequest(requestId: Int): WrapperForResponse
+
+    suspend fun deleteImageByPathForRequest(imagePath: String):WrapperForResponse
+
+    suspend fun deleteVideoByPathForRequest(videoPath:String):WrapperForResponse
 }
