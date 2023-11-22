@@ -6,6 +6,7 @@ data class RecreateRequestViewState(
     val selectedVehicleType: VehicleType = VehicleType.Tractor,
     val oldSelectedVehicleType: VehicleType = VehicleType.Tractor,
     val numberVehicle: String = "",
+    val notVehicleNumber:Boolean=false,
     val oldNumberVehicle: String = "",
     val faultDescription: String = "",
     val showSuccessDialog: Boolean = false,

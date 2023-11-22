@@ -108,7 +108,7 @@ fun ActiveRequestsForDriverView(
                         },
                         isReissueRequest = true,
                         onReissueRequest = {
-                            eventHandler.invoke(DriverActiveEvent.OpenDialogRecreateRequest)
+                            eventHandler.invoke(DriverActiveEvent.OpenDialogRecreateForActiveRequest)
                         }
                     )
                 }
@@ -140,7 +140,7 @@ fun ActiveRequestsForDriverView(
                         },
                         isReissueRequest = true,
                         onReissueRequest = {
-                            eventHandler.invoke(DriverActiveEvent.OpenDialogRecreateRequest)
+                            eventHandler.invoke(DriverActiveEvent.OpenDialogRecreateForUnconfirmedRequest)
                         }
                     )
                 }
@@ -169,6 +169,8 @@ fun ActiveRequestsForDriverView(
 
         if (state.showRecreateDialog) {
             RecreateRequestAlertDialog(
+                requestId = state.requestIdForInfo,
+                isActiveRequest = state.showRecreateDialogForActiveRequest,
                 onDismiss = { eventHandler.invoke(DriverActiveEvent.CloseRecreateDialog) },
                 onExit = { eventHandler.invoke(DriverActiveEvent.CloseRecreateDialog) }
             )

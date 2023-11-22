@@ -6,7 +6,9 @@ sealed class DriverActiveEvent {
 
     data object OpenDialogCreateRequest : DriverActiveEvent()
 
-    data object OpenDialogRecreateRequest: DriverActiveEvent()
+    data object OpenDialogRecreateForUnconfirmedRequest: DriverActiveEvent()
+
+    data object OpenDialogRecreateForActiveRequest: DriverActiveEvent()
 
     data class OpenDialogInfoRequest(val requestId: Int, val isActiveRequest: Boolean) :
         DriverActiveEvent()

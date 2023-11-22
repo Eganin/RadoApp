@@ -26,9 +26,9 @@ import models.MechanicRequestsViewState
 import org.company.rado.core.MainRes
 import other.Position
 import theme.Theme
-import views.create.FailureCreateRequestDialog
+import views.create.FailureRequestDialog
 import views.create.RequestCells
-import views.create.SuccessCreateRequestDialog
+import views.create.SuccessRequestDialog
 import views.info.InfoRequestAlertDialog
 import widgets.common.ActionButton
 
@@ -157,7 +157,7 @@ fun RequestsMechanicView(
     }
 
     if (state.showSuccessDialog) {
-        SuccessCreateRequestDialog(
+        SuccessRequestDialog(
             onDismiss = {
                 eventHandler.invoke(MechanicRequestsEvent.CloseSuccessDialog)
             }, onExit = {
@@ -169,7 +169,7 @@ fun RequestsMechanicView(
     }
 
     if (state.showFailureDialog) {
-        FailureCreateRequestDialog(
+        FailureRequestDialog(
             onDismiss = { eventHandler.invoke(MechanicRequestsEvent.CloseFailureDialog) },
             onExit = { eventHandler.invoke(MechanicRequestsEvent.CloseFailureDialog) },
             firstText = MainRes.string.failure_request_confirmation_title

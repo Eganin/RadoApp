@@ -21,7 +21,7 @@ import org.company.rado.core.MainRes
 import theme.Theme
 
 @Composable
-fun SuccessCreateRequestDialog(
+fun SuccessRequestDialog(
     onDismiss: () -> Unit,
     onExit: () -> Unit,
     firstText:String,

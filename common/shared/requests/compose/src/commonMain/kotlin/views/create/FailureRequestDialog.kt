@@ -20,7 +20,7 @@ import org.company.rado.core.MainRes
 import theme.Theme
 
 @Composable
-fun FailureCreateRequestDialog(
+fun FailureRequestDialog(
     onDismiss: () -> Unit,
     onExit: () -> Unit,
     firstText: String,

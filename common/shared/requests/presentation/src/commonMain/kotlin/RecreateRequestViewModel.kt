@@ -74,20 +74,25 @@ class RecreateRequestViewModel :
     private fun recreateRequest() {
         coroutineScope.launch {
             obtainIsLoadingChange()
-            val recreateRequestItem = operationsOnRequestsRepository.recreateRequest(
-                requestId = viewState.requestId,
-                typeVehicle = viewState.selectedVehicleType.nameVehicleType,
-                numberVehicle = viewState.numberVehicle,
-                oldTypeVehicle = viewState.oldSelectedVehicleType.nameVehicleType,
-                oldNumberVehicle = viewState.oldNumberVehicle,
-                faultDescription = viewState.faultDescription
-            )
-            if (recreateRequestItem is RecreateRequestItem.Success){
-                log(tag = TAG) { "request recreate success" }
-                obtainShowSuccessDialog()
-            }else if(recreateRequestItem is RecreateRequestItem.Error){
-                log(tag = TAG) { "request recreate failure" }
-                obtainShowFailureDialog(value = !viewState.showFailureDialog)
+            if (viewState.numberVehicle.isNotEmpty()) {
+                viewState = viewState.copy(notVehicleNumber = false)
+                val recreateRequestItem = operationsOnRequestsRepository.recreateRequest(
+                    requestId = viewState.requestId,
+                    typeVehicle = viewState.selectedVehicleType.nameVehicleType,
+                    numberVehicle = viewState.numberVehicle,
+                    oldTypeVehicle = viewState.oldSelectedVehicleType.nameVehicleType,
+                    oldNumberVehicle = viewState.oldNumberVehicle,
+                    faultDescription = viewState.faultDescription
+                )
+                if (recreateRequestItem is RecreateRequestItem.Success) {
+                    log(tag = TAG) { "request recreate success" }
+                    obtainShowSuccessDialog()
+                } else if (recreateRequestItem is RecreateRequestItem.Error) {
+                    log(tag = TAG) { "request recreate failure" }
+                    obtainShowFailureDialog(value = !viewState.showFailureDialog)
+                }
+            } else {
+                viewState = viewState.copy(notVehicleNumber = true)
             }
             obtainIsLoadingChange()
         }
