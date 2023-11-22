@@ -101,7 +101,7 @@ class RecreateRequestViewModel :
                 val newVideosList = mutableListOf<String>()
                 newVideosList.addAll(viewState.videos)
                 newVideosList.remove(videoPath)
-                viewState = viewState.copy(images = newVideosList)
+                viewState = viewState.copy(videos = newVideosList)
             }
             obtainIsLoadingChange()
         }
@@ -199,7 +199,9 @@ class RecreateRequestViewModel :
     private fun removeRequestWrapper(requestId: Int) {
         coroutineScope.launch {
             val wrapperForDeleteResources =
-                activeRequestsRepositoryForDriver.deleteResourcesForRequest(requestId = requestId)
+                if (viewState.images.isNotEmpty() || viewState.videos.isNotEmpty()) activeRequestsRepositoryForDriver.deleteResourcesForRequest(
+                    requestId = requestId
+                ) else WrapperForResponse.Success()
             if (wrapperForDeleteResources is WrapperForResponse.Success) {
                 val wrapperForResponse =
                     activeRequestsRepositoryForDriver.deleteRequest(requestId = requestId)

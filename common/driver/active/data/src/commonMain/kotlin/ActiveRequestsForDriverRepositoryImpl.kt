@@ -131,7 +131,7 @@ class ActiveRequestsForDriverRepositoryImpl(
 
     override suspend fun deleteImageByPathForRequest(imagePath: String): WrapperForResponse {
         return try {
-            val imagePathSplit = "app/images/" + imagePath.split("/images/").last()
+            val imagePathSplit = imagePath.split("/images/").last()
             val statusCode = remoteDataSource.deleteImageAndVideoByPath(
                 isImage = true,
                 resourcePath = imagePathSplit
@@ -145,7 +145,7 @@ class ActiveRequestsForDriverRepositoryImpl(
 
     override suspend fun deleteVideoByPathForRequest(videoPath: String): WrapperForResponse {
         return try {
-            val videoUrlSplit = "app/videos/" + videoPath.split("/videos/").last()
+            val videoUrlSplit = videoPath.split("/videos/").last()
             val statusCode = remoteDataSource.deleteImageAndVideoByPath(
                 isImage = false,
                 resourcePath = videoUrlSplit
