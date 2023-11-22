@@ -35,6 +35,8 @@ internal fun AlertDialogChooseImageAndVideo(
     addResource: () -> Unit,
     imageOnClick: () -> Unit,
     videoOnClick: () -> Unit,
+    createdImages:List<String> = emptyList(),
+    createdVideos: List<String> = emptyList(),
     modifier: Modifier = Modifier
 ) {
     Text(
@@ -58,6 +60,17 @@ internal fun AlertDialogChooseImageAndVideo(
                 )
             }
         }
+
+        items(createdImages){
+            ImageCells(
+                size = imageSize,
+                isExpanded = resourceIsExpanded,
+                imageLink = it,
+                modifier = Modifier.padding(start = 16.dp, bottom = 16.dp),
+                eventHandler = imageOnClick::invoke
+            )
+        }
+
         items(resources.filter { it.second }) {
             ImageCells(
                 size = imageSize,
@@ -65,6 +78,16 @@ internal fun AlertDialogChooseImageAndVideo(
                 imageLink = "$BASE_URL/resources/images/${it.first}",
                 modifier = Modifier.padding(start = 16.dp, bottom = 16.dp),
                 eventHandler = imageOnClick::invoke
+            )
+        }
+
+        items(createdVideos) {
+            VideoPlayerCell(
+                size = imageSize,
+                isExpanded = resourceIsExpanded,
+                url = it,
+                modifier = Modifier.padding(start = 16.dp, bottom = 16.dp),
+                eventHandler = videoOnClick::invoke
             )
         }
 

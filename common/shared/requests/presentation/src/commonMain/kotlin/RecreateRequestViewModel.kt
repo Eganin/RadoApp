@@ -86,6 +86,7 @@ class RecreateRequestViewModel :
                 )
                 if (recreateRequestItem is RecreateRequestItem.Success) {
                     log(tag = TAG) { "request recreate success" }
+                    saveResources(requestId = viewState.requestId)
                     obtainShowSuccessDialog()
                 } else if (recreateRequestItem is RecreateRequestItem.Error) {
                     log(tag = TAG) { "request recreate failure" }
@@ -189,6 +190,23 @@ class RecreateRequestViewModel :
             viewState = viewState.copy(resources = newResourcesList)
             log(tag = TAG) { "Add resource ${viewState.resources}" }
             obtainIsLoadingChange()
+        }
+    }
+
+    private fun saveResources(requestId: Int) = coroutineScope.launch {
+        //save images
+        if (viewState.resources.isNotEmpty()) {
+            viewState.resources.forEach { resource ->
+                log(tag= TAG) { resource.first }
+                val response = activeRequestsRepositoryForDriver.createResourceForRequest(
+                    requestId = requestId,
+                    resource = resource
+                )
+                if (response is WrapperForResponse.Failure) {
+                    removeRequest(requestId = requestId)
+                    obtainShowFailureDialog(value = true)
+                }
+            }
         }
     }
 
