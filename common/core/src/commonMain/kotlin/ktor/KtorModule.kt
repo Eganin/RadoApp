@@ -3,6 +3,7 @@ package ktor
 import di.Inject
 import io.ktor.client.*
 import io.ktor.client.plugins.*
+import io.ktor.client.plugins.compression.ContentEncoding
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.plugins.logging.*
 import io.ktor.client.request.*
@@ -28,6 +29,10 @@ internal val ktorModule = DI.Module(name = "ktorModule") {
             install(HttpTimeout){
                 connectTimeoutMillis = 15000
                 requestTimeoutMillis = 30000
+            }
+
+            install(ContentEncoding) {
+                deflate(0.01F)
             }
 
             defaultRequest {
