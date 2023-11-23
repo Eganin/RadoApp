@@ -33,7 +33,7 @@ import views.info.InfoRequestAlertDialog
 import widgets.common.ActionButton
 
 @Composable
-fun RequestsMechanicView(
+internal fun RequestsMechanicView(
     state: MechanicRequestsViewState,
     modifier: Modifier = Modifier,
     eventHandler: (MechanicRequestsEvent) -> Unit
@@ -136,7 +136,7 @@ fun RequestsMechanicView(
                     ActionButton(
                         text = MainRes.string.reject_request_title,
                         modifier = Modifier.fillMaxWidth(),
-                        onClick = { eventHandler.invoke(MechanicRequestsEvent.RejectRequest) })
+                        onClick = { eventHandler.invoke(MechanicRequestsEvent.ShowRejectRequest) })
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))

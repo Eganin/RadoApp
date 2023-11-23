@@ -65,7 +65,9 @@ class MechanicRequestsViewModel :
 
             is MechanicRequestsEvent.PullRefresh -> getUnconfirmedRequests()
             is MechanicRequestsEvent.ClearState -> clearState()
-            is MechanicRequestsEvent.RejectRequest -> {}
+            is MechanicRequestsEvent.ShowRejectRequest -> obtainShowRejectDialog()
+            is MechanicRequestsEvent.SendRejectRequest -> obtainShowRejectDialog()
+            is MechanicRequestsEvent.CommentMechanicValueChange->obtainCommentMechanic(mechanicComment = viewEvent.commentMechanic)
             is MechanicRequestsEvent.DriverPhoneClick -> {}
         }
     }
@@ -115,6 +117,14 @@ class MechanicRequestsViewModel :
             datetimeForServer = Pair("", ""),
             date = 0,
         )
+    }
+
+    private fun obtainCommentMechanic(mechanicComment: String){
+        viewState=viewState.copy(mechanicComment = mechanicComment)
+    }
+
+    private fun obtainShowRejectDialog(){
+        viewState= viewState.copy(showRejectDialog = !viewState.showRejectDialog)
     }
 
     private fun obtainShowSuccessDialog() {

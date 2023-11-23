@@ -9,10 +9,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import dev.icerock.moko.mvvm.compose.viewModelFactory
-import io.github.aakira.napier.log
 import kotlinx.coroutines.launch
 import models.MechanicRequestsAction
+import models.MechanicRequestsEvent
 import other.observeAsState
+import views.MechanicRejectDialog
 import views.RequestsMechanicView
 
 object RequestsForMechanicScreen : Screen {
@@ -37,6 +38,19 @@ object RequestsForMechanicScreen : Screen {
                 modifier = Modifier.padding(bottom = 90.dp)
             ) { event ->
                 viewModel.obtainEvent(viewEvent = event)
+            }
+            if (state.value.showRejectDialog) {
+                MechanicRejectDialog(
+                    mechanicComment = state.value.mechanicComment,
+                    onSend = {},
+                    onExit = {},
+                    onValueChange = {
+                        viewModel.obtainEvent(
+                            MechanicRequestsEvent.CommentMechanicValueChange(
+                                commentMechanic = it
+                            )
+                        )
+                    })
             }
         }
 

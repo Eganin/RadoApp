@@ -16,7 +16,7 @@ import theme.Theme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MechanicDatePicker(
+internal fun MechanicDatePicker(
     confirmAction: (Long) -> Unit,
     exitAction: () -> Unit,
     modifier: Modifier = Modifier

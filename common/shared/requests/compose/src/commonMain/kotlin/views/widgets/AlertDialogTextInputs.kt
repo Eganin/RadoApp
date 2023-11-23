@@ -46,7 +46,7 @@ internal fun AlertDialogTextInputs(
                 contentDescription = null
             )
         },
-        onValueChange = numberVehicleOnChange::invoke,
+        onValueChange = numberVehicleOnChange,
         label = {
             Text(
                 text = MainRes.string.number_vehicle_label,
@@ -67,7 +67,7 @@ internal fun AlertDialogTextInputs(
             disabledTextColor = Theme.colors.primaryTextColor,
         ),
         value = faultDescription,
-        onValueChange = faultDescriptionOnChange::invoke,
+        onValueChange = faultDescriptionOnChange,
         label = {
             Text(
                 text = MainRes.string.fault_description_label,
@@ -75,7 +75,8 @@ internal fun AlertDialogTextInputs(
                 fontSize = if (isLargePlatform) 16.sp else 8.sp
             )
         },
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier.fillMaxWidth(),
+        maxLines = 20
     )
 
     Spacer(modifier = Modifier.height(16.dp))

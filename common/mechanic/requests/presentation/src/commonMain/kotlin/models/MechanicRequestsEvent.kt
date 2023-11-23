@@ -22,7 +22,7 @@ sealed class MechanicRequestsEvent {
 
     data object ReopenDialogInfoRequest : MechanicRequestsEvent()
 
-    data object RejectRequest : MechanicRequestsEvent()
+    data object ShowRejectRequest : MechanicRequestsEvent()
 
     data object ConfirmationRequest : MechanicRequestsEvent()
 
@@ -33,4 +33,8 @@ sealed class MechanicRequestsEvent {
     data object PullRefresh: MechanicRequestsEvent()
 
     data object ClearState: MechanicRequestsEvent()
+
+    data object SendRejectRequest:MechanicRequestsEvent()
+
+    data class CommentMechanicValueChange(val commentMechanic:String): MechanicRequestsEvent()
 }
