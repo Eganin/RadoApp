@@ -28,6 +28,7 @@ object Dependencies {
         const val negotiation = "io.ktor:ktor-client-content-negotiation:$version"
         const val kotlin_json = "io.ktor:ktor-serialization-kotlinx-json:$version"
         const val serialization = "io.ktor:ktor-client-serialization:$version"
+        const val compression = "io.ktor:ktor-client-encoding:$version"
         const val logging = "io.ktor:ktor-client-logging:$version"
         const val android = "io.ktor:ktor-client-android:$version"
         const val okhttp = "io.ktor:ktor-client-okhttp:$version"

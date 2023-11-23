@@ -19,6 +19,7 @@ kotlin {
                 implementation(Dependencies.Ktor.serialization)
                 implementation(Dependencies.Ktor.logging)
                 implementation(Dependencies.Ktor.negotiation)
+                implementation(Dependencies.Ktor.compression)
 
                 implementation(Dependencies.Persistence.Settings.core)
                 implementation(Dependencies.Persistence.Settings.noargs)
