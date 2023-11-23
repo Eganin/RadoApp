@@ -62,7 +62,7 @@
     <string name="type_machine_title">Тип транспортного средства:</string>
     <string name="number_vehicle_title">Гос.номер ТС:</string>
     <string name="fault_description_title">Описание неисправности</string>
-    <string name="image_fault_unconfirmed_request">Вложенные изображения:</string>
+    <string name="image_fault_unconfirmed_request">Вложенные изображения и видео:</string>
     <string name="datetime_title">Дата: </string>
     <string name="contact_a_driver">Связаться с водителем: </string>
     <string name="contact_a_mechanic">Связаться с механиком: </string>

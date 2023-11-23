@@ -19,15 +19,16 @@ import views.create.ImageMachineCells
 
 @Composable
 internal fun AlertDialogChooseMachine(
+    title:String,
     imageSize: Dp,
     tractorIsExpanded: Boolean,
     trailerIsExpanded: Boolean,
-    onClickTractor: () -> Unit,
-    onClickTrailer: () -> Unit,
+    onClickTractor: () -> Unit={},
+    onClickTrailer: () -> Unit={},
     modifier: Modifier = Modifier
 ) {
     Text(
-        text = MainRes.string.choose_machine_title,
+        text = title,
         fontSize = 18.sp,
         color = Theme.colors.primaryTextColor,
         textAlign = TextAlign.Center

@@ -73,6 +73,7 @@ fun CreateRequestAlertDialog(
                 }
 
                 AlertDialogChooseMachine(
+                    title=MainRes.string.choose_machine_title,
                     imageSize = imageSize,
                     tractorIsExpanded = state.value.tractorIsExpanded,
                     trailerIsExpanded = state.value.trailerIsExpanded,
