@@ -1,47 +1,23 @@
 package views.create
 
 import CreateRequestViewModel
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Icon
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import compose.icons.FeatherIcons
-import compose.icons.feathericons.AlertCircle
-import compose.icons.feathericons.ArrowLeft
-import compose.icons.feathericons.Plus
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 import io.github.aakira.napier.log
-import ktor.BASE_URL
 import models.create.CreateRequestAction
 import models.create.CreateRequestEvent
 import models.create.VehicleType
@@ -50,8 +26,12 @@ import other.observeAsState
 import platform.LocalPlatform
 import platform.Platform
 import theme.Theme
-import views.shared.VideoPlayerCell
+import views.widgets.AlertDialogChooseImageAndVideo
+import views.widgets.AlertDialogChooseMachine
+import views.widgets.AlertDialogTextInputs
+import views.widgets.AlertDialogTopBar
 import widgets.common.ActionButton
+import widgets.common.CircularLoader
 
 @Composable
 fun CreateRequestAlertDialog(
@@ -87,182 +67,67 @@ fun CreateRequestAlertDialog(
                 modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState())
                     .padding(16.dp)
             ) {
-                Row(modifier = Modifier.clickable {
+                AlertDialogTopBar {
                     viewModel.obtainEvent(viewEvent = CreateRequestEvent.OnBackClick)
                     onExit.invoke()
-                }) {
-                    Icon(imageVector = FeatherIcons.ArrowLeft, contentDescription = null)
-
-                    Spacer(modifier = Modifier.width(4.dp))
-
-                    Text(
-                        text = MainRes.string.back_title,
-                        fontSize = 18.sp,
-                        color = Theme.colors.primaryTextColor,
-                        textAlign = TextAlign.Center
-                    )
                 }
 
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Text(
-                    text = MainRes.string.choose_machine_title,
-                    fontSize = 18.sp,
-                    color = Theme.colors.primaryTextColor,
-                    textAlign = TextAlign.Center
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceAround
-                ) {
-
-                    ImageMachineCells(
-                        imageSize = imageSize,
-                        title = MainRes.string.tractor_title,
-                        imageLink = "$BASE_URL/resources/images/tractor.jpg",
-                        isExpanded = state.value.tractorIsExpanded,
-                        eventHandler = {
-                            viewModel.obtainEvent(
-                                CreateRequestEvent.SelectedTypeVehicleChanged(
-                                    value = VehicleType.Tractor
-                                )
+                AlertDialogChooseMachine(
+                    title=MainRes.string.choose_machine_title,
+                    imageSize = imageSize,
+                    tractorIsExpanded = state.value.tractorIsExpanded,
+                    trailerIsExpanded = state.value.trailerIsExpanded,
+                    onClickTractor = {
+                        viewModel.obtainEvent(
+                            CreateRequestEvent.SelectedTypeVehicleChanged(
+                                value = VehicleType.Tractor
                             )
-                            viewModel.obtainEvent(CreateRequestEvent.TractorIsExpandedChanged)
-                        }
-                    )
-
-                    ImageMachineCells(
-                        imageSize = imageSize,
-                        title = MainRes.string.trailer_title,
-                        imageLink = "$BASE_URL/resources/images/trailer.jpg",
-                        isExpanded = state.value.trailerIsExpanded,
-                        eventHandler = {
-                            viewModel.obtainEvent(
-                                CreateRequestEvent.SelectedTypeVehicleChanged(
-                                    value = VehicleType.Trailer
-                                )
+                        )
+                        viewModel.obtainEvent(CreateRequestEvent.TractorIsExpandedChanged)
+                    },
+                    onClickTrailer = {
+                        viewModel.obtainEvent(
+                            CreateRequestEvent.SelectedTypeVehicleChanged(
+                                value = VehicleType.Trailer
                             )
-                            viewModel.obtainEvent(CreateRequestEvent.TrailerIsExpandedChanged)
-                        }
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                OutlinedTextField(
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedTextColor = Theme.colors.primaryTextColor,
-                        unfocusedTextColor = Theme.colors.primaryTextColor,
-                        disabledTextColor = Theme.colors.primaryTextColor,
-                    ),
-                    value = state.value.numberVehicle,
-                    isError = state.value.notVehicleNumber,
-                    supportingText = {
-                        if (state.value.notVehicleNumber) Text(
-                            text = MainRes.string.number_vehicle_error_message,
-                            color = Theme.colors.errorColor
                         )
-                    },
-                    trailingIcon = {
-                        if (state.value.notVehicleNumber) Icon(
-                            FeatherIcons.AlertCircle,
-                            contentDescription = null
-                        )
-                    },
-                    onValueChange = {
+                        viewModel.obtainEvent(CreateRequestEvent.TrailerIsExpandedChanged)
+                    })
+
+                AlertDialogTextInputs(
+                    numberVehicle = state.value.numberVehicle,
+                    notVehicleNumber = state.value.notVehicleNumber,
+                    faultDescription = state.value.faultDescription,
+                    isLargePlatform = isLargePlatform,
+                    numberVehicleOnChange = {
                         viewModel.obtainEvent(
                             viewEvent = CreateRequestEvent.NumberVehicleChanged(
                                 value = it
                             )
                         )
                     },
-                    label = {
-                        Text(
-                            text = MainRes.string.number_vehicle_label,
-                            color = Theme.colors.primaryTextColor,
-                            fontSize = if (isLargePlatform) 16.sp else 8.sp
-                        )
-                    },
-                    modifier = Modifier.fillMaxWidth(),
-                    maxLines = 1
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                OutlinedTextField(
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedTextColor = Theme.colors.primaryTextColor,
-                        unfocusedTextColor = Theme.colors.primaryTextColor,
-                        disabledTextColor = Theme.colors.primaryTextColor,
-                    ),
-                    value = state.value.faultDescription,
-                    onValueChange = {
+                    faultDescriptionOnChange = {
                         viewModel.obtainEvent(
                             viewEvent = CreateRequestEvent.FaultDescriptionChanged(value = it)
                         )
-                    },
-                    label = {
-                        Text(
-                            text = MainRes.string.fault_description_label,
-                            color = Theme.colors.primaryTextColor,
-                            fontSize = if (isLargePlatform) 16.sp else 8.sp
-                        )
-                    },
-                    modifier = Modifier.fillMaxWidth()
+                    }
                 )
 
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Text(
-                    text = MainRes.string.image_fault_title,
-                    fontSize = 18.sp,
-                    color = Theme.colors.primaryTextColor,
-                    textAlign = TextAlign.Center
+                AlertDialogChooseImageAndVideo(
+                    imageSize = imageSize,
+                    resources = state.value.resources,
+                    resourceIsExpanded = state.value.imageIsExpanded,
+                    isRemoveImageAndVideo = false,
+                    addResource = {
+                        viewModel.obtainEvent(viewEvent = CreateRequestEvent.FilePickerVisibilityChanged)
+                    },
+                    imageOnClick = {
+                        viewModel.obtainEvent(viewEvent = CreateRequestEvent.ImageRepairExpandedChanged)
+                    },
+                    videoOnClick = {
+                        viewModel.obtainEvent(viewEvent = CreateRequestEvent.ImageRepairExpandedChanged)
+                    }
                 )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                LazyRow(modifier = Modifier.fillMaxWidth()) {
-                    item {
-                        Box(modifier = Modifier.clickable {
-                            viewModel.obtainEvent(viewEvent = CreateRequestEvent.FilePickerVisibilityChanged)
-                        }.size(imageSize).background(Theme.colors.primaryAction)) {
-                            Icon(
-                                modifier = Modifier.fillMaxSize(),
-                                imageVector = FeatherIcons.Plus,
-                                contentDescription = null
-                            )
-                        }
-                    }
-                    items(state.value.resources.filter { it.second }) {
-                        ImageCells(
-                            size = imageSize,
-                            isExpanded = state.value.imageIsExpanded,
-                            imageLink = "$BASE_URL/resources/images/${it.first}",
-                            modifier = Modifier.padding(start = 16.dp, bottom = 16.dp),
-                            eventHandler = {
-                                viewModel.obtainEvent(viewEvent = CreateRequestEvent.ImageRepairExpandedChanged)
-                            }
-                        )
-                    }
-
-                    items(state.value.resources.filter { !it.second }) {
-                        VideoPlayerCell(
-                            size = imageSize,
-                            isExpanded = state.value.imageIsExpanded,
-                            url = "$BASE_URL/resources/videos/${it.first}",
-                            modifier = Modifier.padding(start = 16.dp, bottom = 16.dp),
-                            eventHandler = {
-                                viewModel.obtainEvent(viewEvent = CreateRequestEvent.ImageRepairExpandedChanged)
-                            }
-                        )
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(16.dp))
 
                 ActionButton(
                     text = MainRes.string.send_repair_request_title,
@@ -273,15 +138,7 @@ fun CreateRequestAlertDialog(
             }
         }
 
-        if (state.value.isLoading) {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator(
-                    modifier = Modifier.width(64.dp),
-                    color = Theme.colors.highlightColor,
-                    trackColor = Theme.colors.primaryAction
-                )
-            }
-        }
+        CircularLoader(isLoading = state.value.isLoading)
 
         ResourceFilePicker(
             showFilePicker = state.value.showFilePicker,
@@ -297,7 +154,7 @@ fun CreateRequestAlertDialog(
             })
 
         if (state.value.showSuccessCreateRequestDialog) {
-            SuccessCreateRequestDialog(
+            SuccessRequestDialog(
                 onDismiss = {
                     viewModel.obtainEvent(viewEvent = CreateRequestEvent.CloseSuccessDialog)
                 }, onExit = {
@@ -309,7 +166,7 @@ fun CreateRequestAlertDialog(
         }
 
         if (state.value.showFailureCreateRequestDialog) {
-            FailureCreateRequestDialog(
+            FailureRequestDialog(
                 onDismiss = { viewModel.obtainEvent(viewEvent = CreateRequestEvent.CloseFailureDialog) },
                 onExit = { viewModel.obtainEvent(viewEvent = CreateRequestEvent.CloseFailureDialog) },
                 firstText = MainRes.string.failure_create_request_title

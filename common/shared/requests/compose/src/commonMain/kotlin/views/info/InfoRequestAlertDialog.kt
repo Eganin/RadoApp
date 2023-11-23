@@ -1,10 +1,8 @@
 package views.info
 
 import InfoRequestViewModel
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -32,7 +30,6 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import dev.icerock.moko.mvvm.compose.viewModelFactory
-import ktor.BASE_URL
 import models.create.VehicleType
 import models.info.InfoRequestEvent
 import models.info.InfoRequestViewState
@@ -43,8 +40,8 @@ import platform.LocalPlatform
 import platform.Platform
 import theme.Theme
 import views.create.ImageCells
-import views.create.ImageMachineCells
-import views.shared.VideoPlayerCell
+import views.shared.videoplayer.VideoPlayerCell
+import views.widgets.AlertDialogChooseMachine
 
 @Composable
 fun InfoRequestAlertDialog(
@@ -53,7 +50,7 @@ fun InfoRequestAlertDialog(
     infoForPosition: Position,
     isActiveRequest: Boolean,
     modifier: Modifier = Modifier,
-    actionControl: @Composable (InfoRequestViewState) -> Unit = {},
+    actionControl: @Composable (InfoRequestViewState) -> Unit = {}
 ) {
     val viewModel = viewModelFactory { InfoRequestViewModel() }.createViewModel()
     val state = viewModel.viewStates().observeAsState()
@@ -88,36 +85,12 @@ fun InfoRequestAlertDialog(
                 modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState())
                     .padding(16.dp)
             ) {
-                Text(
-                    text = MainRes.string.type_machine_title,
-                    fontSize = 18.sp,
-                    color = Theme.colors.primaryTextColor,
-                    textAlign = TextAlign.Center
+                AlertDialogChooseMachine(
+                    title = MainRes.string.type_machine_title,
+                    imageSize = imageSize,
+                    tractorIsExpanded = state.value.selectedVehicleType == VehicleType.Tractor,
+                    trailerIsExpanded = state.value.selectedVehicleType == VehicleType.Trailer
                 )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceAround
-                ) {
-
-                    ImageMachineCells(
-                        imageSize = imageSize,
-                        title = MainRes.string.tractor_title,
-                        imageLink = "$BASE_URL/resources/images/tractor.jpg",
-                        isExpanded = state.value.selectedVehicleType == VehicleType.Tractor
-                    )
-
-                    ImageMachineCells(
-                        imageSize = imageSize,
-                        title = MainRes.string.trailer_title,
-                        imageLink = "$BASE_URL/resources/images/trailer.jpg",
-                        isExpanded = state.value.selectedVehicleType == VehicleType.Trailer
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
                     text = MainRes.string.number_vehicle_title,
@@ -165,7 +138,7 @@ fun InfoRequestAlertDialog(
                     Spacer(modifier = Modifier.height(16.dp))
                 }
 
-                if (state.value.images.isNotEmpty()) {
+                if (state.value.images.isNotEmpty() || state.value.videos.isNotEmpty()) {
                     Text(
                         text = MainRes.string.image_fault_unconfirmed_request,
                         fontSize = 12.sp,
@@ -184,6 +157,7 @@ fun InfoRequestAlertDialog(
                                 isExpanded = state.value.imageIsExpanded,
                                 imageLink = it,
                                 modifier = Modifier.padding(start = 16.dp, bottom = 16.dp),
+                                isRemove = false,
                                 eventHandler = {
                                     viewModel.obtainEvent(viewEvent = InfoRequestEvent.ImageRepairExpandedChanged)
                                 }
@@ -198,7 +172,8 @@ fun InfoRequestAlertDialog(
                                 modifier = Modifier.padding(start = 16.dp, bottom = 16.dp),
                                 eventHandler = {
                                     viewModel.obtainEvent(viewEvent = InfoRequestEvent.ImageRepairExpandedChanged)
-                                }
+                                },
+                                isRemove = false
                             )
                         }
                     }

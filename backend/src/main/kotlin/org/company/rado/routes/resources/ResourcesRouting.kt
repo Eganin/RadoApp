@@ -67,8 +67,6 @@ fun Application.configureResourcesRouting() {
             val file = File("app/videos/$filename")
             if (file.exists()) {
                 call.respond(LocalFileContent(file, contentType = ContentType.Video.MP4))
-                //call.respondBytes(bytes = file.readBytes(), contentType = ContentType.Video.MP4)
-                //call.respondFile(file)
             } else call.respond(HttpStatusCode.NotFound)
         }
 
@@ -88,6 +86,18 @@ fun Application.configureResourcesRouting() {
             val requestId = call.parameters["requestId"]!!.toInt()
             val resourcesController by closestDI().instance<ResourcesController>()
             resourcesController.deleteImages(call = call, requestId = requestId)
+        }
+
+        delete(path = "/videos/bypath/{name}") {
+            val videoName = call.parameters["name"]!!
+            val resourcesController by closestDI().instance<ResourcesController>()
+            resourcesController.deleteVideoByName(call = call, videoName = videoName)
+        }
+
+        delete(path = "/images/bypath/{name}") {
+            val imageName = call.parameters["name"]!!
+            val resourcesController by closestDI().instance<ResourcesController>()
+            resourcesController.deleteImageByName(call = call, imageName = imageName)
         }
     }
 }

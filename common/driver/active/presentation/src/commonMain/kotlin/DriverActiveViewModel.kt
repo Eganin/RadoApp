@@ -34,6 +34,14 @@ class DriverActiveViewModel :
     override fun obtainEvent(viewEvent: DriverActiveEvent) {
         when (viewEvent) {
             is DriverActiveEvent.OpenDialogCreateRequest -> openCreateRequestScreen()
+            is DriverActiveEvent.OpenDialogRecreateForUnconfirmedRequest -> obtainShowRecreateDialogForUnconfirmedRequestChange(
+                requestId = viewEvent.requestId
+            )
+
+            is DriverActiveEvent.OpenDialogRecreateForActiveRequest -> obtainShowRecreateDialogForActiveRequestChange(
+                requestId = viewEvent.requestId
+            )
+
             is DriverActiveEvent.OpenDialogInfoRequest -> openInfoRequestScreen(
                 requestId = viewEvent.requestId,
                 isActiveDialog = viewEvent.isActiveRequest
@@ -44,8 +52,19 @@ class DriverActiveViewModel :
                 errorMessage = viewEvent.value
             )
 
-            is DriverActiveEvent.CloseCreateDialog -> obtainCloseCreateDialogChange()
+            is DriverActiveEvent.CloseCreateDialog -> {
+                obtainCloseCreateDialogChange()
+                getUnconfirmedRequests()
+                getActiveRequestsByDate()
+            }
+
             is DriverActiveEvent.CloseInfoDialog -> obtainCloseInfoDialogChange()
+            is DriverActiveEvent.CloseRecreateDialog -> {
+                obtainShowRecreateDialogChange()
+                getUnconfirmedRequests()
+                getActiveRequestsByDate()
+            }
+
             is DriverActiveEvent.PullRefresh -> {
                 getUnconfirmedRequests()
                 getActiveRequestsByDate()
@@ -65,6 +84,30 @@ class DriverActiveViewModel :
     private fun openCreateRequestScreen() {
         log(tag = TAG) { "Navigate to create request screen" }
         viewState = viewState.copy(showCreateDialog = !viewState.showCreateDialog)
+    }
+
+    private fun obtainShowRecreateDialogForUnconfirmedRequestChange(requestId: Int) {
+        log(tag = TAG) { "show recreate dialog changed" }
+        viewState = viewState.copy(
+            showRecreateDialog = !viewState.showRecreateDialog,
+            requestIdForInfo = requestId,
+            showRecreateDialogForActiveRequest = false
+        )
+    }
+
+    private fun obtainShowRecreateDialogForActiveRequestChange(requestId: Int) {
+        log(tag = TAG) { "show recreate dialog changed" }
+        viewState = viewState.copy(
+            showRecreateDialog = !viewState.showRecreateDialog,
+            requestIdForInfo = requestId,
+            showRecreateDialogForActiveRequest = true
+        )
+    }
+
+    private fun obtainShowRecreateDialogChange() {
+        log(tag = TAG) { "show recreate dialog changed" }
+        viewState = viewState.copy(showRecreateDialog = !viewState.showRecreateDialog)
+        viewState = viewState.copy(showRecreateDialogForActiveRequest = false)
     }
 
     private fun openInfoRequestScreen(requestId: Int, isActiveDialog: Boolean) {

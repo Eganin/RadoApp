@@ -27,4 +27,9 @@ class ImagesDaoImpl : ImagesDaoFacade {
         val resultDelete = FaultImages.deleteWhere { FaultImages.requestId eq requestId }
         Pair(resultDelete != 0, images)
     }
+
+    override suspend fun deleteImageByName(imageName: String): Pair<Boolean, String> = dbQuery{
+        val resultDelete = FaultImages.deleteWhere { FaultImages.imagePath eq imageName }
+        Pair(first=resultDelete!=0,imageName)
+    }
 }

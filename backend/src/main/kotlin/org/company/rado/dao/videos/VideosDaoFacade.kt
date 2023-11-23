@@ -7,4 +7,6 @@ interface VideosDaoFacade {
     suspend fun findVideoByRequestId(requestId: Int):List<String>
 
     suspend fun deleteVideos(requestId: Int): Pair<Boolean,List<String>>
+
+    suspend fun deleteVideoByName(videoName:String): Pair<Boolean,String>
 }

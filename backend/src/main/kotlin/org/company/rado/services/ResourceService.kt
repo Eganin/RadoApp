@@ -57,4 +57,13 @@ class ResourceService(
 
         return isDeleteResourceList.all { it } && isDelete
     }
+
+    suspend fun deleteImageAndVideoByName(resourceName: String, isImage: Boolean): Boolean {
+        val (isDelete, resourcePath) = if (isImage) imageRepository.deleteImageByName(imageName = resourceName) else videoRepository.deleteVideoByName(
+            videoName = resourceName
+        )
+        val isDeleteFromDisk = File(resourcePath).delete()
+
+        return isDelete && isDeleteFromDisk
+    }
 }
