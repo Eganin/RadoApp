@@ -21,6 +21,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.delay
 import models.DriverActiveEvent
 import models.DriverActiveViewState
 import org.company.rado.core.MainRes
@@ -55,6 +56,14 @@ fun ActiveRequestsForDriverView(
                     )
                 )
             )
+        }
+    }
+
+    //pull refresh every minute
+    LaunchedEffect(key1 = Unit){
+        while (true){
+            eventHandler.invoke(DriverActiveEvent.PullRefresh)
+            delay(30000L)
         }
     }
 
@@ -106,14 +115,7 @@ fun ActiveRequestsForDriverView(
                                 )
                             )
                         },
-                        isReissueRequest = true,
-                        onReissueRequest = {
-                            eventHandler.invoke(
-                                DriverActiveEvent.OpenDialogRecreateForActiveRequest(
-                                    requestId = it.id
-                                )
-                            )
-                        }
+                        isReissueRequest = false
                     )
                 }
             } else {

@@ -13,14 +13,14 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import io.github.aakira.napier.log
+import kotlinx.coroutines.delay
 import models.MechanicRequestsEvent
 import models.MechanicRequestsViewState
 import org.company.rado.core.MainRes
@@ -38,6 +38,13 @@ fun RequestsMechanicView(
     modifier: Modifier = Modifier,
     eventHandler: (MechanicRequestsEvent) -> Unit
 ) {
+
+    LaunchedEffect(key1 = Unit) {
+        while (true) {
+            eventHandler.invoke(MechanicRequestsEvent.PullRefresh)
+            delay(30000L)
+        }
+    }
 
     LazyColumn(
         modifier = modifier.fillMaxSize().background(color = Theme.colors.primaryBackground)
@@ -95,10 +102,6 @@ fun RequestsMechanicView(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 if (state.reopenDialog) {
-                    SideEffect {
-                        log(tag = "DATE VIEW") { state.datetime }
-                        log(tag = "DATE VIEW") { "SIDE EFFECT" }
-                    }
                     Text(
                         text = MainRes.string.datetime_title + state.datetime,
                         fontSize = 12.sp,

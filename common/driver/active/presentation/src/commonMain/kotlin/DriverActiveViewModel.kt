@@ -52,9 +52,19 @@ class DriverActiveViewModel :
                 errorMessage = viewEvent.value
             )
 
-            is DriverActiveEvent.CloseCreateDialog -> obtainCloseCreateDialogChange()
+            is DriverActiveEvent.CloseCreateDialog -> {
+                obtainCloseCreateDialogChange()
+                getUnconfirmedRequests()
+                getActiveRequestsByDate()
+            }
+
             is DriverActiveEvent.CloseInfoDialog -> obtainCloseInfoDialogChange()
-            is DriverActiveEvent.CloseRecreateDialog -> obtainShowRecreateDialogChange()
+            is DriverActiveEvent.CloseRecreateDialog -> {
+                obtainShowRecreateDialogChange()
+                getUnconfirmedRequests()
+                getActiveRequestsByDate()
+            }
+
             is DriverActiveEvent.PullRefresh -> {
                 getUnconfirmedRequests()
                 getActiveRequestsByDate()
