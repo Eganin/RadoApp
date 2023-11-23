@@ -21,6 +21,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.delay
 import models.DriverActiveEvent
 import models.DriverActiveViewState
 import org.company.rado.core.MainRes
@@ -32,6 +33,7 @@ import views.create.CalendarView
 import views.create.CreateRequestAlertDialog
 import views.create.RequestCells
 import views.info.InfoRequestAlertDialog
+import views.recreate.RecreateRequestAlertDialog
 import widgets.common.ActionButton
 import widgets.common.TextStickyHeader
 
@@ -54,6 +56,14 @@ fun ActiveRequestsForDriverView(
                     )
                 )
             )
+        }
+    }
+
+    //pull refresh every minute
+    LaunchedEffect(key1 = Unit){
+        while (true){
+            eventHandler.invoke(DriverActiveEvent.PullRefresh)
+            delay(30000L)
         }
     }
 
@@ -91,15 +101,7 @@ fun ActiveRequestsForDriverView(
                 textTitle = MainRes.string.active_requests_title,
                 modifier = Modifier.fillMaxWidth()
             )
-//            if (state.isLoadingActiveRequests) {
-//                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-//                    CircularProgressIndicator(
-//                        modifier = Modifier.width(64.dp),
-//                        color = Theme.colors.highlightColor,
-//                        trackColor = Theme.colors.primaryAction
-//                    )
-//                }
-//            }
+
             if (state.requests.isNotEmpty()) {
                 state.requests.forEach {
                     RequestCells(
@@ -123,19 +125,12 @@ fun ActiveRequestsForDriverView(
                     modifier = Modifier.fillMaxWidth().padding(all = 16.dp)
                 )
             }
+
             TextStickyHeader(
                 textTitle = MainRes.string.unconfirmed_requests_title,
                 modifier = Modifier.fillMaxWidth()
             )
-//            if (state.isLoadingUnconfirmedRequests) {
-//                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-//                    CircularProgressIndicator(
-//                        modifier = Modifier.width(64.dp),
-//                        color = Theme.colors.highlightColor,
-//                        trackColor = Theme.colors.primaryAction
-//                    )
-//                }
-//            }
+
             if (state.unconfirmedRequests.isNotEmpty()) {
                 state.unconfirmedRequests.forEach {
                     RequestCells(
@@ -150,7 +145,13 @@ fun ActiveRequestsForDriverView(
                             )
                         },
                         isReissueRequest = true,
-                        onReissueRequest = {}
+                        onReissueRequest = {
+                            eventHandler.invoke(
+                                DriverActiveEvent.OpenDialogRecreateForUnconfirmedRequest(
+                                    requestId = it.id
+                                )
+                            )
+                        }
                     )
                 }
             } else {
@@ -174,6 +175,15 @@ fun ActiveRequestsForDriverView(
             CreateRequestAlertDialog(
                 onDismiss = { eventHandler.invoke(DriverActiveEvent.CloseCreateDialog) },
                 onExit = { eventHandler.invoke(DriverActiveEvent.CloseCreateDialog) })
+        }
+
+        if (state.showRecreateDialog) {
+            RecreateRequestAlertDialog(
+                requestId = state.requestIdForInfo,
+                isActiveRequest = state.showRecreateDialogForActiveRequest,
+                onDismiss = { eventHandler.invoke(DriverActiveEvent.CloseRecreateDialog) },
+                onExit = { eventHandler.invoke(DriverActiveEvent.CloseRecreateDialog) }
+            )
         }
 
         if (state.showInfoDialog) {

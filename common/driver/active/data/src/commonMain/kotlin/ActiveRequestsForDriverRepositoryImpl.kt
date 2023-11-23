@@ -100,12 +100,59 @@ class ActiveRequestsForDriverRepositoryImpl(
         }
     }
 
+    override suspend fun deleteResourcesForRequest(requestId: Int): WrapperForResponse {
+        return try {
+            val firstHttpStatusCode =
+                remoteDataSource.deleteImagesFromRequest(requestId = requestId)
+            val secondHttpStatusCode =
+                remoteDataSource.deleteVideosFromRequest(requestId = requestId)
+            if (firstHttpStatusCode == HttpStatusCode.OK) {
+                httpStatusCodeMapper.map(source = firstHttpStatusCode)
+            } else if (secondHttpStatusCode == HttpStatusCode.OK) {
+                httpStatusCodeMapper.map(source = secondHttpStatusCode)
+            } else {
+                WrapperForResponse.Failure(message = MainRes.string.base_error_message)
+            }
+        } catch (e: Exception) {
+            log(tag = TAG) { "Error for delete resource" }
+            WrapperForResponse.Failure(message = MainRes.string.base_error_message)
+        }
+    }
+
     override suspend fun deleteRequest(requestId: Int): WrapperForResponse {
         return try {
             val statusCode = remoteDataSource.deleteRequest(requestId = requestId)
             httpStatusCodeMapper.map(source = statusCode)
         } catch (e: Exception) {
             log(tag = TAG) { "Error for delete request" }
+            WrapperForResponse.Failure(message = MainRes.string.remove_request_error)
+        }
+    }
+
+    override suspend fun deleteImageByPathForRequest(imagePath: String): WrapperForResponse {
+        return try {
+            val imagePathSplit = imagePath.split("/images/").last()
+            val statusCode = remoteDataSource.deleteImageAndVideoByPath(
+                isImage = true,
+                resourcePath = imagePathSplit
+            )
+            httpStatusCodeMapper.map(source = statusCode)
+        } catch (e: Exception) {
+            log(tag = TAG) { "Delete resource by path failure" }
+            WrapperForResponse.Failure(message = MainRes.string.base_error_message)
+        }
+    }
+
+    override suspend fun deleteVideoByPathForRequest(videoPath: String): WrapperForResponse {
+        return try {
+            val videoUrlSplit = videoPath.split("/videos/").last()
+            val statusCode = remoteDataSource.deleteImageAndVideoByPath(
+                isImage = false,
+                resourcePath = videoUrlSplit
+            )
+            httpStatusCodeMapper.map(source = statusCode)
+        } catch (e: Exception) {
+            log(tag = TAG) { "Delete resource by path failure" }
             WrapperForResponse.Failure(message = MainRes.string.base_error_message)
         }
     }

@@ -21,8 +21,14 @@ class VideosDaoImpl : VideosDaoFacade {
     }
 
     override suspend fun deleteVideos(requestId: Int): Pair<Boolean, List<String>> = dbQuery {
-        val videos = FaultVideos.select { FaultVideos.requestId eq requestId }.map { it[FaultVideos.videoPath] }
+        val videos = FaultVideos.select { FaultVideos.requestId eq requestId }
+            .map { it[FaultVideos.videoPath] }
         val resultDelete = FaultVideos.deleteWhere { FaultVideos.requestId eq requestId }
         Pair(resultDelete != 0, videos)
+    }
+
+    override suspend fun deleteVideoByName(videoName: String): Pair<Boolean, String> = dbQuery {
+        val resultDelete = FaultVideos.deleteWhere { FaultVideos.videoPath eq videoName }
+        Pair(first = resultDelete != 0, second = videoName)
     }
 }

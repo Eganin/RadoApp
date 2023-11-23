@@ -38,7 +38,11 @@ class MechanicRequestsViewModel :
                 errorMessage = viewEvent.message
             )
 
-            is MechanicRequestsEvent.CloseInfoDialog -> obtainShowInfoDialogChanged()
+            is MechanicRequestsEvent.CloseInfoDialog -> {
+                obtainShowInfoDialogChanged()
+                getUnconfirmedRequests()
+            }
+
             is MechanicRequestsEvent.OpenDatePicker -> obtainShowDatePickerChanged()
             is MechanicRequestsEvent.OpenTimePicker -> obtainShowTimePickerChangedAndDate(date = viewEvent.date)
             is MechanicRequestsEvent.CloseDatePicker -> obtainShowDatePickerChanged()

@@ -94,6 +94,26 @@ class ResourcesController(
         }
     }
 
+    suspend fun deleteVideoByName(call: ApplicationCall,videoName: String){
+        val videoPath = "app/videos/$videoName"
+        val response = resourceService.deleteImageAndVideoByName(resourceName = videoPath,isImage = false)
+        if (response){
+            call.respond(HttpStatusCode.OK, message = "The image has been deleted by name")
+        }else{
+            call.respond(HttpStatusCode.BadRequest,message = "The image has not been deleted")
+        }
+    }
+
+    suspend fun deleteImageByName(call:ApplicationCall,imageName:String){
+        val imagePath = "app/images/$imageName"
+        val response = resourceService.deleteImageAndVideoByName(resourceName = imagePath,isImage = true)
+        if (response){
+            call.respond(HttpStatusCode.OK, message = "The video has been deleted by name")
+        }else{
+            call.respond(HttpStatusCode.BadRequest,message = "The video has not been deleted")
+        }
+    }
+
     suspend fun deleteResource(call: ApplicationCall, resourceName: String) {
         val file = File("app/resources/${resourceName}")
         file.delete()
