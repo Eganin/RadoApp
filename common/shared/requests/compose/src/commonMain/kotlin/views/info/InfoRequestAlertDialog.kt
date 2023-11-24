@@ -30,7 +30,6 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import dev.icerock.moko.mvvm.compose.viewModelFactory
-import models.create.VehicleType
 import models.info.InfoRequestEvent
 import models.info.InfoRequestViewState
 import org.company.rado.core.MainRes
@@ -88,8 +87,8 @@ fun InfoRequestAlertDialog(
                 AlertDialogChooseMachine(
                     title = MainRes.string.type_machine_title,
                     imageSize = imageSize,
-                    tractorIsExpanded = state.value.selectedVehicleType == VehicleType.Tractor,
-                    trailerIsExpanded = state.value.selectedVehicleType == VehicleType.Trailer
+                    tractorIsExpanded = state.value.isSelectedTractor,
+                    trailerIsExpanded = state.value.isSelectedTrailer
                 )
 
                 Text(

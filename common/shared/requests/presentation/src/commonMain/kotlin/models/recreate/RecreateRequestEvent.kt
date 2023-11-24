@@ -1,14 +1,13 @@
 package models.recreate
 
-import models.create.VehicleType
-
 sealed class RecreateRequestEvent {
 
     data class GetInfoForOldUnconfirmedRequest(val requestId: Int) : RecreateRequestEvent()
-    data class GetInfoForOldActiveRequest(val requestId: Int) : RecreateRequestEvent()
+
     data object RecreateRequest : RecreateRequestEvent()
 
-    data class SelectedTypeVehicleChanged(val value: VehicleType) : RecreateRequestEvent()
+    data object SelectedTypeVehicleTractor : RecreateRequestEvent()
+    data object SelectedTypeVehicleTrailer : RecreateRequestEvent()
 
     data class NumberVehicleChanged(val value: String) : RecreateRequestEvent()
 

@@ -5,10 +5,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
-import models.FullRequestItem
 import models.RecreateRequestItem
 import models.UnconfirmedRequestInfoItem
-import models.create.VehicleType
+import models.create.getVehicleType
 import models.create.toVehicleType
 import models.recreate.RecreateRequestAction
 import models.recreate.RecreateRequestEvent
@@ -28,7 +27,6 @@ class RecreateRequestViewModel :
 
     private val activeRequestsRepositoryForDriver: ActiveRequestsForDriverRepository =
         Inject.instance()
-    private val activeRequestsRepository: ActiveRequestsRepository = Inject.instance()
     private val unconfirmedRequestsRepository: UnconfirmedRequestsRepository = Inject.instance()
     private val operationsOnRequestsRepository: OperationsOnRequestsRepository = Inject.instance()
 
@@ -38,14 +36,17 @@ class RecreateRequestViewModel :
                 requestId = viewEvent.requestId
             )
 
-            is RecreateRequestEvent.GetInfoForOldActiveRequest -> getInfoForOldActiveRequest(
-                requestId = viewEvent.requestId
-            )
-
             is RecreateRequestEvent.RecreateRequest -> recreateRequest()
-            is RecreateRequestEvent.SelectedTypeVehicleChanged -> obtainSelectedTypeVehicleChange(
-                typeVehicle = viewEvent.value
-            )
+
+            is RecreateRequestEvent.SelectedTypeVehicleTractor -> {
+                obtainEvent(RecreateRequestEvent.TractorIsExpandedChanged)
+                obtainIsSelectedTractor()
+            }
+
+            is RecreateRequestEvent.SelectedTypeVehicleTrailer -> {
+                obtainEvent(RecreateRequestEvent.TrailerIsExpandedChanged)
+                obtainIsSelectedTrailer()
+            }
 
             is RecreateRequestEvent.NumberVehicleChanged -> obtainNumberVehicleChange(numberVehicle = viewEvent.value)
             is RecreateRequestEvent.FaultDescriptionChanged -> obtainFaultDescriptionChange(
@@ -118,7 +119,7 @@ class RecreateRequestViewModel :
     private fun removeVideo(videoPath: String, isResource: Boolean) {
         coroutineScope.launch {
             obtainIsLoadingChange()
-            log(tag="RESOURCE") { isResource.toString() }
+            log(tag = "RESOURCE") { isResource.toString() }
             val wrapperForResponse =
                 if (isResource) activeRequestsRepositoryForDriver.deleteResourceForCache(
                     resourceName = videoPath
@@ -144,13 +145,26 @@ class RecreateRequestViewModel :
     private fun recreateRequest() {
         coroutineScope.launch {
             obtainIsLoadingChange()
-            if (viewState.numberVehicle.isNotEmpty()) {
+
+            //check choose vehicle
+            if (!viewState.isSelectedTractor && !viewState.isSelectedTrailer) {
+                obtainNotChooseVehicle(value = true)
+            } else {
+                obtainNotChooseVehicle(value = false)
+            }
+            if (viewState.numberVehicle.isNotEmpty() && !viewState.notChooseVehicle) {
                 viewState = viewState.copy(notVehicleNumber = false)
                 val recreateRequestItem = operationsOnRequestsRepository.recreateRequest(
                     requestId = viewState.requestId,
-                    typeVehicle = viewState.selectedVehicleType.nameVehicleType,
+                    typeVehicle = getVehicleType(
+                        isSelectedTractor = viewState.isSelectedTractor,
+                        isSelectedTrailer = viewState.isSelectedTrailer
+                    ),
                     numberVehicle = viewState.numberVehicle,
-                    oldTypeVehicle = viewState.oldSelectedVehicleType.nameVehicleType,
+                    oldTypeVehicle = getVehicleType(
+                        isSelectedTractor = viewState.isSelectedOldTractor,
+                        isSelectedTrailer = viewState.isSelectedOldTrailer
+                    ),
                     oldNumberVehicle = viewState.oldNumberVehicle,
                     faultDescription = viewState.faultDescription
                 )
@@ -163,7 +177,7 @@ class RecreateRequestViewModel :
                     log(tag = TAG) { "request recreate failure" }
                     obtainShowFailureDialog(value = !viewState.showFailureDialog)
                 }
-            } else {
+            } else if (viewState.numberVehicle.isEmpty()) {
                 viewState = viewState.copy(notVehicleNumber = true)
             }
             obtainIsLoadingChange()
@@ -179,51 +193,26 @@ class RecreateRequestViewModel :
             if (unconfirmedRequestInfoItem is UnconfirmedRequestInfoItem.Success) {
                 log(tag = TAG) { "Get info for old unconfirmed request ${unconfirmedRequestInfoItem.requestInfo}" }
                 val info = unconfirmedRequestInfoItem.requestInfo
+                val (isTractor, isTrailer) = info.vehicleType.toVehicleType()
                 viewState = viewState.copy(
-                    oldSelectedVehicleType = info.vehicleType.toVehicleType(),
+                    isSelectedOldTractor = isTractor,
+                    isSelectedOldTrailer = isTrailer,
                     oldNumberVehicle = info.vehicleNumber,
                     faultDescription = info.faultDescription,
                     images = info.images,
                     videos = info.videos,
                     numberVehicle = info.vehicleNumber
                 )
-                if (viewState.oldSelectedVehicleType == VehicleType.Tractor) {
+                if (viewState.isSelectedOldTractor) {
+                    obtainIsSelectedTractor()
                     obtainTractorIsExpandedChange()
-                } else {
+                }
+                if (viewState.isSelectedOldTrailer) {
+                    obtainIsSelectedTrailer()
                     obtainTrailerIsExpandedChange()
                 }
             } else if (unconfirmedRequestInfoItem is UnconfirmedRequestInfoItem.Error) {
                 log(tag = TAG) { "get info for unconfirmed request is failure" }
-                obtainShowFailureDialog(value = !viewState.showFailureDialog)
-            }
-            obtainIsLoadingChange()
-        }
-    }
-
-    private fun getInfoForOldActiveRequest(requestId: Int) {
-        coroutineScope.launch {
-            obtainIsLoadingChange()
-            obtainRequestIdChange(requestId = requestId)
-            val fullRequestItem =
-                activeRequestsRepository.getActiveRequestInfo(requestId = viewState.requestId)
-            if (fullRequestItem is FullRequestItem.Success) {
-                log(tag = TAG) { "Get info for old active request ${fullRequestItem.request}" }
-                val info = fullRequestItem.request
-                viewState = viewState.copy(
-                    oldSelectedVehicleType = info.vehicleType.toVehicleType(),
-                    oldNumberVehicle = info.vehicleNumber,
-                    faultDescription = info.faultDescription,
-                    images = info.images,
-                    videos = info.videos,
-                    numberVehicle = info.vehicleNumber
-                )
-                if (viewState.oldSelectedVehicleType == VehicleType.Tractor) {
-                    obtainTractorIsExpandedChange()
-                } else {
-                    obtainTrailerIsExpandedChange()
-                }
-            } else if (fullRequestItem is FullRequestItem.Error) {
-                log(tag = TAG) { "get info fo active request is failure" }
                 obtainShowFailureDialog(value = !viewState.showFailureDialog)
             }
             obtainIsLoadingChange()
@@ -303,6 +292,10 @@ class RecreateRequestViewModel :
         viewState = viewState.copy(resources = emptyList())
     }
 
+    private fun obtainNotChooseVehicle(value: Boolean) {
+        viewState = viewState.copy(notChooseVehicle = value)
+    }
+
     private fun obtainRequestIdChange(requestId: Int) {
         viewState = viewState.copy(requestId = requestId)
     }
@@ -323,11 +316,12 @@ class RecreateRequestViewModel :
         viewState = viewState.copy(isLoading = !viewState.isLoading)
     }
 
-    private fun obtainSelectedTypeVehicleChange(typeVehicle: VehicleType) {
-        viewState = viewState.copy(
-            selectedVehicleType = typeVehicle
-        )
-        log(tag = TAG) { "Type vehicle is changed ${viewState.selectedVehicleType}" }
+    private fun obtainIsSelectedTractor() {
+        viewState = viewState.copy(isSelectedTractor = !viewState.isSelectedTractor)
+    }
+
+    private fun obtainIsSelectedTrailer() {
+        viewState = viewState.copy(isSelectedTrailer = !viewState.isSelectedTrailer)
     }
 
     private fun obtainNumberVehicleChange(numberVehicle: String) {
@@ -346,13 +340,13 @@ class RecreateRequestViewModel :
 
     private fun obtainTrailerIsExpandedChange() {
         viewState = viewState.copy(trailerIsExpanded = !viewState.trailerIsExpanded)
-        viewState = viewState.copy(tractorIsExpanded = !viewState.tractorIsExpanded)
+        obtainNotChooseVehicle(value = false)
         log(tag = TAG) { "Trailer expanded changed ${viewState.trailerIsExpanded}" }
     }
 
     private fun obtainTractorIsExpandedChange() {
         viewState = viewState.copy(tractorIsExpanded = !viewState.tractorIsExpanded)
-        viewState = viewState.copy(trailerIsExpanded = !viewState.trailerIsExpanded)
+        obtainNotChooseVehicle(value = false)
         log(tag = TAG) { "Tractor expanded changed ${viewState.tractorIsExpanded}" }
     }
 

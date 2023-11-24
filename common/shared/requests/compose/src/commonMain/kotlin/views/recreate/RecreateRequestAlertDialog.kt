@@ -21,7 +21,6 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 import io.github.aakira.napier.log
-import models.create.VehicleType
 import models.recreate.RecreateRequestAction
 import models.recreate.RecreateRequestEvent
 import org.company.rado.core.MainRes
@@ -42,7 +41,6 @@ import widgets.common.CircularLoader
 @Composable
 fun RecreateRequestAlertDialog(
     requestId: Int,
-    isActiveRequest: Boolean,
     onDismiss: () -> Unit,
     onExit: () -> Unit,
     modifier: Modifier = Modifier
@@ -57,19 +55,11 @@ fun RecreateRequestAlertDialog(
         if (isLargePlatform) (LocalDensity.current.density.dp * 70) else (LocalDensity.current.density.dp * 25)
 
     LaunchedEffect(key1 = Unit) {
-        if (!isActiveRequest) {
-            viewModel.obtainEvent(
-                viewEvent = RecreateRequestEvent.GetInfoForOldUnconfirmedRequest(
-                    requestId = requestId
-                )
+        viewModel.obtainEvent(
+            viewEvent = RecreateRequestEvent.GetInfoForOldUnconfirmedRequest(
+                requestId = requestId
             )
-        } else {
-            viewModel.obtainEvent(
-                viewEvent = RecreateRequestEvent.GetInfoForOldActiveRequest(
-                    requestId = requestId
-                )
-            )
-        }
+        )
     }
 
     Dialog(
@@ -100,21 +90,12 @@ fun RecreateRequestAlertDialog(
                     imageSize = imageSize,
                     tractorIsExpanded = state.value.tractorIsExpanded,
                     trailerIsExpanded = state.value.trailerIsExpanded,
+                    isError = state.value.notChooseVehicle,
                     onClickTractor = {
-                        viewModel.obtainEvent(
-                            RecreateRequestEvent.SelectedTypeVehicleChanged(
-                                value = VehicleType.Tractor
-                            )
-                        )
-                        viewModel.obtainEvent(RecreateRequestEvent.TractorIsExpandedChanged)
+                        viewModel.obtainEvent(RecreateRequestEvent.SelectedTypeVehicleTractor)
                     },
                     onClickTrailer = {
-                        viewModel.obtainEvent(
-                            RecreateRequestEvent.SelectedTypeVehicleChanged(
-                                value = VehicleType.Trailer
-                            )
-                        )
-                        viewModel.obtainEvent(RecreateRequestEvent.TrailerIsExpandedChanged)
+                        viewModel.obtainEvent(RecreateRequestEvent.SelectedTypeVehicleTrailer)
                     })
 
                 AlertDialogTextInputs(

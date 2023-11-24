@@ -77,21 +77,12 @@ fun CreateRequestAlertDialog(
                     imageSize = imageSize,
                     tractorIsExpanded = state.value.tractorIsExpanded,
                     trailerIsExpanded = state.value.trailerIsExpanded,
+                    isError = state.value.notChooseVehicle,
                     onClickTractor = {
-                        viewModel.obtainEvent(
-                            CreateRequestEvent.SelectedTypeVehicleChanged(
-                                value = VehicleType.Tractor
-                            )
-                        )
-                        viewModel.obtainEvent(CreateRequestEvent.TractorIsExpandedChanged)
+                        viewModel.obtainEvent(CreateRequestEvent.SelectedTypeVehicleTractor)
                     },
                     onClickTrailer = {
-                        viewModel.obtainEvent(
-                            CreateRequestEvent.SelectedTypeVehicleChanged(
-                                value = VehicleType.Trailer
-                            )
-                        )
-                        viewModel.obtainEvent(CreateRequestEvent.TrailerIsExpandedChanged)
+                        viewModel.obtainEvent(CreateRequestEvent.SelectedTypeVehicleTrailer)
                     })
 
                 AlertDialogTextInputs(
