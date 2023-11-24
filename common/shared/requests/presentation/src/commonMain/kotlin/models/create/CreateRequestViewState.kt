@@ -30,9 +30,8 @@ fun getVehicleType(isSelectedTractor: Boolean, isSelectedTrailer: Boolean): Stri
     return vehicles.joinToString(separator = "-")
 }
 
-fun String.toVehicleType(): VehicleType {
-    return when (this) {
-        MainRes.string.tractor_enum_value -> VehicleType.Tractor
-        else -> VehicleType.Trailer
-    }
+fun String.toVehicleType(): Pair<Boolean,Boolean> {
+    val isTractor = this.contains(VehicleType.Tractor.nameVehicleType)
+    val isTrailer = this.contains(VehicleType.Trailer.nameVehicleType)
+    return Pair(first=isTractor,second = isTrailer)
 }

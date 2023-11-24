@@ -1,11 +1,11 @@
 package models.info
 
-import models.create.VehicleType
 import other.Position
 import other.StatusRequest
 
 data class InfoRequestViewState(
-    val selectedVehicleType: VehicleType = VehicleType.Tractor,
+    val isSelectedTractor: Boolean = false,
+    val isSelectedTrailer: Boolean = false,
     val numberVehicle: String = "",
     val faultDescription: String = "",
     val images: List<String> = emptyList(),
@@ -21,6 +21,6 @@ data class InfoRequestViewState(
     val errorTitleMessage: String = "",
     val imageIsExpanded: Boolean = false,
     val isLoading: Boolean = false,
-    val infoForPosition: Position=Position.DRIVER,
-    val isActiveRequest: Boolean=false,
+    val infoForPosition: Position = Position.DRIVER,
+    val isActiveRequest: Boolean = false,
 )

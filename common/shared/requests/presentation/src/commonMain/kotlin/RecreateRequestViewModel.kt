@@ -7,8 +7,8 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import models.RecreateRequestItem
 import models.UnconfirmedRequestInfoItem
-import models.create.VehicleType
 import models.create.getVehicleType
+import models.create.toVehicleType
 import models.recreate.RecreateRequestAction
 import models.recreate.RecreateRequestEvent
 import models.recreate.RecreateRequestViewState
@@ -148,15 +148,15 @@ class RecreateRequestViewModel :
 
             //check choose vehicle
             if (!viewState.isSelectedTractor && !viewState.isSelectedTrailer) {
-                log(tag="CHOOSE"){"NOT CHOOSE"}
+                log(tag = "CHOOSE") { "NOT CHOOSE" }
                 obtainNotChooseVehicle(value = true)
             } else {
                 obtainNotChooseVehicle(value = false)
             }
             if (viewState.numberVehicle.isNotEmpty() && !viewState.notChooseVehicle) {
-                log(tag="CHOOSE") { (viewState.numberVehicle.isNotEmpty() && !viewState.notChooseVehicle).toString() }
-                log(tag="CHOOSE") { (!viewState.notChooseVehicle).toString() }
-                log(tag="CHOOSE") { viewState.numberVehicle.isNotEmpty().toString() }
+                log(tag = "CHOOSE") { (viewState.numberVehicle.isNotEmpty() && !viewState.notChooseVehicle).toString() }
+                log(tag = "CHOOSE") { (!viewState.notChooseVehicle).toString() }
+                log(tag = "CHOOSE") { viewState.numberVehicle.isNotEmpty().toString() }
                 viewState = viewState.copy(notVehicleNumber = false)
                 val recreateRequestItem = operationsOnRequestsRepository.recreateRequest(
                     requestId = viewState.requestId,
@@ -197,10 +197,10 @@ class RecreateRequestViewModel :
             if (unconfirmedRequestInfoItem is UnconfirmedRequestInfoItem.Success) {
                 log(tag = TAG) { "Get info for old unconfirmed request ${unconfirmedRequestInfoItem.requestInfo}" }
                 val info = unconfirmedRequestInfoItem.requestInfo
-
+                val (isTractor, isTrailer) = info.vehicleType.toVehicleType()
                 viewState = viewState.copy(
-                    isSelectedOldTractor = info.vehicleType.contains(VehicleType.Tractor.nameVehicleType),
-                    isSelectedOldTrailer = info.vehicleType.contains(VehicleType.Trailer.nameVehicleType),
+                    isSelectedOldTractor = isTractor,
+                    isSelectedOldTrailer = isTrailer,
                     oldNumberVehicle = info.vehicleNumber,
                     faultDescription = info.faultDescription,
                     images = info.images,
