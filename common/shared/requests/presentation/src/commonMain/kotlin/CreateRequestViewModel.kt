@@ -9,7 +9,7 @@ import models.CreateRequestIdItem
 import models.create.CreateRequestAction
 import models.create.CreateRequestEvent
 import models.create.CreateRequestViewState
-import models.create.VehicleType
+import models.create.getVehicleType
 import other.BaseSharedViewModel
 import other.WrapperForResponse
 
@@ -27,9 +27,15 @@ class CreateRequestViewModel :
     override fun obtainEvent(viewEvent: CreateRequestEvent) {
         when (viewEvent) {
             is CreateRequestEvent.CreateRequest -> createRequest()
-            is CreateRequestEvent.SelectedTypeVehicleChanged -> obtainSelectedTypeVehicleChange(
-                typeVehicle = viewEvent.value
-            )
+            is CreateRequestEvent.SelectedTypeVehicleTractor -> {
+                obtainIsSelectedTractor()
+                obtainEvent(CreateRequestEvent.TractorIsExpandedChanged)
+            }
+
+            is CreateRequestEvent.SelectedTypeVehicleTrailer -> {
+                obtainIsSelectedTrailer()
+                obtainEvent(CreateRequestEvent.TrailerIsExpandedChanged)
+            }
 
             is CreateRequestEvent.NumberVehicleChanged -> obtainNumberVehicleChange(numberVehicle = viewEvent.value)
             is CreateRequestEvent.FaultDescriptionChanged -> obtainFaultDescriptionChange(
@@ -57,10 +63,23 @@ class CreateRequestViewModel :
     private fun createRequest() {
         coroutineScope.launch {
             viewState = viewState.copy(isLoading = !viewState.isLoading)
-            if (viewState.numberVehicle.isNotEmpty()) {
+
+            //check choose vehicle
+            if (!viewState.isSelectedTractor && !viewState.isSelectedTrailer) {
+                obtainNotChooseVehicle(value = true)
+            } else {
+                obtainNotChooseVehicle(value = false)
+            }
+
+            if (viewState.numberVehicle.isNotEmpty() && !viewState.notChooseVehicle) {
                 viewState = viewState.copy(notVehicleNumber = false)
+                log(tag="VEHICLE") { viewState.isSelectedTractor.toString() }
+                log(tag="VEHICLE") { viewState.isSelectedTrailer.toString() }
                 val createRequestIdItem = activeRequestsRepository.createRequest(
-                    typeVehicle = viewState.selectedVehicleType.nameVehicleType,
+                    typeVehicle = getVehicleType(
+                        isSelectedTractor = viewState.isSelectedTractor,
+                        isSelectedTrailer = viewState.isSelectedTrailer
+                    ),
                     numberVehicle = viewState.numberVehicle,
                     faultDescription = viewState.faultDescription
                 )
@@ -75,7 +94,7 @@ class CreateRequestViewModel :
                     log(tag = TAG) { "Create request is failure" }
                     obtainShowFailureDialog(value = !viewState.showFailureCreateRequestDialog)
                 }
-            } else {
+            } else if (viewState.numberVehicle.isEmpty()) {
                 viewState = viewState.copy(notVehicleNumber = true)
             }
             viewState = viewState.copy(isLoading = !viewState.isLoading)
@@ -86,7 +105,7 @@ class CreateRequestViewModel :
         //save images
         if (viewState.resources.isNotEmpty()) {
             viewState.resources.forEach { resource ->
-                log(tag= TAG) { resource.first }
+                log(tag = TAG) { resource.first }
                 val response = activeRequestsRepository.createResourceForRequest(
                     requestId = requestId,
                     resource = resource
@@ -124,6 +143,18 @@ class CreateRequestViewModel :
 
     private fun obtainShowFailureDialog(value: Boolean) {
         viewState = viewState.copy(showFailureCreateRequestDialog = value)
+    }
+
+    private fun obtainIsSelectedTractor() {
+        viewState = viewState.copy(isSelectedTractor = !viewState.isSelectedTractor)
+        log(tag="SELECTED trailer") { viewState.isSelectedTrailer.toString() }
+        log(tag="SELECTED tractor") { viewState.isSelectedTractor.toString() }
+    }
+
+    private fun obtainIsSelectedTrailer() {
+        viewState = viewState.copy(isSelectedTrailer = !viewState.isSelectedTrailer)
+        log(tag="SELECTED trailer") { viewState.isSelectedTrailer.toString() }
+        log(tag="SELECTED tractor") { viewState.isSelectedTractor.toString() }
     }
 
     private fun closeSuccessDialog() {
@@ -164,7 +195,7 @@ class CreateRequestViewModel :
 
     private fun obtainTractorIsExpandedChange() {
         viewState = viewState.copy(tractorIsExpanded = !viewState.tractorIsExpanded)
-        viewState = viewState.copy(trailerIsExpanded = !viewState.trailerIsExpanded)
+        obtainNotChooseVehicle(value = false)
         log(tag = TAG) { "Tractor expanded changed ${viewState.tractorIsExpanded}" }
     }
 
@@ -175,15 +206,12 @@ class CreateRequestViewModel :
 
     private fun obtainTrailerIsExpandedChange() {
         viewState = viewState.copy(trailerIsExpanded = !viewState.trailerIsExpanded)
-        viewState = viewState.copy(tractorIsExpanded = !viewState.tractorIsExpanded)
+        obtainNotChooseVehicle(value = false)
         log(tag = TAG) { "Trailer expanded changed ${viewState.trailerIsExpanded}" }
     }
 
-    private fun obtainSelectedTypeVehicleChange(typeVehicle: VehicleType) {
-        viewState = viewState.copy(
-            selectedVehicleType = typeVehicle
-        )
-        log(tag = TAG) { "Type vehicle is changed ${viewState.selectedVehicleType}" }
+    private fun obtainNotChooseVehicle(value: Boolean) {
+        viewState = viewState.copy(notChooseVehicle = value)
     }
 
     private fun obtainNumberVehicleChange(numberVehicle: String) {

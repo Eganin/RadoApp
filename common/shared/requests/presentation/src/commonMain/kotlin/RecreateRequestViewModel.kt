@@ -148,15 +148,11 @@ class RecreateRequestViewModel :
 
             //check choose vehicle
             if (!viewState.isSelectedTractor && !viewState.isSelectedTrailer) {
-                log(tag = "CHOOSE") { "NOT CHOOSE" }
                 obtainNotChooseVehicle(value = true)
             } else {
                 obtainNotChooseVehicle(value = false)
             }
             if (viewState.numberVehicle.isNotEmpty() && !viewState.notChooseVehicle) {
-                log(tag = "CHOOSE") { (viewState.numberVehicle.isNotEmpty() && !viewState.notChooseVehicle).toString() }
-                log(tag = "CHOOSE") { (!viewState.notChooseVehicle).toString() }
-                log(tag = "CHOOSE") { viewState.numberVehicle.isNotEmpty().toString() }
                 viewState = viewState.copy(notVehicleNumber = false)
                 val recreateRequestItem = operationsOnRequestsRepository.recreateRequest(
                     requestId = viewState.requestId,
