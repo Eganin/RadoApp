@@ -103,6 +103,7 @@ fun RecreateRequestAlertDialog(
                     notVehicleNumber = state.value.notVehicleNumber,
                     faultDescription = state.value.faultDescription,
                     isLargePlatform = isLargePlatform,
+                    arrivalDate="",
                     numberVehicleOnChange = {
                         viewModel.obtainEvent(
                             viewEvent = RecreateRequestEvent.NumberVehicleChanged(
@@ -114,6 +115,9 @@ fun RecreateRequestAlertDialog(
                         viewModel.obtainEvent(
                             viewEvent = RecreateRequestEvent.FaultDescriptionChanged(value = it)
                         )
+                    },
+                    arrivalDateOnClick = {
+
                     }
                 )
 

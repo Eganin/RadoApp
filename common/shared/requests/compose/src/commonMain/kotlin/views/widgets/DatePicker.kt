@@ -1,4 +1,4 @@
-package views
+package views.widgets
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DatePicker
@@ -16,7 +16,7 @@ import theme.Theme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun MechanicDatePicker(
+fun DatePicker(
     confirmAction: (Long) -> Unit,
     exitAction: () -> Unit,
     modifier: Modifier = Modifier

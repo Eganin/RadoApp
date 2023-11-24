@@ -1,5 +1,7 @@
 package views.widgets
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -15,6 +17,7 @@ import compose.icons.FeatherIcons
 import compose.icons.feathericons.AlertCircle
 import org.company.rado.core.MainRes
 import theme.Theme
+import widgets.common.ActionButton
 
 @Composable
 internal fun AlertDialogTextInputs(
@@ -22,8 +25,10 @@ internal fun AlertDialogTextInputs(
     notVehicleNumber: Boolean,
     faultDescription: String,
     isLargePlatform: Boolean,
+    arrivalDate: String,
     numberVehicleOnChange: (String) -> Unit,
     faultDescriptionOnChange: (String) -> Unit,
+    arrivalDateOnClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     OutlinedTextField(
@@ -78,6 +83,40 @@ internal fun AlertDialogTextInputs(
         modifier = modifier.fillMaxWidth(),
         maxLines = 20
     )
+
+    Spacer(modifier = Modifier.height(16.dp))
+
+    Text(
+        text = MainRes.string.optional_title,
+        color = Theme.colors.primaryTextColor,
+        fontSize = if (isLargePlatform) 16.sp else 8.sp
+    )
+
+    Spacer(modifier = Modifier.height(4.dp))
+
+    Row(modifier = Modifier.fillMaxWidth()) {
+        ActionButton(text = MainRes.string.arrival_date_button_title, onClick = arrivalDateOnClick)
+
+        Spacer(modifier = Modifier.fillMaxWidth())
+
+        if (arrivalDate.isNotEmpty()) {
+            Column {
+                Text(
+                    text = MainRes.string.arrival_date_title,
+                    color = Theme.colors.primaryTextColor,
+                    fontSize = if (isLargePlatform) 16.sp else 8.sp
+                )
+
+                Spacer(modifier = Modifier.height(4.dp))
+
+                Text(
+                    text = arrivalDate,
+                    color = Theme.colors.primaryTextColor,
+                    fontSize = if (isLargePlatform) 16.sp else 8.sp
+                )
+            }
+        }
+    }
 
     Spacer(modifier = Modifier.height(16.dp))
 }

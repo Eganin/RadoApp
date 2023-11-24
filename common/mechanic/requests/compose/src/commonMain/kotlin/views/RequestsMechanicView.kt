@@ -30,6 +30,7 @@ import views.create.FailureRequestDialog
 import views.create.RequestCells
 import views.create.SuccessRequestDialog
 import views.info.InfoRequestAlertDialog
+import views.widgets.DatePicker
 import widgets.common.ActionButton
 
 @Composable
@@ -184,7 +185,7 @@ internal fun RequestsMechanicView(
     }
 
     if (state.showDatePicker) {
-        MechanicDatePicker(
+        DatePicker(
             confirmAction = { dateLong ->
                 eventHandler.invoke(MechanicRequestsEvent.OpenTimePicker(date = dateLong))
             }, exitAction = {

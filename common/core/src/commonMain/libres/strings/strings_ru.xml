@@ -83,4 +83,7 @@
     <string name="base_success_message">Операция прошла успешно</string>
     <string name="reject_request_title_dialog">Отмена заявки</string>
     <string name="reject_request_label">Причина отмены(макс 500 симв)</string>
+    <string name="arrival_date_button_title">Выбрать дату заезда на базу</string>
+    <string name="optional_title">Опцианально</string>
+    <string name="arrival_date_title">Дата заезда на базу</string>
 </resources>

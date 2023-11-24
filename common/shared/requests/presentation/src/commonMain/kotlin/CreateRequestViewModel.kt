@@ -12,6 +12,7 @@ import models.create.CreateRequestViewState
 import models.create.getVehicleType
 import other.BaseSharedViewModel
 import other.WrapperForResponse
+import time.convertDateLongToString
 
 class CreateRequestViewModel :
     BaseSharedViewModel<CreateRequestViewState, CreateRequestAction, CreateRequestEvent>(
@@ -57,6 +58,11 @@ class CreateRequestViewModel :
 
             is CreateRequestEvent.ImageRepairExpandedChanged -> obtainImageIsExpandedChange()
             is CreateRequestEvent.OnBackClick -> removeCacheResources()
+            is CreateRequestEvent.ArrivalDateChanged ->{
+                obtainArrivalDate(arrivalDate = convertDateLongToString(date=viewEvent.arrivalDate))
+            }
+            is CreateRequestEvent.ShowDatePicker->obtainShowDatePicker(value = true)
+            is CreateRequestEvent.CloseDatePicker->obtainShowDatePicker(value = false)
         }
     }
 
@@ -73,15 +79,16 @@ class CreateRequestViewModel :
 
             if (viewState.numberVehicle.isNotEmpty() && !viewState.notChooseVehicle) {
                 viewState = viewState.copy(notVehicleNumber = false)
-                log(tag="VEHICLE") { viewState.isSelectedTractor.toString() }
-                log(tag="VEHICLE") { viewState.isSelectedTrailer.toString() }
+                log(tag = "VEHICLE") { viewState.isSelectedTractor.toString() }
+                log(tag = "VEHICLE") { viewState.isSelectedTrailer.toString() }
                 val createRequestIdItem = activeRequestsRepository.createRequest(
                     typeVehicle = getVehicleType(
                         isSelectedTractor = viewState.isSelectedTractor,
                         isSelectedTrailer = viewState.isSelectedTrailer
                     ),
                     numberVehicle = viewState.numberVehicle,
-                    faultDescription = viewState.faultDescription
+                    faultDescription = viewState.faultDescription,
+                    arrivalDate = viewState.arrivalDate
                 )
                 if (createRequestIdItem is CreateRequestIdItem.Success) {
                     log(tag = TAG) { "Create request is success" }
@@ -136,6 +143,14 @@ class CreateRequestViewModel :
         activeRequestsRepository.deleteRequest(requestId = requestId)
     }
 
+    private fun obtainArrivalDate(arrivalDate: String) {
+        viewState = viewState.copy(arrivalDate = arrivalDate)
+    }
+
+    private fun obtainShowDatePicker(value: Boolean){
+        viewState=viewState.copy(showFilePicker = value)
+    }
+
     private fun obtainShowSuccessDialog() {
         viewState =
             viewState.copy(showSuccessCreateRequestDialog = !viewState.showSuccessCreateRequestDialog)
@@ -147,14 +162,14 @@ class CreateRequestViewModel :
 
     private fun obtainIsSelectedTractor() {
         viewState = viewState.copy(isSelectedTractor = !viewState.isSelectedTractor)
-        log(tag="SELECTED trailer") { viewState.isSelectedTrailer.toString() }
-        log(tag="SELECTED tractor") { viewState.isSelectedTractor.toString() }
+        log(tag = "SELECTED trailer") { viewState.isSelectedTrailer.toString() }
+        log(tag = "SELECTED tractor") { viewState.isSelectedTractor.toString() }
     }
 
     private fun obtainIsSelectedTrailer() {
         viewState = viewState.copy(isSelectedTrailer = !viewState.isSelectedTrailer)
-        log(tag="SELECTED trailer") { viewState.isSelectedTrailer.toString() }
-        log(tag="SELECTED tractor") { viewState.isSelectedTractor.toString() }
+        log(tag = "SELECTED trailer") { viewState.isSelectedTrailer.toString() }
+        log(tag = "SELECTED tractor") { viewState.isSelectedTractor.toString() }
     }
 
     private fun closeSuccessDialog() {

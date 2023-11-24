@@ -23,6 +23,12 @@ sealed class CreateRequestEvent {
 
     data object FilePickerVisibilityChanged : CreateRequestEvent()
 
+    data class ArrivalDateChanged(val arrivalDate:Long): CreateRequestEvent()
+
+    data object ShowDatePicker: CreateRequestEvent()
+
+    data object CloseDatePicker: CreateRequestEvent()
+
     data class SetResource(
         val filePath: String,
         val isImage: Boolean,
