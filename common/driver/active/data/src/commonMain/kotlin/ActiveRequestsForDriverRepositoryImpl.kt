@@ -20,7 +20,8 @@ class ActiveRequestsForDriverRepositoryImpl(
     override suspend fun createRequest(
         typeVehicle: String,
         numberVehicle: String,
-        faultDescription: String
+        faultDescription: String,
+        arrivalDate:String
     ): CreateRequestIdItem {
         val createRequestItem = try {
             val userInfo = localDataSource.fetchLoginUserInfo()
@@ -29,7 +30,8 @@ class ActiveRequestsForDriverRepositoryImpl(
                     driverUsername = userInfo.fullName,
                     typeVehicle = typeVehicle,
                     numberVehicle = numberVehicle,
-                    faultDescription = faultDescription
+                    faultDescription = faultDescription,
+                    arrivalDate=arrivalDate
                 )
             )
             createRequestMapper.map(source = response)

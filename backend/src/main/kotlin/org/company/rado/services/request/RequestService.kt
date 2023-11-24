@@ -25,7 +25,8 @@ class RequestService(
         driverUsername: String,
         typeVehicle: String,
         numberVehicle: String,
-        faultDescription: String
+        faultDescription: String,
+        arrivalDate:String
     ): CreateRequestResponse {
         val vehicleId = vehicleRepository.createVehicle(numberVehicle = numberVehicle, typeVehicle = typeVehicle)
             ?: throw NotFoundException("Vehicle is not found")
@@ -36,7 +37,8 @@ class RequestService(
             vehicleId = vehicleId,
             driverId = driverId,
             statusRequest = StatusRequest.UNCONFIRMED,
-            faultDescription = faultDescription
+            faultDescription = faultDescription,
+            arrivalDate = arrivalDate
         )
         val requestId = requestRepository.createRequest(request = requestDTO)
 

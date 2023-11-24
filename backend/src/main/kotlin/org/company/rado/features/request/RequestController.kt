@@ -18,7 +18,8 @@ class RequestController(
             typeVehicle = requestRemoteInfo.typeVehicle,
             numberVehicle = requestRemoteInfo.numberVehicle,
             faultDescription = requestRemoteInfo.faultDescription,
-            driverUsername = requestRemoteInfo.driverUsername
+            driverUsername = requestRemoteInfo.driverUsername,
+            arrivalDate = requestRemoteInfo.arrivalDate
         )
         call.respond(response)
     }

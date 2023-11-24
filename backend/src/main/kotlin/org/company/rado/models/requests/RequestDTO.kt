@@ -13,7 +13,8 @@ data class RequestDTO(
     val date: String? = null,
     val time: String?=null,
     val statusRepair: Boolean? = null,
-    val commentMechanic: String? = null
+    val commentMechanic: String? = null,
+    val arrivalDate:String?=null
 )
 
 enum class StatusRequest {

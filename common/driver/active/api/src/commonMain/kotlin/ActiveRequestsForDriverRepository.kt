@@ -4,7 +4,7 @@ import other.WrapperForResponse
 
 interface ActiveRequestsForDriverRepository {
 
-    suspend fun createRequest(typeVehicle: String, numberVehicle: String, faultDescription: String): CreateRequestIdItem
+    suspend fun createRequest(typeVehicle: String, numberVehicle: String, faultDescription: String,arrivalDate:String): CreateRequestIdItem
 
     suspend fun getRequestsByDate(date: String): ActiveRequestsForDriverItem
 

@@ -48,6 +48,7 @@ CREATE TABLE requests
     status_request character varying(20) COLLATE pg_catalog."default",
     date character varying(10) COLLATE pg_catalog."default",
     "time" character varying(5) COLLATE pg_catalog."default",
+    arrival_date character varying(10) COLLATE pg_catalog."default",
     CONSTRAINT requests_pkey PRIMARY KEY (id),
     CONSTRAINT mechanic_id FOREIGN KEY (mechanic_id)
         REFERENCES public.mechanics (id) MATCH SIMPLE
