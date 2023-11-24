@@ -37,4 +37,9 @@ sealed class MechanicRequestsEvent {
     data object SendRejectRequest:MechanicRequestsEvent()
 
     data class CommentMechanicValueChange(val commentMechanic:String): MechanicRequestsEvent()
+
+    data object CloseMechanicRejectDialogWithSuccess : MechanicRequestsEvent()
+    data object CloseMechanicRejectDialogWithFailure : MechanicRequestsEvent()
+
+    data object CloseMechanicRejectDialog : MechanicRequestsEvent()
 }

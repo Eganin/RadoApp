@@ -66,9 +66,45 @@ class MechanicRequestsViewModel :
             is MechanicRequestsEvent.PullRefresh -> getUnconfirmedRequests()
             is MechanicRequestsEvent.ClearState -> clearState()
             is MechanicRequestsEvent.ShowRejectRequest -> obtainShowRejectDialog()
-            is MechanicRequestsEvent.SendRejectRequest -> obtainShowRejectDialog()
-            is MechanicRequestsEvent.CommentMechanicValueChange->obtainCommentMechanic(mechanicComment = viewEvent.commentMechanic)
+            is MechanicRequestsEvent.SendRejectRequest -> sendRejectRequest()
+            is MechanicRequestsEvent.CommentMechanicValueChange -> obtainCommentMechanic(
+                mechanicComment = viewEvent.commentMechanic
+            )
+
+            is MechanicRequestsEvent.CloseMechanicRejectDialogWithSuccess -> {
+                obtainEvent(MechanicRequestsEvent.CloseSuccessDialog)
+                closeRejectDialog()
+            }
+
+            is MechanicRequestsEvent.CloseMechanicRejectDialogWithFailure -> {
+                obtainEvent(MechanicRequestsEvent.CloseFailureDialog)
+                closeRejectDialog()
+            }
+
+            is MechanicRequestsEvent.CloseMechanicRejectDialog -> obtainShowRejectDialog()
+
             is MechanicRequestsEvent.DriverPhoneClick -> {}
+        }
+    }
+
+    private fun sendRejectRequest() {
+        coroutineScope.launch {
+            changeLoading()
+            val wrapperForResponse = requestsForMechanicRepository.rejectRequest(
+                requestId = viewState.requestsIdForInfo,
+                commentMechanic = viewState.mechanicComment
+            )
+
+            if (wrapperForResponse is WrapperForResponse.Success) {
+                obtainShowSuccessDialog()
+            } else if (wrapperForResponse is WrapperForResponse.Failure) {
+                obtainShowFailureDialog()
+            }
+
+            //update requests list for mechanic
+            getUnconfirmedRequests()
+
+            changeLoading()
         }
     }
 
@@ -119,12 +155,17 @@ class MechanicRequestsViewModel :
         )
     }
 
-    private fun obtainCommentMechanic(mechanicComment: String){
-        viewState=viewState.copy(mechanicComment = mechanicComment)
+    private fun closeRejectDialog() {
+        obtainShowRejectDialog()
+        obtainEvent(MechanicRequestsEvent.CloseInfoDialog)
     }
 
-    private fun obtainShowRejectDialog(){
-        viewState= viewState.copy(showRejectDialog = !viewState.showRejectDialog)
+    private fun obtainCommentMechanic(mechanicComment: String) {
+        viewState = viewState.copy(mechanicComment = mechanicComment)
+    }
+
+    private fun obtainShowRejectDialog() {
+        viewState = viewState.copy(showRejectDialog = !viewState.showRejectDialog)
     }
 
     private fun obtainShowSuccessDialog() {

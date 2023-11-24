@@ -45,7 +45,7 @@ internal fun MechanicRejectDialog(
         Card(
             shape = RoundedCornerShape(10.dp),
             modifier = modifier
-                .fillMaxSize()
+                .fillMaxWidth()
                 .padding(16.dp),
             colors = CardDefaults.cardColors(containerColor = Theme.colors.primaryBackground)
         ) {
