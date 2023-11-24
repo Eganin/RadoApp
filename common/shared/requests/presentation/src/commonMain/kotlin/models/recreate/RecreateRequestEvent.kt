@@ -39,4 +39,8 @@ sealed class RecreateRequestEvent {
     data class RemoveImage(val imagePath: String) : RecreateRequestEvent()
 
     data class RemoveVideo(val videoPath: String) : RecreateRequestEvent()
+
+    data class RemoveImageFromResource(val imagePath: String) : RecreateRequestEvent()
+
+    data class RemoveVideoFromResource(val videoPath: String) : RecreateRequestEvent()
 }

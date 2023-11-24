@@ -6,6 +6,9 @@ data class MechanicRequestsViewState(
     val showInfoDialog: Boolean = false,
     val showSuccessDialog:Boolean=false,
     val showFailureDialog:Boolean=false,
+    val showRejectDialog:Boolean=false,
+    val showSuccessRejectDialog:Boolean=false,
+    val showFailureRejectDialog:Boolean=false,
     val reopenDialog: Boolean = false,
     val showDatePicker: Boolean = false,
     val showTimePicker: Boolean = false,
@@ -13,6 +16,6 @@ data class MechanicRequestsViewState(
     val datetime: String = "",
     val datetimeForServer: Pair<String, String> = Pair("", ""),
     val date: Long = 0,
-    val rejectDescription: String = "",
-    val isLoading: Boolean = false
+    val isLoading: Boolean = false,
+    val mechanicComment:String=""
 )
