@@ -13,14 +13,21 @@ data class CreateRequestViewState(
     val tractorIsExpanded: Boolean = true,
     val imageIsExpanded: Boolean = false,
     val showFilePicker: Boolean = false,
-    val resources: List<Triple<String,Boolean, ByteArray>> = emptyList(),
-    val isLoading:Boolean = false
+    val resources: List<Triple<String, Boolean, ByteArray>> = emptyList(),
+    val isLoading: Boolean = false
 )
 
 
 enum class VehicleType(val nameVehicleType: String) {
     Tractor(nameVehicleType = MainRes.string.tractor_enum_value),
     Trailer(nameVehicleType = MainRes.string.trailer_enum_value)
+}
+
+fun getVehicleType(isSelectedTractor: Boolean, isSelectedTrailer: Boolean): String {
+    val vehicleTypeTractor = if (isSelectedTractor) VehicleType.Tractor.nameVehicleType else ""
+    val vehicleTypeTrailer = if (isSelectedTrailer) VehicleType.Trailer.nameVehicleType else ""
+    val vehicles = mutableListOf(vehicleTypeTractor,vehicleTypeTrailer).filter { it.isNotEmpty() }
+    return vehicles.joinToString(separator = "-")
 }
 
 fun String.toVehicleType(): VehicleType {

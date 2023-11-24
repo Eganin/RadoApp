@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.seiko.imageloader.rememberImagePainter
 import compose.icons.FeatherIcons
+import compose.icons.feathericons.AlertCircle
 import compose.icons.feathericons.Check
 import theme.Theme
 
@@ -38,6 +39,7 @@ fun ImageMachineCells(
     imageLink: String,
     title: String,
     isExpanded: Boolean,
+    isError:Boolean,
     eventHandler: () -> Unit={},
     modifier: Modifier = Modifier
 ) {
@@ -71,6 +73,14 @@ fun ImageMachineCells(
                     contentDescription = null,
                     modifier = Modifier.fillMaxSize()
                         .background(color = Theme.colors.highlightColor.copy(alpha = 0.15f))
+                )
+            }
+            if (isError){
+                Icon(
+                    imageVector = FeatherIcons.AlertCircle,
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxSize()
+                        .background(color = Theme.colors.errorColor.copy(alpha = 0.15f))
                 )
             }
         }

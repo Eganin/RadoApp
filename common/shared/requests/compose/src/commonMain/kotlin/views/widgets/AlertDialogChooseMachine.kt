@@ -25,6 +25,7 @@ internal fun AlertDialogChooseMachine(
     trailerIsExpanded: Boolean,
     onClickTractor: () -> Unit={},
     onClickTrailer: () -> Unit={},
+    isError:Boolean=false,
     modifier: Modifier = Modifier
 ) {
     Text(
@@ -46,6 +47,7 @@ internal fun AlertDialogChooseMachine(
             title = MainRes.string.tractor_title,
             imageLink = "$BASE_URL/resources/images/tractor.jpg",
             isExpanded = tractorIsExpanded,
+            isError = isError,
             eventHandler = {
                 onClickTractor.invoke()
             }
@@ -56,6 +58,7 @@ internal fun AlertDialogChooseMachine(
             title = MainRes.string.trailer_title,
             imageLink = "$BASE_URL/resources/images/trailer.jpg",
             isExpanded = trailerIsExpanded,
+            isError = isError,
             eventHandler = {
                 onClickTrailer.invoke()
             }
