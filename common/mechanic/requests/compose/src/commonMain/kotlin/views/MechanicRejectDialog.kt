@@ -3,19 +3,18 @@ package views
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TimePicker
-import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -23,35 +22,59 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import org.company.rado.core.MainRes
+import platform.LocalPlatform
+import platform.Platform
 import theme.Theme
+import widgets.common.TextStickyHeader
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun MechanicTimePicker(
-    confirmAction: (Pair<Int, Int>) -> Unit,
-    exitAction: () -> Unit,
+internal fun MechanicRejectDialog(
+    mechanicComment: String,
+    onSend: () -> Unit,
+    onExit: () -> Unit,
+    onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val timePickerState = rememberTimePickerState()
+    val isLargePlatform =
+        LocalPlatform.current == Platform.Web || LocalPlatform.current == Platform.Desktop
+
     Dialog(
-        onDismissRequest = exitAction,
+        onDismissRequest = onExit,
         properties = DialogProperties(dismissOnBackPress = true, dismissOnClickOutside = true)
     ) {
         Card(
             shape = RoundedCornerShape(10.dp),
             modifier = modifier
-                .fillMaxSize()
+                .fillMaxWidth()
                 .padding(16.dp),
             colors = CardDefaults.cardColors(containerColor = Theme.colors.primaryBackground)
         ) {
             Column(
-                modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState())
-                    .padding(16.dp)
+                modifier = Modifier.fillMaxSize().padding(16.dp)
             ) {
-                // time picker
-                TimePicker(state = timePickerState)
+                TextStickyHeader(textTitle = MainRes.string.reject_request_title)
 
-                // buttons
+                Spacer(modifier = Modifier.height(16.dp))
+
+                OutlinedTextField(
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedTextColor = Theme.colors.primaryTextColor,
+                        unfocusedTextColor = Theme.colors.primaryTextColor,
+                        disabledTextColor = Theme.colors.primaryTextColor,
+                    ),
+                    value = mechanicComment,
+                    onValueChange = onValueChange,
+                    label = {
+                        Text(
+                            text = MainRes.string.reject_request_label,
+                            color = Theme.colors.primaryTextColor,
+                            fontSize = if (isLargePlatform) 16.sp else 8.sp
+                        )
+                    },
+                    modifier = modifier.fillMaxWidth(),
+                    maxLines = 10
+                )
+
                 Row(
                     modifier = Modifier
                         .padding(top = 12.dp)
@@ -59,7 +82,7 @@ internal fun MechanicTimePicker(
                     horizontalArrangement = Arrangement.End
                 ) {
                     // dismiss button
-                    TextButton(onClick = { exitAction.invoke() }) {
+                    TextButton(onClick = { onExit.invoke() }) {
                         Text(
                             text = MainRes.string.dismiss_button_title,
                             fontSize = 12.sp,
@@ -70,9 +93,7 @@ internal fun MechanicTimePicker(
                     // confirm button
                     TextButton(
                         onClick = {
-                            val answer =
-                                Pair(first = timePickerState.hour, second = timePickerState.minute)
-                            confirmAction.invoke(answer)
+                            onSend.invoke()
                         }
                     ) {
                         Text(

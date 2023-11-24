@@ -68,40 +68,74 @@ class RecreateRequestViewModel :
 
             is RecreateRequestEvent.OnBackClick -> removeCacheResources()
             is RecreateRequestEvent.DeleteRequest -> removeRequestWrapper(requestId = viewState.requestId)
-            is RecreateRequestEvent.RemoveImage -> removeImage(imagePath = viewEvent.imagePath)
-            is RecreateRequestEvent.RemoveVideo -> removeVideo(videoPath = viewEvent.videoPath)
+            is RecreateRequestEvent.RemoveImage -> removeImage(
+                imagePath = viewEvent.imagePath,
+                isResource = false
+            )
+
+            is RecreateRequestEvent.RemoveVideo -> removeVideo(
+                videoPath = viewEvent.videoPath,
+                isResource = false
+            )
+
+            is RecreateRequestEvent.RemoveImageFromResource -> removeImage(
+                imagePath = viewEvent.imagePath,
+                isResource = true
+            )
+
+            is RecreateRequestEvent.RemoveVideoFromResource -> removeVideo(
+                videoPath = viewEvent.videoPath,
+                isResource = true
+            )
         }
     }
 
-    private fun removeImage(imagePath: String) {
+    private fun removeImage(imagePath: String, isResource: Boolean) {
         coroutineScope.launch {
             obtainIsLoadingChange()
-            log(tag = TAG) { "Image removing by path" }
             val wrapperForResponse =
-                activeRequestsRepositoryForDriver.deleteImageByPathForRequest(imagePath = imagePath)
+                if (isResource) activeRequestsRepositoryForDriver.deleteResourceForCache(
+                    resourceName = imagePath
+                ) else activeRequestsRepositoryForDriver.deleteImageByPathForRequest(imagePath = imagePath)
             if (wrapperForResponse is WrapperForResponse.Success) {
+                viewState = if (isResource) {
+                    val newImagesList = mutableListOf<Triple<String, Boolean, ByteArray>>()
+                    newImagesList.addAll(viewState.resources)
+                    newImagesList.removeAll { it.first == imagePath }
+                    viewState.copy(resources = newImagesList)
+                } else {
+                    val newImagesList = mutableListOf<String>()
+                    newImagesList.addAll(viewState.images)
+                    newImagesList.remove(imagePath)
+                    viewState.copy(images = newImagesList)
+                }
                 log(tag = TAG) { "Image removed" }
-                val newImagesList = mutableListOf<String>()
-                newImagesList.addAll(viewState.images)
-                newImagesList.remove(imagePath)
-                viewState = viewState.copy(images = newImagesList)
             }
             obtainIsLoadingChange()
         }
     }
 
-    private fun removeVideo(videoPath: String) {
+    private fun removeVideo(videoPath: String, isResource: Boolean) {
         coroutineScope.launch {
             obtainIsLoadingChange()
-            log(tag = TAG) { "Video removing by path" }
+            log(tag="RESOURCE") { isResource.toString() }
             val wrapperForResponse =
-                activeRequestsRepositoryForDriver.deleteVideoByPathForRequest(videoPath = videoPath)
+                if (isResource) activeRequestsRepositoryForDriver.deleteResourceForCache(
+                    resourceName = videoPath
+                ) else activeRequestsRepositoryForDriver.deleteVideoByPathForRequest(videoPath = videoPath)
             if (wrapperForResponse is WrapperForResponse.Success) {
+                viewState = if (isResource) {
+                    val newVideosList = mutableListOf<Triple<String, Boolean, ByteArray>>()
+                    newVideosList.addAll(viewState.resources)
+                    newVideosList.removeAll { it.first == videoPath }
+                    viewState.copy(resources = newVideosList)
+                } else {
+                    val newVideosList = mutableListOf<String>()
+                    newVideosList.addAll(viewState.videos)
+                    newVideosList.remove(videoPath)
+                    viewState.copy(videos = newVideosList)
+                }
                 log(tag = TAG) { "Video removed" }
-                val newVideosList = mutableListOf<String>()
-                newVideosList.addAll(viewState.videos)
-                newVideosList.remove(videoPath)
-                viewState = viewState.copy(videos = newVideosList)
             }
             obtainIsLoadingChange()
         }
@@ -256,8 +290,8 @@ class RecreateRequestViewModel :
             val response =
                 activeRequestsRepositoryForDriver.deleteResourceForCache(resourceName = it.first)
             if (response is WrapperForResponse.Failure) {
-                requestId?.let {
-                    removeRequest(requestId = it)
+                requestId?.let { id ->
+                    removeRequest(requestId = id)
                 }
                 obtainShowFailureDialog(value = true)
             }

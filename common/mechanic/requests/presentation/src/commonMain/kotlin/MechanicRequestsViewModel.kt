@@ -40,6 +40,7 @@ class MechanicRequestsViewModel :
 
             is MechanicRequestsEvent.CloseInfoDialog -> {
                 obtainShowInfoDialogChanged()
+                obtainEvent(MechanicRequestsEvent.ClearState)
                 getUnconfirmedRequests()
             }
 
@@ -54,19 +55,57 @@ class MechanicRequestsViewModel :
             )
 
             is MechanicRequestsEvent.CloseSuccessDialog -> {
-                clearState()
                 obtainShowSuccessDialog()
+                obtainEvent(MechanicRequestsEvent.ClearState)
             }
 
             is MechanicRequestsEvent.CloseFailureDialog -> {
-                clearState()
                 obtainShowFailureDialog()
+                obtainEvent(MechanicRequestsEvent.ClearState)
             }
 
             is MechanicRequestsEvent.PullRefresh -> getUnconfirmedRequests()
             is MechanicRequestsEvent.ClearState -> clearState()
-            is MechanicRequestsEvent.RejectRequest -> {}
+            is MechanicRequestsEvent.ShowRejectRequest -> obtainShowRejectDialog()
+            is MechanicRequestsEvent.SendRejectRequest -> sendRejectRequest()
+            is MechanicRequestsEvent.CommentMechanicValueChange -> obtainCommentMechanic(
+                mechanicComment = viewEvent.commentMechanic
+            )
+
+            is MechanicRequestsEvent.CloseMechanicRejectDialogWithSuccess -> {
+                obtainShowSuccessRejectDialog()
+                closeRejectDialog()
+            }
+
+            is MechanicRequestsEvent.CloseMechanicRejectDialogWithFailure -> {
+                obtainShowFailureRejectDialog()
+                closeRejectDialog()
+            }
+
+            is MechanicRequestsEvent.CloseMechanicRejectDialog -> obtainShowRejectDialog()
+
             is MechanicRequestsEvent.DriverPhoneClick -> {}
+        }
+    }
+
+    private fun sendRejectRequest() {
+        coroutineScope.launch {
+            changeLoading()
+            val wrapperForResponse = requestsForMechanicRepository.rejectRequest(
+                requestId = viewState.requestsIdForInfo,
+                commentMechanic = viewState.mechanicComment
+            )
+
+            if (wrapperForResponse is WrapperForResponse.Success) {
+                obtainShowSuccessRejectDialog()
+            } else if (wrapperForResponse is WrapperForResponse.Failure) {
+                obtainShowFailureRejectDialog()
+            }
+
+            //update requests list for mechanic
+            getUnconfirmedRequests()
+
+            changeLoading()
         }
     }
 
@@ -110,11 +149,32 @@ class MechanicRequestsViewModel :
 
     private fun clearState() {
         viewState = viewState.copy(
-            reopenDialog = !viewState.reopenDialog,
+            reopenDialog = false,
             datetime = "",
             datetimeForServer = Pair("", ""),
             date = 0,
         )
+    }
+
+    private fun closeRejectDialog() {
+        obtainShowRejectDialog()
+        obtainEvent(MechanicRequestsEvent.CloseInfoDialog)
+    }
+
+    private fun obtainShowSuccessRejectDialog(){
+        viewState = viewState.copy(showSuccessRejectDialog = !viewState.showSuccessRejectDialog)
+    }
+
+    private fun obtainShowFailureRejectDialog(){
+        viewState= viewState.copy(showFailureRejectDialog = !viewState.showFailureRejectDialog)
+    }
+
+    private fun obtainCommentMechanic(mechanicComment: String) {
+        viewState = viewState.copy(mechanicComment = mechanicComment)
+    }
+
+    private fun obtainShowRejectDialog() {
+        viewState = viewState.copy(showRejectDialog = !viewState.showRejectDialog)
     }
 
     private fun obtainShowSuccessDialog() {

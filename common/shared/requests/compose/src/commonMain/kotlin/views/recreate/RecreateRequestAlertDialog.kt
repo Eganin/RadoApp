@@ -96,7 +96,7 @@ fun RecreateRequestAlertDialog(
                 }
 
                 AlertDialogChooseMachine(
-                    title=MainRes.string.choose_machine_title,
+                    title = MainRes.string.choose_machine_title,
                     imageSize = imageSize,
                     tractorIsExpanded = state.value.tractorIsExpanded,
                     trailerIsExpanded = state.value.trailerIsExpanded,
@@ -153,10 +153,24 @@ fun RecreateRequestAlertDialog(
                         viewModel.obtainEvent(viewEvent = RecreateRequestEvent.ImageRepairExpandedChanged)
                     },
                     removeImageAction = { imagePath ->
-                        viewModel.obtainEvent(viewEvent = RecreateRequestEvent.   RemoveImage(imagePath = imagePath))
+                        viewModel.obtainEvent(viewEvent = RecreateRequestEvent.RemoveImage(imagePath = imagePath))
                     },
                     removeVideoAction = { videoPath ->
                         viewModel.obtainEvent(viewEvent = RecreateRequestEvent.RemoveVideo(videoPath = videoPath))
+                    },
+                    removeImageFromResourceAction = { imagePath ->
+                        viewModel.obtainEvent(
+                            viewEvent = RecreateRequestEvent.RemoveImageFromResource(
+                                imagePath = imagePath
+                            )
+                        )
+                    },
+                    removeVideoFromResourceAction = { videoPath ->
+                        viewModel.obtainEvent(
+                            viewEvent = RecreateRequestEvent.RemoveVideoFromResource(
+                                videoPath = videoPath
+                            )
+                        )
                     }
                 )
 
