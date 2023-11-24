@@ -68,12 +68,14 @@ class InfoRequestViewModel :
             if (unconfirmedRequestInfoItem is UnconfirmedRequestInfoItem.Success) {
                 log(tag = TAG) { "Get info for unconfirmed request ${unconfirmedRequestInfoItem.requestInfo}" }
                 val info = unconfirmedRequestInfoItem.requestInfo
+                val (isTractor, isTrailer) = info.vehicleType.toVehicleType()
                 viewState = viewState.copy(
-                    selectedVehicleType = info.vehicleType.toVehicleType(),
+                    isSelectedTractor = isTractor,
+                    isSelectedTrailer = isTrailer,
                     numberVehicle = info.vehicleNumber,
                     faultDescription = info.faultDescription,
                     images = info.images,
-                    videos=info.videos,
+                    videos = info.videos,
                     driverPhone = info.driverPhone
                 )
             } else if (unconfirmedRequestInfoItem is UnconfirmedRequestInfoItem.Error) {
@@ -94,10 +96,12 @@ class InfoRequestViewModel :
             if (fullRequestItem is FullRequestItem.Success) {
                 log(tag = TAG) { "Get info for active request ${fullRequestItem.request}" }
                 val info = fullRequestItem.request
+                val (isTractor, isTrailer) = info.vehicleType.toVehicleType()
                 log(tag = "IMAGES") { info.images.toString() }
                 viewState = viewState.copy(
                     numberVehicle = info.vehicleNumber,
-                    selectedVehicleType = info.vehicleType.toVehicleType(),
+                    isSelectedTractor = isTractor,
+                    isSelectedTrailer = isTrailer,
                     driverName = info.driverName,
                     driverPhone = info.driverPhone,
                     statusRequest = info.statusRequest,
