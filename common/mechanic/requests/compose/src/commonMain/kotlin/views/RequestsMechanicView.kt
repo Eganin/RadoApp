@@ -58,6 +58,8 @@ internal fun RequestsMechanicView(
                 },
                 modifier = Modifier.fillMaxWidth()
             )
+
+            Spacer(modifier=Modifier.height(16.dp))
         }
         if (state.errorTextForRequestList.isNotEmpty()) {
             item {

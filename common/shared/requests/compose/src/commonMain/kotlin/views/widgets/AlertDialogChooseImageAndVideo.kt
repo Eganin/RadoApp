@@ -40,6 +40,8 @@ internal fun AlertDialogChooseImageAndVideo(
     isRemoveImageAndVideo: Boolean,
     removeVideoAction: (String) -> Unit = {},
     removeImageAction: (String) -> Unit = {},
+    removeVideoFromResourceAction: (String) -> Unit = {},
+    removeImageFromResourceAction: (String) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     Text(
@@ -71,7 +73,7 @@ internal fun AlertDialogChooseImageAndVideo(
                 imageLink = it,
                 modifier = Modifier.padding(start = 16.dp, bottom = 16.dp),
                 isRemove = isRemoveImageAndVideo,
-                eventHandler = imageOnClick::invoke,
+                eventHandler = imageOnClick,
                 onRemove = {
                     removeImageAction.invoke(it)
                 }
@@ -84,8 +86,11 @@ internal fun AlertDialogChooseImageAndVideo(
                 isExpanded = resourceIsExpanded,
                 imageLink = "$BASE_URL/resources/images/${it.first}",
                 modifier = Modifier.padding(start = 16.dp, bottom = 16.dp),
-                isRemove = false,
-                eventHandler = imageOnClick::invoke
+                isRemove = isRemoveImageAndVideo,
+                eventHandler = imageOnClick,
+                onRemove = {
+                    removeImageFromResourceAction.invoke(it.first)
+                }
             )
         }
 
@@ -95,7 +100,7 @@ internal fun AlertDialogChooseImageAndVideo(
                 isExpanded = resourceIsExpanded,
                 url = it,
                 modifier = Modifier.padding(start = 16.dp, bottom = 16.dp),
-                eventHandler = videoOnClick::invoke,
+                eventHandler = videoOnClick,
                 isRemove = isRemoveImageAndVideo,
                 onRemove = {
                     removeVideoAction.invoke(it)
@@ -109,8 +114,11 @@ internal fun AlertDialogChooseImageAndVideo(
                 isExpanded = resourceIsExpanded,
                 url = "$BASE_URL/resources/videos/${it.first}",
                 modifier = Modifier.padding(start = 16.dp, bottom = 16.dp),
-                eventHandler = videoOnClick::invoke,
-                isRemove = false
+                eventHandler = videoOnClick,
+                isRemove = isRemoveImageAndVideo,
+                onRemove = {
+                    removeVideoFromResourceAction.invoke(it.first)
+                }
             )
         }
     }
