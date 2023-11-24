@@ -55,7 +55,9 @@ internal fun RequestsMechanicView(
                 text = MainRes.string.update_date_title,
                 onClick = {
                     eventHandler.invoke(MechanicRequestsEvent.PullRefresh)
-                })
+                },
+                modifier = Modifier.fillMaxWidth()
+            )
         }
         if (state.errorTextForRequestList.isNotEmpty()) {
             item {

@@ -60,8 +60,8 @@ fun ActiveRequestsForDriverView(
     }
 
     //pull refresh every minute
-    LaunchedEffect(key1 = Unit){
-        while (true){
+    LaunchedEffect(key1 = Unit) {
+        while (true) {
             eventHandler.invoke(DriverActiveEvent.PullRefresh)
             delay(30000L)
         }
@@ -76,7 +76,9 @@ fun ActiveRequestsForDriverView(
             text = MainRes.string.update_date_title,
             onClick = {
                 eventHandler.invoke(DriverActiveEvent.PullRefresh)
-            })
+            },
+            modifier = Modifier.fillMaxWidth()
+        )
 
         CalendarView(
             state = datePickerState,

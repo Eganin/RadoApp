@@ -60,7 +60,7 @@ object RequestsForMechanicScreen : Screen {
                     })
             }
 
-            if (state.value.showSuccessDialog) {
+            if (state.value.showSuccessRejectDialog) {
                 SuccessRequestDialog(
                     onDismiss = {
                         viewModel.obtainEvent(MechanicRequestsEvent.CloseMechanicRejectDialogWithSuccess)
@@ -72,7 +72,7 @@ object RequestsForMechanicScreen : Screen {
                 )
             }
 
-            if (state.value.showFailureDialog) {
+            if (state.value.showFailureRejectDialog) {
                 FailureRequestDialog(
                     onDismiss = {
                         viewModel.obtainEvent(MechanicRequestsEvent.CloseMechanicRejectDialogWithFailure)

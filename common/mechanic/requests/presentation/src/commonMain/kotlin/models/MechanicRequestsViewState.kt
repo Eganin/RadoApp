@@ -7,6 +7,8 @@ data class MechanicRequestsViewState(
     val showSuccessDialog:Boolean=false,
     val showFailureDialog:Boolean=false,
     val showRejectDialog:Boolean=false,
+    val showSuccessRejectDialog:Boolean=false,
+    val showFailureRejectDialog:Boolean=false,
     val reopenDialog: Boolean = false,
     val showDatePicker: Boolean = false,
     val showTimePicker: Boolean = false,

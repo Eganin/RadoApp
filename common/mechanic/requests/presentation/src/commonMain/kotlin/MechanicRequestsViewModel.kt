@@ -40,6 +40,7 @@ class MechanicRequestsViewModel :
 
             is MechanicRequestsEvent.CloseInfoDialog -> {
                 obtainShowInfoDialogChanged()
+                obtainEvent(MechanicRequestsEvent.ClearState)
                 getUnconfirmedRequests()
             }
 
@@ -54,13 +55,13 @@ class MechanicRequestsViewModel :
             )
 
             is MechanicRequestsEvent.CloseSuccessDialog -> {
-                clearState()
                 obtainShowSuccessDialog()
+                obtainEvent(MechanicRequestsEvent.ClearState)
             }
 
             is MechanicRequestsEvent.CloseFailureDialog -> {
-                clearState()
                 obtainShowFailureDialog()
+                obtainEvent(MechanicRequestsEvent.ClearState)
             }
 
             is MechanicRequestsEvent.PullRefresh -> getUnconfirmedRequests()
@@ -72,12 +73,12 @@ class MechanicRequestsViewModel :
             )
 
             is MechanicRequestsEvent.CloseMechanicRejectDialogWithSuccess -> {
-                obtainEvent(MechanicRequestsEvent.CloseSuccessDialog)
+                obtainShowSuccessRejectDialog()
                 closeRejectDialog()
             }
 
             is MechanicRequestsEvent.CloseMechanicRejectDialogWithFailure -> {
-                obtainEvent(MechanicRequestsEvent.CloseFailureDialog)
+                obtainShowFailureRejectDialog()
                 closeRejectDialog()
             }
 
@@ -96,9 +97,9 @@ class MechanicRequestsViewModel :
             )
 
             if (wrapperForResponse is WrapperForResponse.Success) {
-                obtainShowSuccessDialog()
+                obtainShowSuccessRejectDialog()
             } else if (wrapperForResponse is WrapperForResponse.Failure) {
-                obtainShowFailureDialog()
+                obtainShowFailureRejectDialog()
             }
 
             //update requests list for mechanic
@@ -148,7 +149,7 @@ class MechanicRequestsViewModel :
 
     private fun clearState() {
         viewState = viewState.copy(
-            reopenDialog = !viewState.reopenDialog,
+            reopenDialog = false,
             datetime = "",
             datetimeForServer = Pair("", ""),
             date = 0,
@@ -158,6 +159,14 @@ class MechanicRequestsViewModel :
     private fun closeRejectDialog() {
         obtainShowRejectDialog()
         obtainEvent(MechanicRequestsEvent.CloseInfoDialog)
+    }
+
+    private fun obtainShowSuccessRejectDialog(){
+        viewState = viewState.copy(showSuccessRejectDialog = !viewState.showSuccessRejectDialog)
+    }
+
+    private fun obtainShowFailureRejectDialog(){
+        viewState= viewState.copy(showFailureRejectDialog = !viewState.showFailureRejectDialog)
     }
 
     private fun obtainCommentMechanic(mechanicComment: String) {
