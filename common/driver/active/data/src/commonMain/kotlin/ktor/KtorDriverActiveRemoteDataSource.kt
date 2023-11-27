@@ -16,7 +16,7 @@ import ktor.models.KtorCreateRequest
 import models.CreateRequestIdResponse
 import models.SmallActiveRequestForDriverResponse
 
-class KtorDriverActiveRemoteDataSource(
+internal class KtorDriverActiveRemoteDataSource(
     private val httpClient: HttpClient
 ) {
 

@@ -11,7 +11,7 @@ import other.Mapper
 import other.WrapperForResponse
 import settings.SettingsAuthDataSource
 
-class ActiveRequestsForDriverRepositoryImpl(
+internal class ActiveRequestsForDriverRepositoryImpl(
     private val localDataSource: SettingsAuthDataSource,
     private val remoteDataSource: KtorDriverActiveRemoteDataSource,
     private val createRequestMapper: Mapper<CreateRequestIdResponse, CreateRequestIdItem>,
