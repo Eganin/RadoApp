@@ -14,7 +14,8 @@ class OperationsOnRequestsRepositoryImpl(
         numberVehicle: String,
         oldTypeVehicle: String,
         oldNumberVehicle: String,
-        faultDescription: String
+        faultDescription: String,
+        arrivalDate:String
     ): RecreateRequestItem {
         return try {
             val userInfo = localDataSource.fetchLoginUserInfo()
@@ -25,7 +26,8 @@ class OperationsOnRequestsRepositoryImpl(
                 numberVehicle = numberVehicle,
                 oldTypeVehicle = oldTypeVehicle,
                 oldNumberVehicle = oldNumberVehicle,
-                faultDescription = faultDescription
+                faultDescription = faultDescription,
+                arrivalDate=arrivalDate
             )
             RecreateRequestItem.Success(response = response)
         } catch (e: Exception) {

@@ -8,5 +8,6 @@ interface OperationsOnRequestsRepository {
         oldTypeVehicle: String,
         oldNumberVehicle: String,
         faultDescription: String,
+        arrivalDate:String
     ): RecreateRequestItem
 }

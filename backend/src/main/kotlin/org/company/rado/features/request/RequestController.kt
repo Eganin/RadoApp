@@ -33,7 +33,8 @@ class RequestController(
             oldTypeVehicle = requestRemoteInfo.oldTypeVehicle,
             oldNumberVehicle = requestRemoteInfo.oldNumberVehicle,
             faultDescription = requestRemoteInfo.faultDescription,
-            driverId = requestRemoteInfo.driverId
+            driverId = requestRemoteInfo.driverId,
+            arrivalDate = requestRemoteInfo.arrivalDate
         )
         if (response != null) {
             call.respond(response)

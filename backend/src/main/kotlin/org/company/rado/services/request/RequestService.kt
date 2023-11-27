@@ -56,7 +56,8 @@ class RequestService(
         numberVehicle: String,
         oldTypeVehicle: String,
         oldNumberVehicle: String,
-        faultDescription: String
+        faultDescription: String,
+        arrivalDate: String
     ): CreateRequestResponse? {
         var removeVehicle = false
         val vehicleId = if (typeVehicle == oldTypeVehicle && numberVehicle == oldNumberVehicle) {
@@ -73,7 +74,8 @@ class RequestService(
             vehicleId = vehicleId,
             driverId = driverId,
             statusRequest = StatusRequest.UNCONFIRMED,
-            faultDescription = faultDescription
+            faultDescription = faultDescription,
+            arrivalDate=arrivalDate
         )
         val requestIsRecreate = requestRepository.recreateRequest(request = requestDTO)
         if (removeVehicle) try {

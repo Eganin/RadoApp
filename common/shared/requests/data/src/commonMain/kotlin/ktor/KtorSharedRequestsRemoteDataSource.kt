@@ -54,7 +54,8 @@ class KtorSharedRequestsRemoteDataSource(
         numberVehicle: String,
         oldTypeVehicle: String,
         oldNumberVehicle: String,
-        faultDescription: String
+        faultDescription: String,
+        arrivalDate:String
     ): RecreateRequestResponse {
         val request = RecreateRequest(
             driverId = driverId,
@@ -62,7 +63,8 @@ class KtorSharedRequestsRemoteDataSource(
             numberVehicle = numberVehicle,
             oldTypeVehicle = oldTypeVehicle,
             oldNumberVehicle = oldNumberVehicle,
-            faultDescription = faultDescription
+            faultDescription = faultDescription,
+            arrivalDate=arrivalDate
         )
         return httpClient.put {
             url {

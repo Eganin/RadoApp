@@ -173,7 +173,8 @@ class RecreateRequestViewModel :
                         isSelectedTrailer = viewState.isSelectedOldTrailer
                     ),
                     oldNumberVehicle = viewState.oldNumberVehicle,
-                    faultDescription = viewState.faultDescription
+                    faultDescription = viewState.faultDescription,
+                    arrivalDate = viewState.arrivalDate
                 )
                 if (recreateRequestItem is RecreateRequestItem.Success) {
                     log(tag = TAG) { "request recreate success" }
