@@ -14,6 +14,7 @@ import models.recreate.RecreateRequestEvent
 import models.recreate.RecreateRequestViewState
 import other.BaseSharedViewModel
 import other.WrapperForResponse
+import time.convertDateLongToString
 
 class RecreateRequestViewModel :
     BaseSharedViewModel<RecreateRequestViewState, RecreateRequestAction, RecreateRequestEvent>(
@@ -88,6 +89,12 @@ class RecreateRequestViewModel :
                 videoPath = viewEvent.videoPath,
                 isResource = true
             )
+
+            is RecreateRequestEvent.ShowDatePicker->obtainShowDatePicker(value = true)
+
+            is RecreateRequestEvent.CloseDatePicker->obtainShowDatePicker(value = false)
+
+            is RecreateRequestEvent.ArrivalDateChanged->obtainArrivalDate(arrivalDate = convertDateLongToString(date=viewEvent.arrivalDate))
         }
     }
 
@@ -201,7 +208,8 @@ class RecreateRequestViewModel :
                     faultDescription = info.faultDescription,
                     images = info.images,
                     videos = info.videos,
-                    numberVehicle = info.vehicleNumber
+                    numberVehicle = info.vehicleNumber,
+                    arrivalDate = info.arrivalDate
                 )
                 if (viewState.isSelectedOldTractor) {
                     obtainIsSelectedTractor()
@@ -292,6 +300,10 @@ class RecreateRequestViewModel :
         viewState = viewState.copy(resources = emptyList())
     }
 
+    private fun obtainArrivalDate(arrivalDate: String) {
+        viewState = viewState.copy(arrivalDate = arrivalDate)
+    }
+
     private fun obtainNotChooseVehicle(value: Boolean) {
         viewState = viewState.copy(notChooseVehicle = value)
     }
@@ -371,6 +383,10 @@ class RecreateRequestViewModel :
 
     private fun obtainFilePickerVisibilityChange() {
         viewState = viewState.copy(showFilePicker = !viewState.showFilePicker)
+    }
+
+    private fun obtainShowDatePicker(value: Boolean){
+        viewState=viewState.copy(showDatePicker = value)
     }
 
     private companion object {

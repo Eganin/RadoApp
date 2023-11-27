@@ -58,9 +58,7 @@ class CreateRequestViewModel :
 
             is CreateRequestEvent.ImageRepairExpandedChanged -> obtainImageIsExpandedChange()
             is CreateRequestEvent.OnBackClick -> removeCacheResources()
-            is CreateRequestEvent.ArrivalDateChanged ->{
-                obtainArrivalDate(arrivalDate = convertDateLongToString(date=viewEvent.arrivalDate))
-            }
+            is CreateRequestEvent.ArrivalDateChanged ->obtainArrivalDate(arrivalDate = convertDateLongToString(date=viewEvent.arrivalDate))
             is CreateRequestEvent.ShowDatePicker->obtainShowDatePicker(value = true)
             is CreateRequestEvent.CloseDatePicker->obtainShowDatePicker(value = false)
         }

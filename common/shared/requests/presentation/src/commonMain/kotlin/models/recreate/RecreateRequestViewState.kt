@@ -11,6 +11,7 @@ data class RecreateRequestViewState(
     val faultDescription: String = "",
     val showSuccessDialog: Boolean = false,
     val showFailureDialog: Boolean = false,
+    val showDatePicker:Boolean=false,
     val trailerIsExpanded: Boolean = false,
     val tractorIsExpanded: Boolean = false,
     val imageIsExpanded: Boolean = false,

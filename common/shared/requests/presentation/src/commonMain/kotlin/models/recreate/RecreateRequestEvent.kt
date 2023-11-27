@@ -42,4 +42,10 @@ sealed class RecreateRequestEvent {
     data class RemoveImageFromResource(val imagePath: String) : RecreateRequestEvent()
 
     data class RemoveVideoFromResource(val videoPath: String) : RecreateRequestEvent()
+
+    data class ArrivalDateChanged(val arrivalDate: Long) : RecreateRequestEvent()
+
+    data object ShowDatePicker : RecreateRequestEvent()
+
+    data object CloseDatePicker : RecreateRequestEvent()
 }
