@@ -20,6 +20,7 @@
     <string name="create_request_button_title">Создать завку на ремонт</string>
     <string name="request_is_not_create">Не удалось создать запрос</string>
     <string name="requests_by_date_is_not_fetch">Не удалось получить заявки</string>
+    <string name="archieve_request_is_failure">Не удалось подтвердить ремонт</string>
     <string name="number_vehicle_is_empty">Номер машины не введен</string>
     <string name="reissue_request_title">Переоформить</string>
     <string name="january_title">янв.</string>
