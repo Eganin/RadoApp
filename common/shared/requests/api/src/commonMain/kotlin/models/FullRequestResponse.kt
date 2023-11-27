@@ -37,5 +37,7 @@ data class FullRequestResponse(
     @SerialName("videos")
     val videos: List<String>,
     @SerialName("arrivalDate")
-    val arrivalDate:String
+    val arrivalDate:String,
+    @SerialName("streetRepair")
+    val streetRepair:String
 )

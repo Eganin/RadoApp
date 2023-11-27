@@ -42,4 +42,10 @@ sealed class MechanicRequestsEvent {
     data object CloseMechanicRejectDialogWithFailure : MechanicRequestsEvent()
 
     data object CloseMechanicRejectDialog : MechanicRequestsEvent()
+
+    data class CheckRepairOnBase(val isChecked:Boolean):MechanicRequestsEvent()
+
+    data class CheckRepairOnOtherPlace(val isChecked: Boolean): MechanicRequestsEvent()
+
+    data class StreetForRepairChanged(val street:String):MechanicRequestsEvent()
 }

@@ -19,5 +19,6 @@ data class FullRequest(
     val commentMechanic: String? = null,
     val images: List<String>,
     val videos: List<String>,
-    val arrivalDate:String=""
+    val arrivalDate:String="",
+    val streetRepair:String=""
 )

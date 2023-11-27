@@ -17,5 +17,9 @@ data class MechanicRequestsViewState(
     val datetimeForServer: Pair<String, String> = Pair("", ""),
     val date: Long = 0,
     val isLoading: Boolean = false,
-    val mechanicComment:String=""
+    val mechanicComment:String="",
+    val repairOnBase:Boolean=false,
+    val repairOnOtherPlace:Boolean=false,
+    val isActiveInputFieldForStreet:Boolean=false,
+    val streetForRepair:String=""
 )
