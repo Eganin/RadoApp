@@ -148,7 +148,7 @@ class CreateRequestViewModel :
     }
 
     private fun obtainShowDatePicker(value: Boolean){
-        viewState=viewState.copy(showFilePicker = value)
+        viewState=viewState.copy(showDatePicker = value)
     }
 
     private fun obtainShowSuccessDialog() {

@@ -1,7 +1,6 @@
 package views.widgets
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -89,32 +88,30 @@ internal fun AlertDialogTextInputs(
     Text(
         text = MainRes.string.optional_title,
         color = Theme.colors.primaryTextColor,
-        fontSize = if (isLargePlatform) 16.sp else 8.sp
+        fontSize = if (isLargePlatform) 20.sp else 12.sp
     )
 
-    Spacer(modifier = Modifier.height(4.dp))
+    Spacer(modifier = Modifier.height(16.dp))
 
-    Row(modifier = Modifier.fillMaxWidth()) {
-        ActionButton(text = MainRes.string.arrival_date_button_title, onClick = arrivalDateOnClick)
+    ActionButton(text = MainRes.string.arrival_date_button_title, onClick = arrivalDateOnClick)
 
-        Spacer(modifier = Modifier.fillMaxWidth())
+    Spacer(modifier = Modifier.height(16.dp))
 
-        if (arrivalDate.isNotEmpty()) {
-            Column {
-                Text(
-                    text = MainRes.string.arrival_date_title,
-                    color = Theme.colors.primaryTextColor,
-                    fontSize = if (isLargePlatform) 16.sp else 8.sp
-                )
+    if (arrivalDate.isNotEmpty()) {
+        Column {
+            Text(
+                text = MainRes.string.arrival_date_title,
+                color = Theme.colors.primaryTextColor,
+                fontSize = if (isLargePlatform) 20.sp else 21.sp
+            )
 
-                Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(4.dp))
 
-                Text(
-                    text = arrivalDate,
-                    color = Theme.colors.primaryTextColor,
-                    fontSize = if (isLargePlatform) 16.sp else 8.sp
-                )
-            }
+            Text(
+                text = arrivalDate,
+                color = Theme.colors.primaryTextColor,
+                fontSize = if (isLargePlatform) 20.sp else 12.sp
+            )
         }
     }
 

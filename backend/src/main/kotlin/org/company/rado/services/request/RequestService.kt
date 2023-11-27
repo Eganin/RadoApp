@@ -128,7 +128,8 @@ class RequestService(
             time = requestDTO.time ?: "",
             statusRepair = requestDTO.statusRepair ?: false,
             images = images,
-            videos = videos
+            videos = videos,
+            arrivalDate = requestDTO.arrivalDate
         )
     }
 }

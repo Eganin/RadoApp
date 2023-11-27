@@ -20,5 +20,6 @@ data class RecreateRequestViewState(
     val resources: List<Triple<String, Boolean, ByteArray>> = emptyList(),
     val images: List<String> = emptyList(),
     val videos: List<String> = emptyList(),
-    val notChooseVehicle:Boolean=false
+    val notChooseVehicle:Boolean=false,
+    val arrivalDate:String=""
 )

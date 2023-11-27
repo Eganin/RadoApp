@@ -58,6 +58,7 @@ dependencies {
     implementation("io.ktor:ktor-server-compression:$ktor_version")
     implementation("io.ktor:ktor-server-resources:$ktor_version")
     implementation("io.ktor:ktor-server-partial-content:$ktor_version")
+    implementation("org.flywaydb:flyway-core:6.5.2")
 }
 
 ktor {

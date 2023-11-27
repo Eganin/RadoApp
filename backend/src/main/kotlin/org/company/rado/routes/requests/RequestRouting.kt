@@ -17,7 +17,5 @@ fun Application.configureRequestRouting() {
             val requestController by closestDI().instance<RequestController>()
             requestController.recreateRequest(call = call,requestId=requestId)
         }
-
-        delete(path = "/request/delete") { }
     }
 }
