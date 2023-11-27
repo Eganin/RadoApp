@@ -13,5 +13,6 @@ data class FullUnconfirmedRequest(
     val statusRequest: StatusRequest = StatusRequest.UNCONFIRMED,
     val faultDescription: String,
     val images: List<String>,
-    val videos: List<String>
+    val videos: List<String>,
+    val arrivalDate:String=""
 )

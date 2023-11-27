@@ -12,6 +12,7 @@ object Requests : Table(name = "requests") {
     val mechanicId = reference(name = "mechanic_id", refColumn = Mechanics.id).nullable()
     val date = varchar(name = "date", length = 10).nullable()
     val time = varchar(name = "time", length = 5).nullable()
+    val arrivalDate = varchar(name="arrival_date",length=10).nullable()
     val faultDescription = text(name = "fault_description").nullable()
     val statusRepair = bool(name = "status_repair").nullable()
     val commentMechanic = text(name = "comment_mechanic").nullable()

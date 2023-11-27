@@ -1,12 +1,10 @@
 package org.company.rado
 
-import org.company.rado.dao.di.bindRepositories
-import org.company.rado.features.di.bindControllers
 import io.ktor.server.application.Application
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
-import org.jetbrains.exposed.sql.Database
-import org.kodein.di.ktor.di
+import org.company.rado.dao.di.bindRepositories
+import org.company.rado.features.di.bindControllers
 import org.company.rado.plugins.configureCompression
 import org.company.rado.plugins.configureCors
 import org.company.rado.plugins.configureException
@@ -27,6 +25,9 @@ import org.company.rado.routes.users.configureRegisterRouting
 import org.company.rado.routes.vehicles.configureDeleteVehiclesRouting
 import org.company.rado.services.di.bindServices
 import org.company.rado.utils.configureTestRouting
+import org.flywaydb.core.Flyway
+import org.jetbrains.exposed.sql.Database
+import org.kodein.di.ktor.di
 
 fun main() {
     Database.connect(
@@ -44,6 +45,11 @@ fun main() {
 }
 
 fun Application.module() {
+    Flyway.configure().dataSource(
+        System.getenv("DATABASE_CONNECTION_STRING"),
+        System.getenv("POSTGRES_USER"),
+        System.getenv("POSTGRES_PASSWORD")
+    ).load().baseline()
     configureCompression()
     configureSerialization()
     configureException()

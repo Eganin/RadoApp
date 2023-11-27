@@ -76,7 +76,8 @@ class InfoRequestViewModel :
                     faultDescription = info.faultDescription,
                     images = info.images,
                     videos = info.videos,
-                    driverPhone = info.driverPhone
+                    driverPhone = info.driverPhone,
+                    arrivalDate = info.arrivalDate
                 )
             } else if (unconfirmedRequestInfoItem is UnconfirmedRequestInfoItem.Error) {
                 log(tag = TAG) { "Failure get info for unconfirmed request" }
@@ -112,7 +113,8 @@ class InfoRequestViewModel :
                     statusRepair = info.statusRepair,
                     commentMechanic = info.commentMechanic ?: "",
                     images = info.images,
-                    videos = info.videos
+                    videos = info.videos,
+                    arrivalDate = info.arrivalDate
                 )
             } else if (fullRequestItem is FullRequestItem.Error) {
                 log(tag = TAG) { "Failure get info for active request" }

@@ -16,5 +16,7 @@ data class RecreateRequest(
     @SerialName("oldNumberVehicle")
     val oldNumberVehicle: String,
     @SerialName("faultDescription")
-    val faultDescription: String = ""
+    val faultDescription: String = "",
+    @SerialName("arrivalDate")
+    val arrivalDate:String
 )

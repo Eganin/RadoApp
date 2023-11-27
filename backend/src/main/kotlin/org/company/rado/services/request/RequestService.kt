@@ -25,7 +25,8 @@ class RequestService(
         driverUsername: String,
         typeVehicle: String,
         numberVehicle: String,
-        faultDescription: String
+        faultDescription: String,
+        arrivalDate:String
     ): CreateRequestResponse {
         val vehicleId = vehicleRepository.createVehicle(numberVehicle = numberVehicle, typeVehicle = typeVehicle)
             ?: throw NotFoundException("Vehicle is not found")
@@ -36,7 +37,8 @@ class RequestService(
             vehicleId = vehicleId,
             driverId = driverId,
             statusRequest = StatusRequest.UNCONFIRMED,
-            faultDescription = faultDescription
+            faultDescription = faultDescription,
+            arrivalDate = arrivalDate
         )
         val requestId = requestRepository.createRequest(request = requestDTO)
 
@@ -54,7 +56,8 @@ class RequestService(
         numberVehicle: String,
         oldTypeVehicle: String,
         oldNumberVehicle: String,
-        faultDescription: String
+        faultDescription: String,
+        arrivalDate: String
     ): CreateRequestResponse? {
         var removeVehicle = false
         val vehicleId = if (typeVehicle == oldTypeVehicle && numberVehicle == oldNumberVehicle) {
@@ -71,7 +74,8 @@ class RequestService(
             vehicleId = vehicleId,
             driverId = driverId,
             statusRequest = StatusRequest.UNCONFIRMED,
-            faultDescription = faultDescription
+            faultDescription = faultDescription,
+            arrivalDate=arrivalDate
         )
         val requestIsRecreate = requestRepository.recreateRequest(request = requestDTO)
         if (removeVehicle) try {
@@ -126,7 +130,8 @@ class RequestService(
             time = requestDTO.time ?: "",
             statusRepair = requestDTO.statusRepair ?: false,
             images = images,
-            videos = videos
+            videos = videos,
+            arrivalDate = requestDTO.arrivalDate
         )
     }
 }

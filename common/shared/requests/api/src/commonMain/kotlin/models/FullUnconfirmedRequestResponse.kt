@@ -23,5 +23,7 @@ data class FullUnconfirmedRequestResponse(
     @SerialName("images")
     val images: List<String>,
     @SerialName("videos")
-    val videos: List<String>
+    val videos: List<String>,
+    @SerialName("arrivalDate")
+    val arrivalDate: String
 )

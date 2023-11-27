@@ -17,6 +17,7 @@ class RequestDaoImpl(override val requestDTOMapper: Mapper<RequestDTO, ResultRow
             it[driverId] = request.driverId
             it[faultDescription] = request.faultDescription
             it[statusRequest] = request.statusRequest.name
+            it[arrivalDate] = request.arrivalDate
         }
         insertStatement.resultedValues?.map { it[Requests.id] }?.single()
     }
@@ -27,6 +28,7 @@ class RequestDaoImpl(override val requestDTOMapper: Mapper<RequestDTO, ResultRow
             it[driverId] = request.driverId
             it[statusRequest] = request.statusRequest.name
             it[faultDescription] = request.faultDescription
+            it[arrivalDate] = request.arrivalDate
         }
         result != 0
     }

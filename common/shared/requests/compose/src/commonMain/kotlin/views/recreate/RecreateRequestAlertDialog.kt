@@ -35,6 +35,7 @@ import views.widgets.AlertDialogChooseImageAndVideo
 import views.widgets.AlertDialogChooseMachine
 import views.widgets.AlertDialogTextInputs
 import views.widgets.AlertDialogTopBar
+import views.widgets.DatePicker
 import widgets.common.ActionButton
 import widgets.common.CircularLoader
 
@@ -103,6 +104,7 @@ fun RecreateRequestAlertDialog(
                     notVehicleNumber = state.value.notVehicleNumber,
                     faultDescription = state.value.faultDescription,
                     isLargePlatform = isLargePlatform,
+                    arrivalDate = state.value.arrivalDate,
                     numberVehicleOnChange = {
                         viewModel.obtainEvent(
                             viewEvent = RecreateRequestEvent.NumberVehicleChanged(
@@ -114,6 +116,9 @@ fun RecreateRequestAlertDialog(
                         viewModel.obtainEvent(
                             viewEvent = RecreateRequestEvent.FaultDescriptionChanged(value = it)
                         )
+                    },
+                    arrivalDateOnClick = {
+                        viewModel.obtainEvent(viewEvent = RecreateRequestEvent.ShowDatePicker)
                     }
                 )
 
@@ -205,6 +210,22 @@ fun RecreateRequestAlertDialog(
                 onDismiss = { viewModel.obtainEvent(viewEvent = RecreateRequestEvent.CloseFailureDialog) },
                 onExit = { viewModel.obtainEvent(viewEvent = RecreateRequestEvent.CloseFailureDialog) },
                 firstText = MainRes.string.base_error_message
+            )
+        }
+
+        if (state.value.showDatePicker) {
+            DatePicker(
+                confirmAction = { dateLong ->
+                    viewModel.obtainEvent(
+                        viewEvent = RecreateRequestEvent.ArrivalDateChanged(
+                            arrivalDate = dateLong
+                        )
+                    )
+                    viewModel.obtainEvent(viewEvent = RecreateRequestEvent.CloseDatePicker)
+                },
+                exitAction = {
+                    viewModel.obtainEvent(viewEvent = RecreateRequestEvent.CloseDatePicker)
+                }
             )
         }
     }

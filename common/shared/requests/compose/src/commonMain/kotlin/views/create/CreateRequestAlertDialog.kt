@@ -20,7 +20,6 @@ import dev.icerock.moko.mvvm.compose.viewModelFactory
 import io.github.aakira.napier.log
 import models.create.CreateRequestAction
 import models.create.CreateRequestEvent
-import models.create.VehicleType
 import org.company.rado.core.MainRes
 import other.observeAsState
 import platform.LocalPlatform
@@ -30,6 +29,7 @@ import views.widgets.AlertDialogChooseImageAndVideo
 import views.widgets.AlertDialogChooseMachine
 import views.widgets.AlertDialogTextInputs
 import views.widgets.AlertDialogTopBar
+import views.widgets.DatePicker
 import widgets.common.ActionButton
 import widgets.common.CircularLoader
 
@@ -73,7 +73,7 @@ fun CreateRequestAlertDialog(
                 }
 
                 AlertDialogChooseMachine(
-                    title=MainRes.string.choose_machine_title,
+                    title = MainRes.string.choose_machine_title,
                     imageSize = imageSize,
                     tractorIsExpanded = state.value.tractorIsExpanded,
                     trailerIsExpanded = state.value.trailerIsExpanded,
@@ -90,6 +90,7 @@ fun CreateRequestAlertDialog(
                     notVehicleNumber = state.value.notVehicleNumber,
                     faultDescription = state.value.faultDescription,
                     isLargePlatform = isLargePlatform,
+                    arrivalDate = state.value.arrivalDate,
                     numberVehicleOnChange = {
                         viewModel.obtainEvent(
                             viewEvent = CreateRequestEvent.NumberVehicleChanged(
@@ -101,6 +102,9 @@ fun CreateRequestAlertDialog(
                         viewModel.obtainEvent(
                             viewEvent = CreateRequestEvent.FaultDescriptionChanged(value = it)
                         )
+                    },
+                    arrivalDateOnClick = {
+                        viewModel.obtainEvent(viewEvent = CreateRequestEvent.ShowDatePicker)
                     }
                 )
 
@@ -161,6 +165,22 @@ fun CreateRequestAlertDialog(
                 onDismiss = { viewModel.obtainEvent(viewEvent = CreateRequestEvent.CloseFailureDialog) },
                 onExit = { viewModel.obtainEvent(viewEvent = CreateRequestEvent.CloseFailureDialog) },
                 firstText = MainRes.string.failure_create_request_title
+            )
+        }
+
+        if (state.value.showDatePicker) {
+            DatePicker(
+                confirmAction = { dateLong ->
+                    viewModel.obtainEvent(
+                        viewEvent = CreateRequestEvent.ArrivalDateChanged(
+                            arrivalDate = dateLong
+                        )
+                    )
+                    viewModel.obtainEvent(viewEvent = CreateRequestEvent.CloseDatePicker)
+                },
+                exitAction = {
+                    viewModel.obtainEvent(viewEvent = CreateRequestEvent.CloseDatePicker)
+                }
             )
         }
     }
