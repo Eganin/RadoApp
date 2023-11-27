@@ -102,7 +102,7 @@ internal fun AlertDialogTextInputs(
             Text(
                 text = MainRes.string.arrival_date_title,
                 color = Theme.colors.primaryTextColor,
-                fontSize = if (isLargePlatform) 20.sp else 21.sp
+                fontSize = if (isLargePlatform) 20.sp else 12.sp
             )
 
             Spacer(modifier = Modifier.height(4.dp))

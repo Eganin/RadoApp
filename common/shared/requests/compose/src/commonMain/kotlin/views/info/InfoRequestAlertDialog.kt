@@ -113,8 +113,6 @@ fun InfoRequestAlertDialog(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 if (state.value.faultDescription.isNotEmpty()) {
-                    Spacer(modifier = Modifier.height(16.dp))
-
                     Text(
                         text = MainRes.string.fault_description_title,
                         fontSize = 12.sp,
@@ -133,6 +131,27 @@ fun InfoRequestAlertDialog(
                         textAlign = TextAlign.Start,
                         modifier = Modifier.fillMaxWidth()
                     )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
+
+                if (state.value.arrivalDate.isNotEmpty()) {
+                    Column {
+                        Text(
+                            text = MainRes.string.arrival_date_title,
+                            color = Theme.colors.primaryTextColor,
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+
+                        Spacer(modifier = Modifier.height(4.dp))
+
+                        Text(
+                            text = state.value.arrivalDate,
+                            color = Theme.colors.primaryTextColor,
+                            fontSize = 12.sp
+                        )
+                    }
 
                     Spacer(modifier = Modifier.height(16.dp))
                 }
