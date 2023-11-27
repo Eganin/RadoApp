@@ -84,6 +84,9 @@
     <string name="reject_request_title_dialog">Отмена заявки</string>
     <string name="reject_request_label">Причина отмены(макс 500 симв)</string>
     <string name="arrival_date_button_title">Выбрать дату заезда на базу</string>
-    <string name="optional_title">Опцианально</string>
+    <string name="optional_title">Опционально</string>
     <string name="arrival_date_title">Дата заезда на базу</string>
+    <string name="repair_on_base_title">Ремонт на базе</string>
+    <string name="repair_on_other_place_title">Ремонт в другом месте</string>
+    <string name="repair_on_other_place_street_label">Место ремонта(улица)</string>
 </resources>
