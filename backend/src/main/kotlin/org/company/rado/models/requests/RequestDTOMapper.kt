@@ -15,7 +15,8 @@ class RequestDTOMapper : Mapper<RequestDTO, ResultRow> {
             time = source[Requests.time],
             date= source[Requests.date],
             statusRepair = source[Requests.statusRepair],
-            commentMechanic = source[Requests.commentMechanic]
+            commentMechanic = source[Requests.commentMechanic],
+            arrivalDate = source[Requests.arrivalDate]?:""
         )
     }
 

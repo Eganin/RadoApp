@@ -9,5 +9,6 @@ data class RecreateRequestRemote(
     val numberVehicle: String,
     val oldTypeVehicle: String,
     val oldNumberVehicle: String,
-    val faultDescription: String = ""
+    val faultDescription: String = "",
+    val arrivalDate:String=""
 )

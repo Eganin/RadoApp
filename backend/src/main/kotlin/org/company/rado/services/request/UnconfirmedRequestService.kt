@@ -56,7 +56,8 @@ class UnconfirmedRequestService(
             statusRequest = requestDTO.statusRequest,
             faultDescription = requestDTO.faultDescription,
             images = images,
-            videos=videos
+            videos=videos,
+            arrivalDate = requestDTO.arrivalDate
         )
     }
 }

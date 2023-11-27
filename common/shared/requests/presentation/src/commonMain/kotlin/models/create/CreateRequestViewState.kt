@@ -16,7 +16,9 @@ data class CreateRequestViewState(
     val showFilePicker: Boolean = false,
     val resources: List<Triple<String, Boolean, ByteArray>> = emptyList(),
     val isLoading: Boolean = false,
-    val notChooseVehicle:Boolean=false
+    val notChooseVehicle:Boolean=false,
+    val arrivalDate:String="",
+    val showDatePicker:Boolean=false
 )
 
 
