@@ -23,5 +23,6 @@ data class InfoRequestViewState(
     val isLoading: Boolean = false,
     val infoForPosition: Position = Position.DRIVER,
     val isActiveRequest: Boolean = false,
-    val arrivalDate:String=""
+    val arrivalDate:String="",
+    val streetRepair:String=""
 )

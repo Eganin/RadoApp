@@ -136,22 +136,39 @@ fun InfoRequestAlertDialog(
                 }
 
                 if (state.value.arrivalDate.isNotEmpty()) {
-                    Column {
-                        Text(
-                            text = MainRes.string.arrival_date_title,
-                            color = Theme.colors.primaryTextColor,
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.Bold
-                        )
+                    Text(
+                        text = MainRes.string.arrival_date_title,
+                        color = Theme.colors.primaryTextColor,
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Bold
+                    )
 
-                        Spacer(modifier = Modifier.height(4.dp))
+                    Spacer(modifier = Modifier.height(4.dp))
 
-                        Text(
-                            text = state.value.arrivalDate,
-                            color = Theme.colors.primaryTextColor,
-                            fontSize = 12.sp
-                        )
-                    }
+                    Text(
+                        text = state.value.arrivalDate,
+                        color = Theme.colors.primaryTextColor,
+                        fontSize = 12.sp
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
+
+                if (state.value.streetRepair.isNotEmpty()) {
+                    Text(
+                        text = MainRes.string.repair_on_other_place_street_label,
+                        color = Theme.colors.primaryTextColor,
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+
+                    Spacer(modifier = Modifier.height(4.dp))
+
+                    Text(
+                        text = state.value.streetRepair,
+                        color = Theme.colors.primaryTextColor,
+                        fontSize = 12.sp
+                    )
 
                     Spacer(modifier = Modifier.height(16.dp))
                 }

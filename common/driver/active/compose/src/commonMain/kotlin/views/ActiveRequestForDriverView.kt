@@ -26,6 +26,8 @@ import models.DriverActiveEvent
 import models.DriverActiveViewState
 import org.company.rado.core.MainRes
 import other.Position
+import platform.LocalPlatform
+import platform.Platform
 import theme.Theme
 import time.convertDateLongToString
 import time.datetimeStringToPrettyString
@@ -44,6 +46,9 @@ fun ActiveRequestsForDriverView(
     modifier: Modifier = Modifier,
     eventHandler: (DriverActiveEvent) -> Unit
 ) {
+
+    val isLargePlatform =
+        LocalPlatform.current == Platform.Web || LocalPlatform.current == Platform.Desktop
 
     val datePickerState = rememberDatePickerState()
 
@@ -85,8 +90,8 @@ fun ActiveRequestsForDriverView(
         CalendarView(
             state = datePickerState,
             modifier = Modifier
-                .heightIn(max = 500.dp)
-                .widthIn(max = 500.dp)
+                .heightIn(max = if(isLargePlatform) 800.dp else 400.dp)
+                .widthIn(max = if(isLargePlatform) 800.dp else 400.dp)
         )
 
         Spacer(modifier = Modifier.height(8.dp))

@@ -84,6 +84,12 @@ class MechanicRequestsViewModel :
 
             is MechanicRequestsEvent.CloseMechanicRejectDialog -> obtainShowRejectDialog()
 
+            is MechanicRequestsEvent.CheckRepairOnBase -> obtainRepairOnBase(isChecked = viewEvent.isChecked)
+
+            is MechanicRequestsEvent.CheckRepairOnOtherPlace -> obtainRepairOnOtherPlace(isChecked = viewEvent.isChecked)
+
+            is MechanicRequestsEvent.StreetForRepairChanged -> obtainStreetForRepair(street = viewEvent.street)
+
             is MechanicRequestsEvent.DriverPhoneClick -> {}
         }
     }
@@ -133,7 +139,8 @@ class MechanicRequestsViewModel :
             val response = requestsForMechanicRepository.confirmationRequest(
                 requestId = viewState.requestsIdForInfo,
                 date = viewState.datetimeForServer.first,
-                time = viewState.datetimeForServer.second
+                time = viewState.datetimeForServer.second,
+                streetRepair = viewState.streetForRepair
             )
             if (response is WrapperForResponse.Success) {
                 obtainShowSuccessDialog()
@@ -161,12 +168,38 @@ class MechanicRequestsViewModel :
         obtainEvent(MechanicRequestsEvent.CloseInfoDialog)
     }
 
-    private fun obtainShowSuccessRejectDialog(){
+    private fun obtainStreetForRepair(street: String) {
+        viewState = viewState.copy(streetForRepair = street)
+    }
+
+    private fun obtainRepairOnBase(isChecked: Boolean) {
+        viewState = viewState.copy(
+            repairOnBase = isChecked,
+            repairOnOtherPlace = !isChecked,
+            isActiveInputFieldForStreet = !isChecked
+        )
+        if (isChecked){
+            viewState=viewState.copy(
+                streetForRepair = ""
+            )
+        }
+    }
+
+    private fun obtainRepairOnOtherPlace(isChecked: Boolean) {
+        viewState =
+            viewState.copy(
+                repairOnOtherPlace = isChecked,
+                isActiveInputFieldForStreet = isChecked,
+                repairOnBase = !isChecked
+            )
+    }
+
+    private fun obtainShowSuccessRejectDialog() {
         viewState = viewState.copy(showSuccessRejectDialog = !viewState.showSuccessRejectDialog)
     }
 
-    private fun obtainShowFailureRejectDialog(){
-        viewState= viewState.copy(showFailureRejectDialog = !viewState.showFailureRejectDialog)
+    private fun obtainShowFailureRejectDialog() {
+        viewState = viewState.copy(showFailureRejectDialog = !viewState.showFailureRejectDialog)
     }
 
     private fun obtainCommentMechanic(mechanicComment: String) {

@@ -114,7 +114,8 @@ class InfoRequestViewModel :
                     commentMechanic = info.commentMechanic ?: "",
                     images = info.images,
                     videos = info.videos,
-                    arrivalDate = info.arrivalDate
+                    arrivalDate = info.arrivalDate,
+                    streetRepair = info.streetRepair
                 )
             } else if (fullRequestItem is FullRequestItem.Error) {
                 log(tag = TAG) { "Failure get info for active request" }

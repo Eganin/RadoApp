@@ -21,7 +21,8 @@ class ActiveRequestController(
             requestId = confirmationRequestRemote.requestId,
             time = confirmationRequestRemote.time,
             date = confirmationRequestRemote.date,
-            mechanicId = confirmationRequestRemote.mechanicId
+            mechanicId = confirmationRequestRemote.mechanicId,
+            streetRepair = confirmationRequestRemote.streetRepair
         )
         if (response) {
             call.respond(HttpStatusCode.OK, message = "Request is confirmation")

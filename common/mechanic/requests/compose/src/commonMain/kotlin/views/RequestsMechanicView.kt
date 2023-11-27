@@ -2,6 +2,8 @@ package views
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,7 +12,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -60,7 +66,7 @@ internal fun RequestsMechanicView(
                 modifier = Modifier.fillMaxWidth()
             )
 
-            Spacer(modifier=Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(16.dp))
         }
         if (state.errorTextForRequestList.isNotEmpty()) {
             item {
@@ -106,10 +112,94 @@ internal fun RequestsMechanicView(
                 }
                 Spacer(modifier = Modifier.height(16.dp))
 
+                Column(modifier = Modifier.fillMaxWidth()) {
+                    Row(modifier = Modifier.fillMaxWidth()) {
+                        Checkbox(
+                            checked = state.repairOnBase,
+                            onCheckedChange = {
+                                eventHandler.invoke(
+                                    MechanicRequestsEvent.CheckRepairOnBase(
+                                        isChecked = it
+                                    )
+                                )
+                            },
+                            modifier = Modifier.padding(5.dp),
+                            colors = CheckboxDefaults.colors(
+                                checkedColor = Theme.colors.primaryAction
+                            )
+                        )
+
+                        Text(
+                            text = MainRes.string.repair_on_base_title,
+                            fontSize = 12.sp,
+                            color = Theme.colors.primaryTextColor,
+                            textAlign = TextAlign.Start,
+                            modifier = Modifier.padding(top = 5.dp)
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(4.dp))
+
+                    Row(modifier = Modifier.fillMaxWidth()) {
+                        Checkbox(
+                            checked = state.repairOnOtherPlace,
+                            onCheckedChange = {
+                                eventHandler.invoke(
+                                    MechanicRequestsEvent.CheckRepairOnOtherPlace(
+                                        isChecked = it
+                                    )
+                                )
+                            },
+                            modifier = Modifier.padding(5.dp),
+                            colors = CheckboxDefaults.colors(
+                                checkedColor = Theme.colors.primaryAction
+                            )
+                        )
+
+                        Text(
+                            text = MainRes.string.repair_on_other_place_title,
+                            fontSize = 12.sp,
+                            color = Theme.colors.primaryTextColor,
+                            textAlign = TextAlign.Start,
+                            modifier = Modifier.padding(top = 5.dp)
+                        )
+                    }
+
+                    OutlinedTextField(
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedTextColor = Theme.colors.primaryTextColor,
+                            unfocusedTextColor = Theme.colors.primaryTextColor,
+                            disabledTextColor = Theme.colors.hintTextColor.copy(alpha = 0.5f),
+                            disabledContainerColor = Theme.colors.hintTextColor.copy(alpha = 0.5f)
+                        ),
+                        enabled = state.isActiveInputFieldForStreet,
+                        value = state.streetForRepair,
+                        onValueChange = {
+                            eventHandler.invoke(
+                                MechanicRequestsEvent.StreetForRepairChanged(
+                                    street = it
+                                )
+                            )
+                        },
+                        label = {
+                            Text(
+                                text = MainRes.string.repair_on_other_place_street_label,
+                                color = Theme.colors.primaryTextColor
+                            )
+                        },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+
+                    Spacer(modifier = Modifier.height(4.dp))
+                }
+
+
+                Spacer(modifier = Modifier.height(16.dp))
+
                 if (state.reopenDialog) {
                     Text(
                         text = MainRes.string.datetime_title + state.datetime,
-                        fontSize = 12.sp,
+                        fontSize = 21.sp,
                         color = Theme.colors.highlightColor,
                         textAlign = TextAlign.Start,
                         fontWeight = FontWeight.Bold,

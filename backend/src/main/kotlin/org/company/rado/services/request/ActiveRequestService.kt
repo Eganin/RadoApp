@@ -14,12 +14,13 @@ class ActiveRequestService(
     private val vehicleRepository: VehicleDaoFacade,
     private val mechanicRepository: MechanicDaoFacade
 ) {
-    suspend fun confirmationRequest(requestId: Int, date: String, time: String, mechanicId: Int): Boolean {
+    suspend fun confirmationRequest(requestId: Int, date: String, time: String, mechanicId: Int,streetRepair:String): Boolean {
         return requestRepository.confirmationRequest(
             requestId = requestId,
             time = time,
             date = date,
-            mechanicId = mechanicId
+            mechanicId = mechanicId,
+            streetRepair = streetRepair
         )
     }
 
