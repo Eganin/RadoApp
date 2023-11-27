@@ -5,9 +5,14 @@ import org.company.rado.models.requests.RequestDTO
 import org.company.rado.models.requests.RequestDTOMapper
 import org.company.rado.models.requests.Requests
 import org.company.rado.models.requests.StatusRequest
-import org.jetbrains.exposed.sql.*
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.company.rado.utils.Mapper
+import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.and
+import org.jetbrains.exposed.sql.deleteWhere
+import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.update
 
 class RequestDaoImpl(override val requestDTOMapper: Mapper<RequestDTO, ResultRow> = RequestDTOMapper()) :
     RequestDaoFacade {
@@ -58,7 +63,13 @@ class RequestDaoImpl(override val requestDTOMapper: Mapper<RequestDTO, ResultRow
         resultDelete != 0
     }
 
-    override suspend fun confirmationRequest(requestId: Int, date: String, time: String, mechanicId: Int): Boolean =
+    override suspend fun confirmationRequest(
+        requestId: Int,
+        date: String,
+        time: String,
+        mechanicId: Int,
+        streetRepair: String
+    ): Boolean =
         dbQuery {
             val result =
                 Requests.update({ (Requests.id eq requestId) and (Requests.statusRequest eq StatusRequest.UNCONFIRMED.name) }) {
@@ -67,11 +78,15 @@ class RequestDaoImpl(override val requestDTOMapper: Mapper<RequestDTO, ResultRow
                     it[Requests.mechanicId] = mechanicId
                     it[statusRequest] = StatusRequest.ACTIVE.name
                     it[statusRepair] = false
+                    it[Requests.streetRepair]=streetRepair
                 }
             result != 0
         }
 
-    override suspend fun activeRequestsForMechanic(mechanicId: Int, date: String): List<RequestDTO> = dbQuery {
+    override suspend fun activeRequestsForMechanic(
+        mechanicId: Int,
+        date: String
+    ): List<RequestDTO> = dbQuery {
         Requests.select {
             if (date.isNotEmpty()) {
                 (Requests.statusRequest eq StatusRequest.ACTIVE.name) and
@@ -84,18 +99,19 @@ class RequestDaoImpl(override val requestDTOMapper: Mapper<RequestDTO, ResultRow
         }.map { requestDTOMapper.map(source = it) }
     }
 
-    override suspend fun activeRequestsForDriver(driverId: Int, date: String): List<RequestDTO> = dbQuery {
-        Requests.select {
-            if (date.isNotEmpty()) {
-                (Requests.statusRequest eq StatusRequest.ACTIVE.name) and
-                        (Requests.driverId eq driverId) and
-                        (Requests.date eq date)
-            } else {
-                (Requests.statusRequest eq StatusRequest.ACTIVE.name) and
-                        (Requests.driverId eq driverId)
-            }
-        }.map { requestDTOMapper.map(source = it) }
-    }
+    override suspend fun activeRequestsForDriver(driverId: Int, date: String): List<RequestDTO> =
+        dbQuery {
+            Requests.select {
+                if (date.isNotEmpty()) {
+                    (Requests.statusRequest eq StatusRequest.ACTIVE.name) and
+                            (Requests.driverId eq driverId) and
+                            (Requests.date eq date)
+                } else {
+                    (Requests.statusRequest eq StatusRequest.ACTIVE.name) and
+                            (Requests.driverId eq driverId)
+                }
+            }.map { requestDTOMapper.map(source = it) }
+        }
 
     override suspend fun activeRequestsForObserver(date: String): List<RequestDTO> = dbQuery {
         Requests.select {
@@ -142,7 +158,11 @@ class RequestDaoImpl(override val requestDTOMapper: Mapper<RequestDTO, ResultRow
             .map { requestDTOMapper.map(source = it) }
     }
 
-    override suspend fun updateRejectRequestById(requestId: Int, commentMechanic: String, mechanicId: Int): Boolean =
+    override suspend fun updateRejectRequestById(
+        requestId: Int,
+        commentMechanic: String,
+        mechanicId: Int
+    ): Boolean =
         dbQuery {
             val result =
                 Requests.update({ (Requests.id eq requestId) and (Requests.statusRequest eq StatusRequest.UNCONFIRMED.name) }) {

@@ -7,5 +7,6 @@ data class ConfirmationRequestRemote(
     val requestId: Int,
     val time: String,
     val date:String,
-    val mechanicId :Int
+    val mechanicId :Int,
+    val streetRepair:String=""
 )

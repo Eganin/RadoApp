@@ -139,7 +139,8 @@ class MechanicRequestsViewModel :
             val response = requestsForMechanicRepository.confirmationRequest(
                 requestId = viewState.requestsIdForInfo,
                 date = viewState.datetimeForServer.first,
-                time = viewState.datetimeForServer.second
+                time = viewState.datetimeForServer.second,
+                streetRepair = viewState.streetForRepair
             )
             if (response is WrapperForResponse.Success) {
                 obtainShowSuccessDialog()

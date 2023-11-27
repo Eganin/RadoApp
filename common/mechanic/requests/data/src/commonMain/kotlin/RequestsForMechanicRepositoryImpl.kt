@@ -15,7 +15,8 @@ class RequestsForMechanicRepositoryImpl(
     override suspend fun confirmationRequest(
         requestId: Int,
         date: String,
-        time: String
+        time: String,
+        streetRepair:String
     ): WrapperForResponse {
         return try {
             val mechanicId = localDataSource.fetchLoginUserInfo().userId
@@ -24,7 +25,8 @@ class RequestsForMechanicRepositoryImpl(
                     requestId = requestId,
                     time = time,
                     date = date,
-                    mechanicId = mechanicId
+                    mechanicId = mechanicId,
+                    streetRepair=streetRepair
                 )
             )
             httpStatusCodeMapper.map(source = statusCode)

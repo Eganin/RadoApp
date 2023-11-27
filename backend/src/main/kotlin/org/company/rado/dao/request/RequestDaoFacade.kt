@@ -16,7 +16,7 @@ interface RequestDaoFacade {
 
     suspend fun unconfirmedRequestsForDriver(driverId: Int): List<RequestDTO>
 
-    suspend fun confirmationRequest(requestId: Int, date: String, time: String, mechanicId: Int): Boolean
+    suspend fun confirmationRequest(requestId: Int, date: String, time: String, mechanicId: Int,streetRepair:String): Boolean
 
     suspend fun activeRequestsForMechanic(mechanicId: Int, date: String): List<RequestDTO>
 

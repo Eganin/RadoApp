@@ -12,5 +12,7 @@ data class ConfirmationRequestRemote(
     @SerialName("date")
     val date: String,
     @SerialName("mechanicId")
-    val mechanicId: Int
+    val mechanicId: Int,
+    @SerialName("streetRepair")
+    val streetRepair: String
 )
