@@ -6,14 +6,14 @@ import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.path
-import ktor.models.KtorActiveRequest
+import ktor.models.KtorActiveRequestForMechanic
 import models.SmallActiveRequestForMechanic
 
 internal class KtorMechanicActiveRemoteDataSource(
     private val httpClient: HttpClient
 ) {
 
-    suspend fun fetchRequestsByDate(request: KtorActiveRequest): List<SmallActiveRequestForMechanic> {
+    suspend fun fetchRequestsByDate(request: KtorActiveRequestForMechanic): List<SmallActiveRequestForMechanic> {
         return httpClient.post {
             url {
                 path("request/active/mechanic")

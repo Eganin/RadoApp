@@ -6,7 +6,6 @@ import cafe.adriel.voyager.core.registry.rememberScreen
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import platform.Platform
 
 object SplashScreen : Screen {
     @Composable
@@ -17,8 +16,6 @@ object SplashScreen : Screen {
             mainDriverScreenModule()
             mainMechanicScreenModule()
             mainObserverScreenModule()
-
-            featureActiveRequestsForDriverScreenModule()
         }
 
         //navigate to auth screen in the auth module

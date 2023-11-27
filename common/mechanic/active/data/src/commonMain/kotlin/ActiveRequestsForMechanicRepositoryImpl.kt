@@ -1,7 +1,7 @@
 import io.github.aakira.napier.log
 import io.ktor.http.HttpStatusCode
 import ktor.KtorMechanicActiveRemoteDataSource
-import ktor.models.KtorActiveRequest
+import ktor.models.KtorActiveRequestForMechanic
 import models.ActiveRequestsForMechanicItem
 import org.company.rado.core.MainRes
 import other.Mapper
@@ -17,7 +17,7 @@ internal class ActiveRequestsForMechanicRepositoryImpl(
         val activeRequestsForMechanicItem = try {
             val userInfo = localDataSource.fetchLoginUserInfo()
             val response = remoteDataSource.fetchRequestsByDate(
-                request = KtorActiveRequest(
+                request = KtorActiveRequestForMechanic(
                     userId = userInfo.userId,
                     date = date
                 )

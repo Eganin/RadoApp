@@ -56,13 +56,15 @@ class MechanicActiveViewModel :
 
             is MechanicActiveEvent.EndLoading -> obtainIsLoading(isLoading = false)
 
-            is MechanicActiveEvent.ShowSuccessDialog -> obtainShowArchieveRequestSuccessDialog(
-                isShow = true
-            )
+            is MechanicActiveEvent.ShowSuccessDialog -> {
+                obtainShowArchieveRequestSuccessDialog(isShow = true)
+                obtainEvent(viewEvent=MechanicActiveEvent.CloseInfoDialog)
+            }
 
-            is MechanicActiveEvent.CloseSuccessDialog -> obtainShowArchieveRequestSuccessDialog(
-                isShow = false
-            )
+            is MechanicActiveEvent.CloseSuccessDialog -> {
+                obtainShowArchieveRequestSuccessDialog(isShow = false)
+                obtainEvent(viewEvent=MechanicActiveEvent.CloseInfoDialog)
+            }
 
             is MechanicActiveEvent.ShowFailureDialog -> obtainShowArchieveRequestFailureDialog(
                 isShow = true

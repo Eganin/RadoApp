@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class KtorActiveRequest(
+data class KtorActiveRequestForMechanic(
     @SerialName("userId")
     val userId: Int,
     @SerialName("date")
