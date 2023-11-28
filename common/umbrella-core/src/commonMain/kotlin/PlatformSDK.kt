@@ -28,7 +28,8 @@ object PlatformSDK {
                 driverActiveModule,
                 sharedRequestsModule,
                 requestsMechanicModule,
-                mechanicActiveModule
+                mechanicActiveModule,
+                mechanicArchiveModule
             )
         }.direct)
 
