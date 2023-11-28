@@ -22,8 +22,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
-import models.MechanicActiveEvent
-import models.MechanicActiveViewState
+import models.ActiveEvent
+import models.ActiveViewState
 import org.company.rado.core.MainRes
 import other.Position
 import platform.LocalPlatform
@@ -42,10 +42,10 @@ import widgets.common.TextStickyHeader
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ActiveRequestsForMechanicView(
-    state: MechanicActiveViewState,
+fun ActiveRequestsView(
+    state: ActiveViewState,
     modifier: Modifier = Modifier,
-    eventHandler: (MechanicActiveEvent) -> Unit
+    eventHandler: (ActiveEvent) -> Unit
 ) {
 
     val isLargePlatform =
@@ -56,7 +56,7 @@ fun ActiveRequestsForMechanicView(
     LaunchedEffect(key1 = datePickerState.selectedDateMillis) {
         datePickerState.selectedDateMillis?.let {
             eventHandler.invoke(
-                MechanicActiveEvent.SelectedDateChanged(
+                ActiveEvent.SelectedDateChanged(
                     value = convertDateLongToString(
                         date = it
                     )
@@ -68,7 +68,7 @@ fun ActiveRequestsForMechanicView(
     //pull refresh every half minute
     LaunchedEffect(key1 = Unit) {
         while (true) {
-            eventHandler.invoke(MechanicActiveEvent.PullRefresh)
+            eventHandler.invoke(ActiveEvent.PullRefresh)
             delay(30000L)
         }
     }
@@ -82,7 +82,7 @@ fun ActiveRequestsForMechanicView(
         ActionButton(
             text = MainRes.string.update_date_title,
             onClick = {
-                eventHandler.invoke(MechanicActiveEvent.PullRefresh)
+                eventHandler.invoke(ActiveEvent.PullRefresh)
             },
             modifier = Modifier.fillMaxWidth()
         )
@@ -106,10 +106,10 @@ fun ActiveRequestsForMechanicView(
                         secondText = it.numberVehicle,
                         isReissueRequest = true,
                         onClick = {
-                            eventHandler.invoke(MechanicActiveEvent.OpenDialogInfoRequest(requestId = it.id))
+                            eventHandler.invoke(ActiveEvent.OpenDialogInfoRequest(requestId = it.id))
                         },
                         onReissueRequest = {
-                            eventHandler.invoke(MechanicActiveEvent.OpenDialogInfoRequest(requestId = it.id))
+                            eventHandler.invoke(ActiveEvent.OpenDialogInfoRequest(requestId = it.id))
                         },
                         reissueRequestText = MainRes.string.archieve_request_title
                     )
@@ -133,7 +133,7 @@ fun ActiveRequestsForMechanicView(
 
         if (state.showInfoDialog) {
             InfoRequestAlertDialog(
-                onDismiss = { eventHandler.invoke(MechanicActiveEvent.CloseInfoDialog) },
+                onDismiss = { eventHandler.invoke(ActiveEvent.CloseInfoDialog) },
                 requestId = state.requestIdForInfo,
                 infoForPosition = Position.MECHANIC,
                 isActiveRequest = true,
@@ -169,14 +169,14 @@ fun ActiveRequestsForMechanicView(
                     ActionButton(
                         text = MainRes.string.archieve_request_title,
                         modifier = Modifier.fillMaxWidth(),
-                        onClick = { eventHandler.invoke(MechanicActiveEvent.ArchieveRequest) })
+                        onClick = { eventHandler.invoke(ActiveEvent.ArchieveRequest) })
 
                     Spacer(modifier = Modifier.height(16.dp))
 
                     ActionButton(
                         text = MainRes.string.close_window_title,
                         modifier = Modifier.fillMaxWidth(),
-                        onClick = { eventHandler.invoke(MechanicActiveEvent.CloseInfoDialog) })
+                        onClick = { eventHandler.invoke(ActiveEvent.CloseInfoDialog) })
                 }
             )
         }
@@ -184,9 +184,9 @@ fun ActiveRequestsForMechanicView(
         if (state.showArchieveRequestSuccessDialog) {
             SuccessRequestDialog(
                 onDismiss = {
-                    eventHandler.invoke(MechanicActiveEvent.CloseSuccessDialog)
+                    eventHandler.invoke(ActiveEvent.CloseSuccessDialog)
                 }, onExit = {
-                    eventHandler.invoke(MechanicActiveEvent.CloseSuccessDialog)
+                    eventHandler.invoke(ActiveEvent.CloseSuccessDialog)
                 },
                 firstText = MainRes.string.archieve_request_success_title,
                 secondText = ""
@@ -195,8 +195,8 @@ fun ActiveRequestsForMechanicView(
 
         if (state.showArchieveRequestFailureDialog) {
             FailureRequestDialog(
-                onDismiss = { eventHandler.invoke(MechanicActiveEvent.CloseFailureDialog) },
-                onExit = { eventHandler.invoke(MechanicActiveEvent.CloseFailureDialog) },
+                onDismiss = { eventHandler.invoke(ActiveEvent.CloseFailureDialog) },
+                onExit = { eventHandler.invoke(ActiveEvent.CloseFailureDialog) },
                 firstText = MainRes.string.archieve_request_failure_title
             )
         }

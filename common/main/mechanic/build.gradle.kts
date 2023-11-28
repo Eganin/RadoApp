@@ -11,7 +11,7 @@ kotlin{
                 implementation(project(":common:core-utils"))
                 implementation(project(":common:core"))
                 implementation(project(":common:mechanic:requests:compose"))
-                implementation(project(":common:mechanic:active:compose"))
+                implementation(project(":common:shared:active:compose"))
                 implementation(project(":common:shared:archive:compose"))
 
                 implementation(Dependencies.Navigation.Voyager.navigator)

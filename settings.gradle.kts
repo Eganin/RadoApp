@@ -45,8 +45,6 @@ include(":common:mechanic:archive:data")
 
 include(":common:mechanic:active:api")
 include(":common:mechanic:active:data")
-include(":common:mechanic:active:presentation")
-include(":common:mechanic:active:compose")
 
 include(":common:main:observer")
 
@@ -69,6 +67,8 @@ include(":common:shared:requests:presentation")
 include(":common:shared:requests:compose")
 include(":common:shared:archive:presentation")
 include(":common:shared:archive:compose")
+include(":common:shared:active:presentation")
+include(":common:shared:active:compose")
 
 pluginManagement {
     repositories {

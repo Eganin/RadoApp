@@ -5,16 +5,17 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import models.ActiveAction
+import models.ActiveEvent
 import models.ActiveRequestsForMechanicItem
-import models.MechanicActiveAction
-import models.MechanicActiveEvent
-import models.MechanicActiveViewState
+import models.ActiveViewState
 import other.BaseSharedViewModel
+import other.Position
 import other.WrapperForResponse
 
-class MechanicActiveViewModel :
-    BaseSharedViewModel<MechanicActiveViewState, MechanicActiveAction, MechanicActiveEvent>(
-        initialState = MechanicActiveViewState()
+class ActiveViewModel(private val position: Position) :
+    BaseSharedViewModel<ActiveViewState, ActiveAction, ActiveEvent>(
+        initialState = ActiveViewState()
     ) {
 
     private val coroutineScope =
@@ -30,47 +31,47 @@ class MechanicActiveViewModel :
     }
 
 
-    override fun obtainEvent(viewEvent: MechanicActiveEvent) {
+    override fun obtainEvent(viewEvent: ActiveEvent) {
         when (viewEvent) {
 
-            is MechanicActiveEvent.SelectedDateChanged -> getActiveRequestsByDate(date = viewEvent.value)
+            is ActiveEvent.SelectedDateChanged -> getActiveRequestsByDate(date = viewEvent.value)
 
-            is MechanicActiveEvent.ErrorTextForRequestListChanged -> obtainErrorTextForRequestList(
+            is ActiveEvent.ErrorTextForRequestListChanged -> obtainErrorTextForRequestList(
                 errorText = viewEvent.value
             )
 
-            is MechanicActiveEvent.PullRefresh -> getActiveRequestsByDate()
+            is ActiveEvent.PullRefresh -> getActiveRequestsByDate()
 
-            is MechanicActiveEvent.ArchieveRequest -> archieveRequest()
+            is ActiveEvent.ArchieveRequest -> archieveRequest()
 
-            is MechanicActiveEvent.OpenDialogInfoRequest -> obtainShowInfoDialog(
+            is ActiveEvent.OpenDialogInfoRequest -> obtainShowInfoDialog(
                 showInfoDialog = true,
                 requestId = viewEvent.requestId
             )
 
-            is MechanicActiveEvent.CloseInfoDialog -> obtainShowInfoDialog(showInfoDialog = false)
+            is ActiveEvent.CloseInfoDialog -> obtainShowInfoDialog(showInfoDialog = false)
 
-            is MechanicActiveEvent.StartLoading -> obtainIsLoading(isLoading = true)
+            is ActiveEvent.StartLoading -> obtainIsLoading(isLoading = true)
 
-            is MechanicActiveEvent.EndLoading -> obtainIsLoading(isLoading = false)
+            is ActiveEvent.EndLoading -> obtainIsLoading(isLoading = false)
 
-            is MechanicActiveEvent.ShowSuccessDialog -> {
+            is ActiveEvent.ShowSuccessDialog -> {
                 obtainShowArchieveRequestSuccessDialog(isShow = true)
-                obtainEvent(viewEvent=MechanicActiveEvent.CloseInfoDialog)
-                obtainEvent(viewEvent=MechanicActiveEvent.PullRefresh)
+                obtainEvent(viewEvent = ActiveEvent.CloseInfoDialog)
+                obtainEvent(viewEvent = ActiveEvent.PullRefresh)
             }
 
-            is MechanicActiveEvent.CloseSuccessDialog -> {
+            is ActiveEvent.CloseSuccessDialog -> {
                 obtainShowArchieveRequestSuccessDialog(isShow = false)
-                obtainEvent(viewEvent=MechanicActiveEvent.CloseInfoDialog)
-                obtainEvent(viewEvent=MechanicActiveEvent.PullRefresh)
+                obtainEvent(viewEvent = ActiveEvent.CloseInfoDialog)
+                obtainEvent(viewEvent = ActiveEvent.PullRefresh)
             }
 
-            is MechanicActiveEvent.ShowFailureDialog -> obtainShowArchieveRequestFailureDialog(
+            is ActiveEvent.ShowFailureDialog -> obtainShowArchieveRequestFailureDialog(
                 isShow = true
             )
 
-            is MechanicActiveEvent.CloseFailureDialog -> obtainShowArchieveRequestFailureDialog(
+            is ActiveEvent.CloseFailureDialog -> obtainShowArchieveRequestFailureDialog(
                 isShow = false
             )
         }
@@ -78,7 +79,7 @@ class MechanicActiveViewModel :
 
     private fun getActiveRequestsByDate(date: String = "") {
         coroutineScope.launch {
-            obtainEvent(viewEvent = MechanicActiveEvent.StartLoading)
+            obtainEvent(viewEvent = ActiveEvent.StartLoading)
 
             val activeRequestsForMechanicItem =
                 activeRequestsForMechanicRepository.getRequestsByDate(date = date)
@@ -89,27 +90,27 @@ class MechanicActiveViewModel :
                 )
             } else if (activeRequestsForMechanicItem is ActiveRequestsForMechanicItem.Error) {
                 log(tag = TAG) { "Active requests for mechanic is failure" }
-                obtainEvent(viewEvent = MechanicActiveEvent.ErrorTextForRequestListChanged(value = activeRequestsForMechanicItem.message))
+                obtainEvent(viewEvent = ActiveEvent.ErrorTextForRequestListChanged(value = activeRequestsForMechanicItem.message))
             }
 
-            obtainEvent(viewEvent = MechanicActiveEvent.EndLoading)
+            obtainEvent(viewEvent = ActiveEvent.EndLoading)
         }
     }
 
     private fun archieveRequest() {
         coroutineScope.launch {
-            obtainEvent(viewEvent = MechanicActiveEvent.StartLoading)
+            obtainEvent(viewEvent = ActiveEvent.StartLoading)
 
             val wrapperForResponse =
                 activeRequestsForMechanicRepository.archieveRequest(requestId = viewState.requestIdForInfo)
 
             if (wrapperForResponse is WrapperForResponse.Success) {
-                obtainEvent(viewEvent = MechanicActiveEvent.ShowSuccessDialog)
+                obtainEvent(viewEvent = ActiveEvent.ShowSuccessDialog)
             } else if (wrapperForResponse is WrapperForResponse.Failure) {
-                obtainEvent(viewEvent = MechanicActiveEvent.ShowFailureDialog)
+                obtainEvent(viewEvent = ActiveEvent.ShowFailureDialog)
             }
 
-            obtainEvent(viewEvent = MechanicActiveEvent.EndLoading)
+            obtainEvent(viewEvent = ActiveEvent.EndLoading)
         }
     }
 
