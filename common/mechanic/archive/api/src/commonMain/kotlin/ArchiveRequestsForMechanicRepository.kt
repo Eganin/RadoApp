@@ -1,6 +1,6 @@
-import models.SmallArchiveRequestForMechanic
+import models.ArchiveRequestsForMechanicItem
 
 interface ArchiveRequestsForMechanicRepository {
 
-    suspend fun getArchiveRequests():List<SmallArchiveRequestForMechanic>
+    suspend fun getArchiveRequests(): ArchiveRequestsForMechanicItem
 }
