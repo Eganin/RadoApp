@@ -39,9 +39,7 @@ class MechanicActiveViewModel :
                 errorText = viewEvent.value
             )
 
-            is MechanicActiveEvent.PullRefresh -> {
-                getActiveRequestsByDate()
-            }
+            is MechanicActiveEvent.PullRefresh -> getActiveRequestsByDate()
 
             is MechanicActiveEvent.ArchieveRequest -> archieveRequest()
 
@@ -59,11 +57,13 @@ class MechanicActiveViewModel :
             is MechanicActiveEvent.ShowSuccessDialog -> {
                 obtainShowArchieveRequestSuccessDialog(isShow = true)
                 obtainEvent(viewEvent=MechanicActiveEvent.CloseInfoDialog)
+                obtainEvent(viewEvent=MechanicActiveEvent.PullRefresh)
             }
 
             is MechanicActiveEvent.CloseSuccessDialog -> {
                 obtainShowArchieveRequestSuccessDialog(isShow = false)
                 obtainEvent(viewEvent=MechanicActiveEvent.CloseInfoDialog)
+                obtainEvent(viewEvent=MechanicActiveEvent.PullRefresh)
             }
 
             is MechanicActiveEvent.ShowFailureDialog -> obtainShowArchieveRequestFailureDialog(

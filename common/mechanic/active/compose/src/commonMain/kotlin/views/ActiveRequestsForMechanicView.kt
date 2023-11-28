@@ -39,6 +39,7 @@ import views.info.InfoRequestAlertDialog
 import widgets.common.ActionButton
 import widgets.common.TextStickyHeader
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ActiveRequestsForMechanicView(
@@ -90,8 +91,8 @@ fun ActiveRequestsForMechanicView(
         CalendarView(
             state = datePickerState,
             modifier = Modifier
-                .heightIn(max = if (isLargePlatform) 800.dp else 400.dp)
-                .widthIn(max = if (isLargePlatform) 800.dp else 400.dp)
+                .heightIn(max = if (isLargePlatform) 600.dp else 350.dp)
+                .widthIn(max = if (isLargePlatform) 600.dp else 350.dp)
         )
 
         Spacer(modifier = Modifier.height(8.dp))
