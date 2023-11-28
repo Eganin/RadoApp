@@ -6,14 +6,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
@@ -22,53 +18,27 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
-import models.MechanicActiveEvent
-import models.MechanicActiveViewState
+import models.MechanicArchiveEvent
+import models.MechanicArchiveViewState
 import org.company.rado.core.MainRes
 import other.Position
-import platform.LocalPlatform
-import platform.Platform
 import theme.Theme
-import time.convertDateLongToString
 import time.datetimeStringToPrettyString
-import views.create.CalendarView
-import views.create.FailureRequestDialog
 import views.create.RequestCells
-import views.create.SuccessRequestDialog
 import views.info.InfoRequestAlertDialog
 import widgets.common.ActionButton
 import widgets.common.TextStickyHeader
 
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ActiveRequestsForMechanicView(
-    state: MechanicActiveViewState,
+fun ArchiveRequestsForMechanicView(
+    state: MechanicArchiveViewState,
     modifier: Modifier = Modifier,
-    eventHandler: (MechanicActiveEvent) -> Unit
+    eventHandler: (MechanicArchiveEvent) -> Unit
 ) {
-
-    val isLargePlatform =
-        LocalPlatform.current == Platform.Web || LocalPlatform.current == Platform.Desktop
-
-    val datePickerState = rememberDatePickerState()
-
-    LaunchedEffect(key1 = datePickerState.selectedDateMillis) {
-        datePickerState.selectedDateMillis?.let {
-            eventHandler.invoke(
-                MechanicActiveEvent.SelectedDateChanged(
-                    value = convertDateLongToString(
-                        date = it
-                    )
-                )
-            )
-        }
-    }
-
     //pull refresh every half minute
     LaunchedEffect(key1 = Unit) {
         while (true) {
-            eventHandler.invoke(MechanicActiveEvent.PullRefresh)
+            eventHandler.invoke(MechanicArchiveEvent.PullRefresh)
             delay(30000L)
         }
     }
@@ -82,36 +52,23 @@ fun ActiveRequestsForMechanicView(
         ActionButton(
             text = MainRes.string.update_date_title,
             onClick = {
-                eventHandler.invoke(MechanicActiveEvent.PullRefresh)
+                eventHandler.invoke(MechanicArchiveEvent.PullRefresh)
             },
             modifier = Modifier.fillMaxWidth()
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        CalendarView(
-            state = datePickerState,
-            modifier = Modifier
-                .heightIn(max = if (isLargePlatform) 600.dp else 350.dp)
-                .widthIn(max = if (isLargePlatform) 600.dp else 350.dp)
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
         if (state.errorTextForRequestList.isEmpty()) {
             if (state.requests.isNotEmpty()) {
                 state.requests.forEach {
                     RequestCells(
-                        firstText = it.typeVehicle,
+                        firstText = datetimeStringToPrettyString(dateTime = it.datetime),
                         secondText = it.numberVehicle,
-                        isReissueRequest = true,
+                        isReissueRequest = false,
                         onClick = {
-                            eventHandler.invoke(MechanicActiveEvent.OpenDialogInfoRequest(requestId = it.id))
-                        },
-                        onReissueRequest = {
-                            eventHandler.invoke(MechanicActiveEvent.OpenDialogInfoRequest(requestId = it.id))
-                        },
-                        reissueRequestText = MainRes.string.archieve_request_title
+                            eventHandler.invoke(MechanicArchiveEvent.OpenDialogInfoRequest(requestId = it.id))
+                        }
                     )
                 }
             } else {
@@ -131,12 +88,12 @@ fun ActiveRequestsForMechanicView(
             )
         }
 
-        if (state.showInfoDialog) {
+        if (state.showInfoDialog){
             InfoRequestAlertDialog(
-                onDismiss = { eventHandler.invoke(MechanicActiveEvent.CloseInfoDialog) },
+                onDismiss = { eventHandler.invoke(MechanicArchiveEvent.CloseInfoDialog) },
                 requestId = state.requestIdForInfo,
                 infoForPosition = Position.MECHANIC,
-                isActiveRequest = true,
+                isActiveRequest = false,
                 actionControl = { infoRequestState ->
                     if (infoRequestState.driverPhone.isNotEmpty()) {
                         Text(
@@ -166,37 +123,10 @@ fun ActiveRequestsForMechanicView(
                     }
 
                     ActionButton(
-                        text = MainRes.string.archieve_request_title,
-                        modifier = Modifier.fillMaxWidth(),
-                        onClick = { eventHandler.invoke(MechanicActiveEvent.ArchieveRequest) })
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    ActionButton(
                         text = MainRes.string.close_window_title,
                         modifier = Modifier.fillMaxWidth(),
-                        onClick = { eventHandler.invoke(MechanicActiveEvent.CloseInfoDialog) })
+                        onClick = { eventHandler.invoke(MechanicArchiveEvent.CloseInfoDialog) })
                 }
-            )
-        }
-
-        if (state.showArchieveRequestSuccessDialog) {
-            SuccessRequestDialog(
-                onDismiss = {
-                    eventHandler.invoke(MechanicActiveEvent.CloseSuccessDialog)
-                }, onExit = {
-                    eventHandler.invoke(MechanicActiveEvent.CloseSuccessDialog)
-                },
-                firstText = MainRes.string.archieve_request_success_title,
-                secondText = ""
-            )
-        }
-
-        if (state.showArchieveRequestFailureDialog) {
-            FailureRequestDialog(
-                onDismiss = { eventHandler.invoke(MechanicActiveEvent.CloseFailureDialog) },
-                onExit = { eventHandler.invoke(MechanicActiveEvent.CloseFailureDialog) },
-                firstText = MainRes.string.archieve_request_failure_title
             )
         }
     }
