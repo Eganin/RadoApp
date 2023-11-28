@@ -1,6 +1,7 @@
 import io.github.aakira.napier.log
 import ktor.KtorMechanicArchiveRemoteDataSource
 import models.ArchiveRequestsForMechanicItem
+import org.company.rado.core.MainRes
 import settings.SettingsAuthDataSource
 
 internal class ArchiveRequestsForMechanicRepositoryImpl(
@@ -15,7 +16,7 @@ internal class ArchiveRequestsForMechanicRepositoryImpl(
             ArchiveRequestsForMechanicItem.Success(items = response)
         } catch (e: Exception) {
             log(tag = TAG) { "Error occurred for get archive requests for mechanic" }
-            ArchiveRequestsForMechanicItem.Error(message = "")
+            ArchiveRequestsForMechanicItem.Error(message = MainRes.string.requests_by_date_is_not_fetch)
         }
         return archiveRequestsForMechanicItem
     }
