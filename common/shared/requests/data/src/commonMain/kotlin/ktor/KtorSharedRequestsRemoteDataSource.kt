@@ -12,7 +12,7 @@ import models.FullUnconfirmedRequestResponse
 import models.RecreateRequestResponse
 import models.SmallUnconfirmedRequestResponse
 
-class KtorSharedRequestsRemoteDataSource(
+internal class KtorSharedRequestsRemoteDataSource(
     private val httpClient: HttpClient
 ) {
     suspend fun fetchUnconfirmedRequestInfo(requestId: Int): FullUnconfirmedRequestResponse {
@@ -43,6 +43,14 @@ class KtorSharedRequestsRemoteDataSource(
         return httpClient.get {
             url {
                 path("request/active/info/$requestId")
+            }
+        }.body()
+    }
+
+    suspend fun fetchArchiveRequestInfo(requestId: Int):FullRequestResponse{
+        return httpClient.get {
+            url {
+                path("request/archive/info/$requestId")
             }
         }.body()
     }

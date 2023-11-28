@@ -24,10 +24,11 @@ class InfoRequestViewModel :
             log(tag = TAG) { throwable.message ?: "Error" }
         })
 
-    private val unconfirmedRequestsRepository: UnconfirmedRequestsRepository =
-        Inject.instance()
+    private val unconfirmedRequestsRepository: UnconfirmedRequestsRepository = Inject.instance()
 
     private val activeRequestsRepository: ActiveRequestsRepository = Inject.instance()
+
+    private val archiveRequestsRepository: ArchiveRequestsRepository = Inject.instance()
 
     override fun obtainEvent(viewEvent: InfoRequestEvent) {
         when (viewEvent) {
@@ -35,7 +36,8 @@ class InfoRequestViewModel :
             is InfoRequestEvent.RequestGetInfo -> getInfoForRequest(
                 requestId = viewEvent.requestId,
                 infoForPosition = viewEvent.infoForPosition,
-                isActiveRequest = viewEvent.isActiveRequest
+                isActiveRequest = viewEvent.isActiveRequest,
+                isArchiveRequest = viewEvent.isArchiveRequest
             )
 
             is InfoRequestEvent.PhoneClick -> {}
@@ -45,16 +47,20 @@ class InfoRequestViewModel :
     private fun getInfoForRequest(
         requestId: Int,
         infoForPosition: Position,
-        isActiveRequest: Boolean
+        isActiveRequest: Boolean,
+        isArchiveRequest: Boolean
     ) {
         when {
-            isActiveRequest -> getInfoForActiveRequest(
+            !isActiveRequest && !isArchiveRequest -> getInfoForUnconfirmedRequest(
                 requestId = requestId
             )
 
-            !isActiveRequest -> getInfoForUnconfirmedRequest(
-                requestId = requestId
-            )
+            else -> {
+                getInfoForActiveOrArchiveRequest(
+                    requestId = requestId,
+                    isArchive = isArchiveRequest
+                )
+            }
         }
     }
 
@@ -87,11 +93,12 @@ class InfoRequestViewModel :
         }
     }
 
-    private fun getInfoForActiveRequest(requestId: Int) {
+    private fun getInfoForActiveOrArchiveRequest(requestId: Int, isArchive: Boolean) {
         coroutineScope.launch {
             changeLoading()
             val fullRequestItem =
-                activeRequestsRepository.getActiveRequestInfo(requestId = requestId)
+                if (!isArchive) activeRequestsRepository.getActiveRequestInfo(requestId = requestId)
+                else archiveRequestsRepository.getArchiveRequestInfo(requestId = requestId)
             if (fullRequestItem is FullRequestItem.Success) {
                 log(tag = TAG) { "Get info for active request ${fullRequestItem.request}" }
                 val info = fullRequestItem.request

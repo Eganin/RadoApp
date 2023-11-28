@@ -7,7 +7,8 @@ sealed class InfoRequestEvent {
     data class RequestGetInfo(
         val requestId: Int,
         val infoForPosition: Position,
-        val isActiveRequest: Boolean
+        val isActiveRequest: Boolean,
+        val isArchiveRequest:Boolean
     ) : InfoRequestEvent()
 
     data class PhoneClick(val phoneNumber: String) : InfoRequestEvent()
