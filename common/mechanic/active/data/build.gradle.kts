@@ -14,7 +14,6 @@ kotlin{
                 implementation(project(":common:core-utils"))
 
                 implementation(Dependencies.Kodein.core)
-                implementation(Dependencies.Other.UUID.core)
             }
         }
     }
