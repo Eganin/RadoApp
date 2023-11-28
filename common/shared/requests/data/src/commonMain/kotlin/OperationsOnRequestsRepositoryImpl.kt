@@ -3,7 +3,7 @@ import models.RecreateRequestItem
 import org.company.rado.core.MainRes
 import settings.SettingsAuthDataSource
 
-class OperationsOnRequestsRepositoryImpl(
+internal class OperationsOnRequestsRepositoryImpl(
     private val remoteDataSource: KtorSharedRequestsRemoteDataSource,
     private val localDataSource: SettingsAuthDataSource
 ) : OperationsOnRequestsRepository {

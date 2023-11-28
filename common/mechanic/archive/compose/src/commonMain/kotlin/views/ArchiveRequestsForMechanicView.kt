@@ -94,6 +94,7 @@ fun ArchiveRequestsForMechanicView(
                 requestId = state.requestIdForInfo,
                 infoForPosition = Position.MECHANIC,
                 isActiveRequest = false,
+                isArchiveRequest = true,
                 actionControl = { infoRequestState ->
                     if (infoRequestState.driverPhone.isNotEmpty()) {
                         Text(

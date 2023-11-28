@@ -6,7 +6,7 @@ import org.company.rado.core.MainRes
 import other.Mapper
 import settings.SettingsAuthDataSource
 
-class UnconfirmedRequestsRepositoryImpl(
+internal class UnconfirmedRequestsRepositoryImpl(
     private val remoteDataSource: KtorSharedRequestsRemoteDataSource,
     private val localDataSource: SettingsAuthDataSource,
     private val unconfirmedRequestInfoItemMapper: Mapper<FullUnconfirmedRequestResponse, UnconfirmedRequestInfoItem>
