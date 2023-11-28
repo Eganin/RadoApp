@@ -1,14 +1,15 @@
 package tabs
 
-import androidx.compose.material3.Text
+import ArchiveRequestsScreen
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.Clock
-import theme.Theme
+import other.Position
 
 object ArchiveTabForObserver : Tab {
 
@@ -29,6 +30,6 @@ object ArchiveTabForObserver : Tab {
 
     @Composable
     override fun Content() {
-        Text(text = "Archive request for Observer", color = Theme.colors.primaryTextColor)
+        Navigator(ArchiveRequestsScreen(position = Position.OBSERVER))
     }
 }

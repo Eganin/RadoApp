@@ -15,6 +15,8 @@ kotlin{
                 implementation(project(":common:mechanic:requests:data"))
                 implementation(project(":common:mechanic:active:data"))
                 implementation(project(":common:mechanic:archive:data"))
+                implementation(project(":common:driver:archive:data"))
+                implementation(project(":common:observer:archive:data"))
 
                 implementation(Dependencies.Kodein.core)
             }

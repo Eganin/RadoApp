@@ -93,4 +93,6 @@
     <string name="repair_on_base_title">Ремонт на базе</string>
     <string name="repair_on_other_place_title">Ремонт в другом месте</string>
     <string name="repair_on_other_place_street_label">Место ремонта(улица)</string>
+    <string name="driver_title">Водитель: </string>
+    <string name="mechanic_title">Механик: </string>
 </resources>
