@@ -26,10 +26,12 @@ object PlatformSDK {
                 coreModule,
                 authModule,
                 driverActiveModule,
+                driverArchiveModule,
                 sharedRequestsModule,
                 requestsMechanicModule,
                 mechanicActiveModule,
-                mechanicArchiveModule
+                mechanicArchiveModule,
+                observerArchiveModule
             )
         }.direct)
 
