@@ -73,6 +73,8 @@ include(":common:shared:requests:api")
 include(":common:shared:requests:data")
 include(":common:shared:requests:presentation")
 include(":common:shared:requests:compose")
+include(":common:shared:archive:presentation")
+include(":common:shared:archive:compose")
 
 pluginManagement {
     repositories {
