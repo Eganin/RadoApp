@@ -27,8 +27,6 @@ include(":common:driver:active:compose")
 
 include(":common:driver:archive:api")
 include(":common:driver:archive:data")
-include(":common:driver:archive:presentation")
-include(":common:driver:archive:compose")
 
 include(":common:driver:reject:api")
 include(":common:driver:reject:data")
@@ -44,8 +42,6 @@ include(":common:mechanic:requests:compose")
 
 include(":common:mechanic:archive:api")
 include(":common:mechanic:archive:data")
-include(":common:mechanic:archive:presentation")
-include(":common:mechanic:archive:compose")
 
 include(":common:mechanic:active:api")
 include(":common:mechanic:active:data")
@@ -61,8 +57,6 @@ include(":common:observer:active:compose")
 
 include(":common:observer:archive:api")
 include(":common:observer:archive:data")
-include(":common:observer:archive:presentation")
-include(":common:observer:archive:compose")
 
 include(":common:observer:reject:api")
 include(":common:observer:reject:data")

@@ -8,12 +8,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import dev.icerock.moko.mvvm.compose.viewModelFactory
+import other.Position
 import other.observeAsState
-import views.ArchiveRequestsForMechanicView
+import views.ArchiveRequestsView
 
-object ArchiveRequestsForMechanicScreen : Screen {
+class ArchiveRequestsScreen(private val position: Position) : Screen {
 
-    private val viewModel = viewModelFactory { MechanicArchiveViewModel() }.createViewModel()
+    private val viewModel =
+        viewModelFactory { ArchiveViewModel(position = position) }.createViewModel()
 
     @Composable
     override fun Content() {
@@ -27,7 +29,7 @@ object ArchiveRequestsForMechanicScreen : Screen {
                 SnackbarHost(hostState = snackBarHostState)
             }
         ) {
-            ArchiveRequestsForMechanicView(
+            ArchiveRequestsView(
                 state = state.value,
                 modifier = Modifier.padding(bottom = 90.dp)
             ) { event ->

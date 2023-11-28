@@ -90,8 +90,8 @@ fun ActiveRequestsForDriverView(
         CalendarView(
             state = datePickerState,
             modifier = Modifier
-                .heightIn(max = if (isLargePlatform) 600.dp else 350.dp)
-                .widthIn(max = if (isLargePlatform) 600.dp else 350.dp)
+                .heightIn(max = if (isLargePlatform) 600.dp else 500.dp)
+                .widthIn(max = if (isLargePlatform) 600.dp else 400.dp)
         )
 
         Spacer(modifier = Modifier.height(8.dp))

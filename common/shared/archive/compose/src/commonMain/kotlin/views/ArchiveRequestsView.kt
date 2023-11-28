@@ -18,8 +18,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
-import models.MechanicArchiveEvent
-import models.MechanicArchiveViewState
+import models.ArchiveEvent
+import models.ArchiveViewState
 import org.company.rado.core.MainRes
 import other.Position
 import theme.Theme
@@ -30,15 +30,15 @@ import widgets.common.ActionButton
 import widgets.common.TextStickyHeader
 
 @Composable
-fun ArchiveRequestsForMechanicView(
-    state: MechanicArchiveViewState,
+fun ArchiveRequestsView(
+    state: ArchiveViewState,
     modifier: Modifier = Modifier,
-    eventHandler: (MechanicArchiveEvent) -> Unit
+    eventHandler: (ArchiveEvent) -> Unit
 ) {
     //pull refresh every half minute
     LaunchedEffect(key1 = Unit) {
         while (true) {
-            eventHandler.invoke(MechanicArchiveEvent.PullRefresh)
+            eventHandler.invoke(ArchiveEvent.PullRefresh)
             delay(30000L)
         }
     }
@@ -52,7 +52,7 @@ fun ArchiveRequestsForMechanicView(
         ActionButton(
             text = MainRes.string.update_date_title,
             onClick = {
-                eventHandler.invoke(MechanicArchiveEvent.PullRefresh)
+                eventHandler.invoke(ArchiveEvent.PullRefresh)
             },
             modifier = Modifier.fillMaxWidth()
         )
@@ -60,14 +60,25 @@ fun ArchiveRequestsForMechanicView(
         Spacer(modifier = Modifier.height(16.dp))
 
         if (state.errorTextForRequestList.isEmpty()) {
-            if (state.requests.isNotEmpty()) {
-                state.requests.forEach {
+            if (state.requestsForMechanic.isNotEmpty()) {
+                state.requestsForMechanic.forEach {
                     RequestCells(
                         firstText = datetimeStringToPrettyString(dateTime = it.datetime),
                         secondText = it.numberVehicle,
                         isReissueRequest = false,
                         onClick = {
-                            eventHandler.invoke(MechanicArchiveEvent.OpenDialogInfoRequest(requestId = it.id))
+                            eventHandler.invoke(ArchiveEvent.OpenDialogInfoRequest(requestId = it.id))
+                        }
+                    )
+                }
+            } else if(state.requestsForDriver.isNotEmpty()){
+                state.requestsForDriver.forEach {
+                    RequestCells(
+                        firstText = datetimeStringToPrettyString(dateTime = it.datetime),
+                        secondText = it.mechanicName,
+                        isReissueRequest = false,
+                        onClick = {
+                            eventHandler.invoke(ArchiveEvent.OpenDialogInfoRequest(requestId = it.id))
                         }
                     )
                 }
@@ -88,9 +99,9 @@ fun ArchiveRequestsForMechanicView(
             )
         }
 
-        if (state.showInfoDialog){
+        if (state.showInfoDialog) {
             InfoRequestAlertDialog(
-                onDismiss = { eventHandler.invoke(MechanicArchiveEvent.CloseInfoDialog) },
+                onDismiss = { eventHandler.invoke(ArchiveEvent.CloseInfoDialog) },
                 requestId = state.requestIdForInfo,
                 infoForPosition = Position.MECHANIC,
                 isActiveRequest = false,
@@ -98,7 +109,46 @@ fun ArchiveRequestsForMechanicView(
                 actionControl = { infoRequestState ->
                     if (infoRequestState.driverPhone.isNotEmpty()) {
                         Text(
+                            text = MainRes.string.contact_a_driver + infoRequestState.driverPhone,
+                            fontSize = 12.sp,
+                            color = Theme.colors.primaryTextColor,
+                            textAlign = TextAlign.Start,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+
+                        Spacer(modifier = Modifier.height(16.dp))
+                    }
+
+                    if (infoRequestState.driverName.isNotEmpty()) {
+                        Text(
+                            text = MainRes.string.driver_title + infoRequestState.driverName,
+                            fontSize = 12.sp,
+                            color = Theme.colors.primaryTextColor,
+                            textAlign = TextAlign.Start,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+
+                        Spacer(modifier = Modifier.height(16.dp))
+                    }
+
+                    if (infoRequestState.mechanicPhone.isNotEmpty()) {
+                        Text(
                             text = MainRes.string.contact_a_mechanic + infoRequestState.mechanicPhone,
+                            fontSize = 12.sp,
+                            color = Theme.colors.primaryTextColor,
+                            textAlign = TextAlign.Start,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+
+                        Spacer(modifier = Modifier.height(16.dp))
+                    }
+
+                    if (infoRequestState.mechanicName.isNotEmpty()) {
+                        Text(
+                            text = MainRes.string.mechanic_title + infoRequestState.mechanicName,
                             fontSize = 12.sp,
                             color = Theme.colors.primaryTextColor,
                             textAlign = TextAlign.Start,
@@ -126,7 +176,7 @@ fun ArchiveRequestsForMechanicView(
                     ActionButton(
                         text = MainRes.string.close_window_title,
                         modifier = Modifier.fillMaxWidth(),
-                        onClick = { eventHandler.invoke(MechanicArchiveEvent.CloseInfoDialog) })
+                        onClick = { eventHandler.invoke(ArchiveEvent.CloseInfoDialog) })
                 }
             )
         }

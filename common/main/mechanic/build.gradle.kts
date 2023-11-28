@@ -9,9 +9,10 @@ kotlin{
             dependencies {
                 implementation(project(":common:core-compose"))
                 implementation(project(":common:core-utils"))
+                implementation(project(":common:core"))
                 implementation(project(":common:mechanic:requests:compose"))
                 implementation(project(":common:mechanic:active:compose"))
-                implementation(project(":common:mechanic:archive:compose"))
+                implementation(project(":common:shared:archive:compose"))
 
                 implementation(Dependencies.Navigation.Voyager.navigator)
                 implementation(Dependencies.Navigation.Voyager.tabNavigator)
