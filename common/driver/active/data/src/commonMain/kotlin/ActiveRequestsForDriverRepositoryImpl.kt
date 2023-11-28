@@ -11,7 +11,7 @@ import other.Mapper
 import other.WrapperForResponse
 import settings.SettingsAuthDataSource
 
-class ActiveRequestsForDriverRepositoryImpl(
+internal class ActiveRequestsForDriverRepositoryImpl(
     private val localDataSource: SettingsAuthDataSource,
     private val remoteDataSource: KtorDriverActiveRemoteDataSource,
     private val createRequestMapper: Mapper<CreateRequestIdResponse, CreateRequestIdItem>,
@@ -54,7 +54,7 @@ class ActiveRequestsForDriverRepositoryImpl(
                 )
             ActiveRequestsForDriverItem.Success(items = response)
         } catch (e: Exception) {
-            log(tag = TAG) { "Error for get resource by date: $date" }
+            log(tag = TAG) { "Error for get requests by date: $date" }
             ActiveRequestsForDriverItem.Error(message = MainRes.string.requests_by_date_is_not_fetch)
         }
         return activeRequestsForDriverItem

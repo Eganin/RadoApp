@@ -22,8 +22,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
-import models.DriverActiveEvent
-import models.DriverActiveViewState
+import models.MechanicActiveEvent
+import models.MechanicActiveViewState
 import org.company.rado.core.MainRes
 import other.Position
 import platform.LocalPlatform
@@ -32,19 +32,20 @@ import theme.Theme
 import time.convertDateLongToString
 import time.datetimeStringToPrettyString
 import views.create.CalendarView
-import views.create.CreateRequestAlertDialog
+import views.create.FailureRequestDialog
 import views.create.RequestCells
+import views.create.SuccessRequestDialog
 import views.info.InfoRequestAlertDialog
-import views.recreate.RecreateRequestAlertDialog
 import widgets.common.ActionButton
 import widgets.common.TextStickyHeader
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ActiveRequestsForDriverView(
-    state: DriverActiveViewState,
+fun ActiveRequestsForMechanicView(
+    state: MechanicActiveViewState,
     modifier: Modifier = Modifier,
-    eventHandler: (DriverActiveEvent) -> Unit
+    eventHandler: (MechanicActiveEvent) -> Unit
 ) {
 
     val isLargePlatform =
@@ -55,7 +56,7 @@ fun ActiveRequestsForDriverView(
     LaunchedEffect(key1 = datePickerState.selectedDateMillis) {
         datePickerState.selectedDateMillis?.let {
             eventHandler.invoke(
-                DriverActiveEvent.SelectedDateChanged(
+                MechanicActiveEvent.SelectedDateChanged(
                     value = convertDateLongToString(
                         date = it
                     )
@@ -67,7 +68,7 @@ fun ActiveRequestsForDriverView(
     //pull refresh every half minute
     LaunchedEffect(key1 = Unit) {
         while (true) {
-            eventHandler.invoke(DriverActiveEvent.PullRefresh)
+            eventHandler.invoke(MechanicActiveEvent.PullRefresh)
             delay(30000L)
         }
     }
@@ -80,12 +81,12 @@ fun ActiveRequestsForDriverView(
         ActionButton(
             text = MainRes.string.update_date_title,
             onClick = {
-                eventHandler.invoke(DriverActiveEvent.PullRefresh)
+                eventHandler.invoke(MechanicActiveEvent.PullRefresh)
             },
             modifier = Modifier.fillMaxWidth()
         )
 
-        Spacer(modifier=Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
         CalendarView(
             state = datePickerState,
@@ -96,71 +97,20 @@ fun ActiveRequestsForDriverView(
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        ActionButton(
-            text = MainRes.string.create_request_button_title,
-            modifier = Modifier.fillMaxWidth(),
-            onClick = {
-                eventHandler.invoke(DriverActiveEvent.OpenDialogCreateRequest)
-            })
-
-        Spacer(modifier = Modifier.height(8.dp))
-
         if (state.errorTextForRequestList.isEmpty()) {
-            TextStickyHeader(
-                textTitle = MainRes.string.active_requests_title,
-                modifier = Modifier.fillMaxWidth()
-            )
-
             if (state.requests.isNotEmpty()) {
                 state.requests.forEach {
                     RequestCells(
-                        firstText = datetimeStringToPrettyString(dateTime = it.datetime),
-                        secondText = it.mechanicName,
-                        onClick = {
-                            eventHandler.invoke(
-                                DriverActiveEvent.OpenDialogInfoRequest(
-                                    requestId = it.id,
-                                    isActiveRequest = true
-                                )
-                            )
-                        },
-                        isReissueRequest = false
-                    )
-                }
-            } else {
-                TextStickyHeader(
-                    textTitle = MainRes.string.empty_title,
-                    fontSize = 16,
-                    modifier = Modifier.fillMaxWidth().padding(all = 16.dp)
-                )
-            }
-
-            TextStickyHeader(
-                textTitle = MainRes.string.unconfirmed_requests_title,
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            if (state.unconfirmedRequests.isNotEmpty()) {
-                state.unconfirmedRequests.forEach {
-                    RequestCells(
-                        firstText = it.vehicleType,
-                        secondText = it.vehicleNumber,
-                        onClick = {
-                            eventHandler.invoke(
-                                DriverActiveEvent.OpenDialogInfoRequest(
-                                    requestId = it.id,
-                                    isActiveRequest = false
-                                )
-                            )
-                        },
+                        firstText = it.typeVehicle,
+                        secondText = it.numberVehicle,
                         isReissueRequest = true,
+                        onClick = {
+                            eventHandler.invoke(MechanicActiveEvent.OpenDialogInfoRequest(requestId = it.id))
+                        },
                         onReissueRequest = {
-                            eventHandler.invoke(
-                                DriverActiveEvent.OpenDialogRecreateForUnconfirmedRequest(
-                                    requestId = it.id
-                                )
-                            )
-                        }
+                            eventHandler.invoke(MechanicActiveEvent.OpenDialogInfoRequest(requestId = it.id))
+                        },
+                        reissueRequestText = MainRes.string.archieve_request_title
                     )
                 }
             } else {
@@ -180,28 +130,14 @@ fun ActiveRequestsForDriverView(
             )
         }
 
-        if (state.showCreateDialog) {
-            CreateRequestAlertDialog(
-                onDismiss = { eventHandler.invoke(DriverActiveEvent.CloseCreateDialog) },
-                onExit = { eventHandler.invoke(DriverActiveEvent.CloseCreateDialog) })
-        }
-
-        if (state.showRecreateDialog) {
-            RecreateRequestAlertDialog(
-                requestId = state.requestIdForInfo,
-                onDismiss = { eventHandler.invoke(DriverActiveEvent.CloseRecreateDialog) },
-                onExit = { eventHandler.invoke(DriverActiveEvent.CloseRecreateDialog) }
-            )
-        }
-
         if (state.showInfoDialog) {
             InfoRequestAlertDialog(
-                onDismiss = { eventHandler.invoke(DriverActiveEvent.CloseInfoDialog) },
+                onDismiss = { eventHandler.invoke(MechanicActiveEvent.CloseInfoDialog) },
                 requestId = state.requestIdForInfo,
-                infoForPosition = Position.DRIVER,
-                isActiveRequest = state.isActiveDialog,
+                infoForPosition = Position.MECHANIC,
+                isActiveRequest = true,
                 actionControl = { infoRequestState ->
-                    if (infoRequestState.mechanicPhone.isNotEmpty()) {
+                    if (infoRequestState.driverPhone.isNotEmpty()) {
                         Text(
                             text = MainRes.string.contact_a_mechanic + infoRequestState.mechanicPhone,
                             fontSize = 12.sp,
@@ -210,8 +146,9 @@ fun ActiveRequestsForDriverView(
                             fontWeight = FontWeight.Bold,
                             modifier = Modifier.fillMaxWidth()
                         )
+
+                        Spacer(modifier = Modifier.height(16.dp))
                     }
-                    Spacer(modifier = Modifier.height(16.dp))
 
                     if (infoRequestState.datetime.isNotEmpty()) {
                         Text(
@@ -228,10 +165,37 @@ fun ActiveRequestsForDriverView(
                     }
 
                     ActionButton(
+                        text = MainRes.string.archieve_request_title,
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = { eventHandler.invoke(MechanicActiveEvent.ArchieveRequest) })
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    ActionButton(
                         text = MainRes.string.close_window_title,
                         modifier = Modifier.fillMaxWidth(),
-                        onClick = { eventHandler.invoke(DriverActiveEvent.CloseInfoDialog) })
+                        onClick = { eventHandler.invoke(MechanicActiveEvent.CloseInfoDialog) })
                 }
+            )
+        }
+
+        if (state.showArchieveRequestSuccessDialog) {
+            SuccessRequestDialog(
+                onDismiss = {
+                    eventHandler.invoke(MechanicActiveEvent.CloseSuccessDialog)
+                }, onExit = {
+                    eventHandler.invoke(MechanicActiveEvent.CloseSuccessDialog)
+                },
+                firstText = MainRes.string.archieve_request_success_title,
+                secondText = ""
+            )
+        }
+
+        if (state.showArchieveRequestFailureDialog) {
+            FailureRequestDialog(
+                onDismiss = { eventHandler.invoke(MechanicActiveEvent.CloseFailureDialog) },
+                onExit = { eventHandler.invoke(MechanicActiveEvent.CloseFailureDialog) },
+                firstText = MainRes.string.archieve_request_failure_title
             )
         }
     }

@@ -13,6 +13,7 @@ kotlin{
                 implementation(project(":common:driver:active:data"))
                 implementation(project(":common:shared:requests:data"))
                 implementation(project(":common:mechanic:requests:data"))
+                implementation(project(":common:mechanic:active:data"))
 
                 implementation(Dependencies.Kodein.core)
             }

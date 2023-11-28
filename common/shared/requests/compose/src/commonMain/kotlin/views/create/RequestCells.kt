@@ -28,7 +28,8 @@ fun RequestCells(
     isReissueRequest: Boolean,
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
-    onReissueRequest: () -> Unit = {}
+    onReissueRequest: () -> Unit = {},
+    reissueRequestText:String=MainRes.string.reissue_request_title
 ) {
     Row(modifier = modifier.clickable { onClick.invoke() }.fillMaxWidth().padding(16.dp)) {
         Column(modifier = Modifier.weight(1f)) {
@@ -54,7 +55,7 @@ fun RequestCells(
                 colors = ButtonDefaults.textButtonColors(contentColor = Theme.colors.highlightColor)
             ) {
                 Text(
-                    text = MainRes.string.reissue_request_title,
+                    text = reissueRequestText,
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Bold
                 )

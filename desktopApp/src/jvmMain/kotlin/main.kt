@@ -13,7 +13,7 @@ fun main() = application {
     )
     Window(
         title = "Rado",
-        state = rememberWindowState(width = 800.dp, height = 790.dp),
+        state = rememberWindowState(width = 1000.dp, height = 1000.dp),
         onCloseRequest = ::exitApplication,
     ) {
         window.minimumSize = Dimension(350, 600)

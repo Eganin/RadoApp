@@ -48,15 +48,13 @@ class InfoRequestViewModel :
         isActiveRequest: Boolean
     ) {
         when {
-            infoForPosition == Position.DRIVER && isActiveRequest -> getInfoForActiveRequest(
+            isActiveRequest -> getInfoForActiveRequest(
                 requestId = requestId
             )
 
-            infoForPosition == Position.DRIVER && !isActiveRequest -> getInfoForUnconfirmedRequest(
+            !isActiveRequest -> getInfoForUnconfirmedRequest(
                 requestId = requestId
             )
-
-            infoForPosition == Position.MECHANIC -> getInfoForUnconfirmedRequest(requestId = requestId)
         }
     }
 
