@@ -9,6 +9,7 @@ import models.ArchiveAction
 import models.ArchiveEvent
 import models.ArchiveRequestsForDriverItem
 import models.ArchiveRequestsForMechanicItem
+import models.ArchiveRequestsForObserverItem
 import models.ArchiveViewState
 import other.BaseSharedViewModel
 import other.Position
@@ -27,6 +28,9 @@ class ArchiveViewModel(private val position: Position) :
         Inject.instance()
 
     private val archiveRequestsForDriverRepository: ArchiveRequestsForDriverRepository =
+        Inject.instance()
+
+    private val archiveRequestsForObserverRepository: ArchiveRequestsForObserverRepository =
         Inject.instance()
 
     init {
@@ -62,7 +66,27 @@ class ArchiveViewModel(private val position: Position) :
         }
     }
 
-    private fun getArchiveRequestsForObserver() {}
+    private fun getArchiveRequestsForObserver() {
+        coroutineScope.launch {
+            obtainEvent(viewEvent = ArchiveEvent.StartLoading)
+
+            val archiveRequestsForObserverItem =
+                archiveRequestsForObserverRepository.getArchiveRequests()
+
+            if (archiveRequestsForObserverItem is ArchiveRequestsForObserverItem.Success) {
+                log(tag = TAG) { "Archive requests for driver: ${archiveRequestsForObserverItem.items}" }
+                viewState = viewState.copy(
+                    requestsForObserver = archiveRequestsForObserverItem.items
+                )
+            } else if (archiveRequestsForObserverItem is ArchiveRequestsForObserverItem.Error) {
+                log(tag = TAG) { "Archive requests for mechanic is failure" }
+                viewState =
+                    viewState.copy(errorTextForRequestList = archiveRequestsForObserverItem.message)
+            }
+
+            obtainEvent(viewEvent = ArchiveEvent.EndLoading)
+        }
+    }
 
     private fun getArchiveRequestsForDriver() {
         coroutineScope.launch {

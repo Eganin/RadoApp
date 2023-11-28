@@ -30,6 +30,6 @@ object ArchiveTabForDriver : Tab {
 
     @Composable
     override fun Content() {
-        Navigator(ArchiveRequestsScreen(position = Position.MECHANIC))
+        Navigator(ArchiveRequestsScreen(position = Position.DRIVER))
     }
 }

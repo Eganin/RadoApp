@@ -30,7 +30,8 @@ object PlatformSDK {
                 sharedRequestsModule,
                 requestsMechanicModule,
                 mechanicActiveModule,
-                mechanicArchiveModule
+                mechanicArchiveModule,
+                observerArchiveModule
             )
         }.direct)
 

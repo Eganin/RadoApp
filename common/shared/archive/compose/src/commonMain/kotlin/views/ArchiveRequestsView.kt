@@ -71,8 +71,19 @@ fun ArchiveRequestsView(
                         }
                     )
                 }
-            } else if(state.requestsForDriver.isNotEmpty()){
+            } else if (state.requestsForDriver.isNotEmpty()) {
                 state.requestsForDriver.forEach {
+                    RequestCells(
+                        firstText = datetimeStringToPrettyString(dateTime = it.datetime),
+                        secondText = it.mechanicName,
+                        isReissueRequest = false,
+                        onClick = {
+                            eventHandler.invoke(ArchiveEvent.OpenDialogInfoRequest(requestId = it.id))
+                        }
+                    )
+                }
+            } else if (state.requestsForObserver.isNotEmpty()) {
+                state.requestsForObserver.forEach {
                     RequestCells(
                         firstText = datetimeStringToPrettyString(dateTime = it.datetime),
                         secondText = it.mechanicName,
