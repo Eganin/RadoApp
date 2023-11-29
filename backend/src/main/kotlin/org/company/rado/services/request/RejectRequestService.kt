@@ -1,18 +1,15 @@
 package org.company.rado.services.request
 
-import org.company.rado.dao.images.ImagesDaoFacade
+import io.ktor.server.plugins.NotFoundException
 import org.company.rado.dao.register.mechanic.MechanicDaoFacade
 import org.company.rado.dao.request.RequestDaoFacade
 import org.company.rado.dao.vehicles.VehicleDaoFacade
-import io.ktor.server.plugins.*
-import org.company.rado.models.requests.reject.FullRejectRequest
 import org.company.rado.models.requests.reject.SmallRejectRequest
 
 class RejectRequestService(
     private val requestRepository: RequestDaoFacade,
     private val vehicleRepository: VehicleDaoFacade,
-    private val mechanicRepository: MechanicDaoFacade,
-    private val imageRepository: ImagesDaoFacade
+    private val mechanicRepository: MechanicDaoFacade
 ) {
     suspend fun rejectRequest(requestId: Int, commentMechanic: String, mechanicId: Int): Boolean {
         return requestRepository.updateRejectRequestById(
@@ -37,21 +34,5 @@ class RejectRequestService(
                 mechanicName = mechanicDTO.fullName
             )
         }
-    }
-
-    suspend fun getRejectRequestById(requestId: Int): FullRejectRequest {
-        val request = requestRepository.getRejectRequestById(requestId = requestId)
-            ?: throw NotFoundException("Request is not found")
-        val vehicleDTO = vehicleRepository.findVehicle(vehicleId = request.vehicleId)
-            ?: throw NotFoundException("Vehicle is not found")
-        val images = imageRepository.findByRequestId(requestId=request.id)
-        return FullRejectRequest(
-            id = request.id,
-            typeVehicle = vehicleDTO.typeVehicle,
-            numberVehicle = vehicleDTO.numberVehicle,
-            faultDescription = request.faultDescription,
-            images = images,
-            driverId = request.driverId
-        )
     }
 }

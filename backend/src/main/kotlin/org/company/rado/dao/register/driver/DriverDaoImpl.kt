@@ -26,7 +26,7 @@ class DriverDaoImpl(override val mapper: Mapper<UserDTO, ResultRow> = UserDTOMap
             .select { Drivers.fullName eq username }.map { mapper.map(source = it) }.singleOrNull()
     }
 
-    override suspend fun fundById(driverId: Int): UserDTO? = dbQuery {
+    override suspend fun findById(driverId: Int): UserDTO? = dbQuery {
         Drivers
             .select { Drivers.id eq driverId }.map { mapper.map(source = it) }.singleOrNull()
     }

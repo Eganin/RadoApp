@@ -9,6 +9,6 @@ interface DriverDaoFacade {
     val mapper: Mapper<UserDTO, ResultRow>
     suspend fun createDriver(driver: UserDTO):Int?
     suspend fun findByFullName(username:String): UserDTO?
-    suspend fun fundById(driverId: Int): UserDTO?
+    suspend fun findById(driverId: Int): UserDTO?
     suspend fun deleteDriver(username: String):Boolean
 }

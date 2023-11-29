@@ -63,8 +63,7 @@ fun DI.MainBuilder.bindServices() {
         RejectRequestService(
             requestRepository = instance(),
             vehicleRepository = instance(),
-            mechanicRepository = instance(),
-            imageRepository = instance()
+            mechanicRepository = instance()
         )
     }
 
