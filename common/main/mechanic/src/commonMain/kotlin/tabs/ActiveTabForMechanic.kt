@@ -1,6 +1,6 @@
 package tabs
 
-import ActiveRequestsForMechanicScreen
+import ActiveRequestsScreen
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
@@ -9,6 +9,7 @@ import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.Check
+import other.Position
 
 object ActiveTabForMechanic : Tab {
 
@@ -29,6 +30,6 @@ object ActiveTabForMechanic : Tab {
 
     @Composable
     override fun Content() {
-        Navigator(ActiveRequestsForMechanicScreen)
+        Navigator(ActiveRequestsScreen(position = Position.MECHANIC))
     }
 }

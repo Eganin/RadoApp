@@ -1,8 +1,9 @@
 package models
 
-data class MechanicActiveViewState(
+data class ActiveViewState(
     val selectedDate: String = "",
-    val requests: List<SmallActiveRequestForMechanic> = emptyList(),
+    val requestsForMechanic: List<SmallActiveRequestForMechanic> = emptyList(),
+    val requestsForObserver: List<SmallActiveRequestForObserverResponse> = emptyList(),
     val errorTextForRequestList: String = "",
     val showInfoDialog: Boolean = false,
     val requestIdForInfo: Int = -1,
