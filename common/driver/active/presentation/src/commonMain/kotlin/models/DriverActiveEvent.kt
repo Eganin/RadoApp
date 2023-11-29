@@ -8,8 +8,6 @@ sealed class DriverActiveEvent {
 
     data class OpenDialogRecreateForUnconfirmedRequest(val requestId: Int): DriverActiveEvent()
 
-    data class OpenDialogRecreateForActiveRequest(val requestId: Int): DriverActiveEvent()
-
     data class OpenDialogInfoRequest(val requestId: Int, val isActiveRequest: Boolean) :
         DriverActiveEvent()
 
