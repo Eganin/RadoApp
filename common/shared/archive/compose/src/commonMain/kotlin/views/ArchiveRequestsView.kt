@@ -117,6 +117,7 @@ fun ArchiveRequestsView(
                 infoForPosition = Position.MECHANIC,
                 isActiveRequest = false,
                 isArchiveRequest = true,
+                isRejectRequest = false,
                 actionControl = { infoRequestState ->
                     if (infoRequestState.driverPhone.isNotEmpty()) {
                         Text(

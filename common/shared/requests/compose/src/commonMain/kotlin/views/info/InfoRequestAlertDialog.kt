@@ -49,6 +49,7 @@ fun InfoRequestAlertDialog(
     infoForPosition: Position,
     isActiveRequest: Boolean,
     isArchiveRequest: Boolean,
+    isRejectRequest:Boolean,
     modifier: Modifier = Modifier,
     actionControl: @Composable (InfoRequestViewState) -> Unit = {}
 ) {
@@ -66,7 +67,8 @@ fun InfoRequestAlertDialog(
                 requestId = requestId,
                 infoForPosition = infoForPosition,
                 isActiveRequest = isActiveRequest,
-                isArchiveRequest=isArchiveRequest
+                isArchiveRequest=isArchiveRequest,
+                isRejectRequest = isRejectRequest
             )
         )
     }

@@ -30,6 +30,8 @@ class InfoRequestViewModel :
 
     private val archiveRequestsRepository: ArchiveRequestsRepository = Inject.instance()
 
+    private val rejectRequestsRepository: RejectRequestsRepository = Inject.instance()
+
     override fun obtainEvent(viewEvent: InfoRequestEvent) {
         when (viewEvent) {
             is InfoRequestEvent.ImageRepairExpandedChanged -> obtainImageRepairExpandedChanged()
@@ -37,7 +39,8 @@ class InfoRequestViewModel :
                 requestId = viewEvent.requestId,
                 infoForPosition = viewEvent.infoForPosition,
                 isActiveRequest = viewEvent.isActiveRequest,
-                isArchiveRequest = viewEvent.isArchiveRequest
+                isArchiveRequest = viewEvent.isArchiveRequest,
+                isRejectRequest = viewEvent.isRejectRequest
             )
 
             is InfoRequestEvent.PhoneClick -> {}
@@ -48,17 +51,19 @@ class InfoRequestViewModel :
         requestId: Int,
         infoForPosition: Position,
         isActiveRequest: Boolean,
-        isArchiveRequest: Boolean
+        isArchiveRequest: Boolean,
+        isRejectRequest: Boolean
     ) {
         when {
-            !isActiveRequest && !isArchiveRequest -> getInfoForUnconfirmedRequest(
+            !isActiveRequest && !isArchiveRequest && !isRejectRequest -> getInfoForUnconfirmedRequest(
                 requestId = requestId
             )
 
             else -> {
                 getInfoForActiveOrArchiveRequest(
                     requestId = requestId,
-                    isArchive = isArchiveRequest
+                    isArchive = isArchiveRequest,
+                    isReject = isRejectRequest
                 )
             }
         }
@@ -93,14 +98,19 @@ class InfoRequestViewModel :
         }
     }
 
-    private fun getInfoForActiveOrArchiveRequest(requestId: Int, isArchive: Boolean) {
+    private fun getInfoForActiveOrArchiveRequest(
+        requestId: Int,
+        isArchive: Boolean,
+        isReject: Boolean
+    ) {
         coroutineScope.launch {
             changeLoading()
             val fullRequestItem =
-                if (!isArchive) activeRequestsRepository.getActiveRequestInfo(requestId = requestId)
-                else archiveRequestsRepository.getArchiveRequestInfo(requestId = requestId)
+                if (isArchive) archiveRequestsRepository.getArchiveRequestInfo(requestId = requestId)
+                else if (isReject) rejectRequestsRepository.getRejectRequestInfo(requestId = requestId)
+                else activeRequestsRepository.getActiveRequestInfo(requestId = requestId)
             if (fullRequestItem is FullRequestItem.Success) {
-                log(tag = TAG) { "Get info for active request ${fullRequestItem.request}" }
+                log(tag = TAG) { "Get info for request ${fullRequestItem.request}" }
                 val info = fullRequestItem.request
                 val (isTractor, isTrailer) = info.vehicleType.toVehicleType()
                 log(tag = "IMAGES") { info.images.toString() }

@@ -100,6 +100,7 @@ internal fun RequestsMechanicView(
             infoForPosition = Position.MECHANIC,
             isActiveRequest = false,
             isArchiveRequest = false,
+            isRejectRequest = false,
             actionControl = { infoRequestState ->
                 if (infoRequestState.driverPhone.isNotEmpty()) {
                     Text(

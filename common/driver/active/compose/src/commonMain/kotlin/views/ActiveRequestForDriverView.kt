@@ -201,6 +201,7 @@ fun ActiveRequestsForDriverView(
                 infoForPosition = Position.DRIVER,
                 isActiveRequest = state.isActiveDialog,
                 isArchiveRequest = false,
+                isRejectRequest = false,
                 actionControl = { infoRequestState ->
                     if (infoRequestState.mechanicPhone.isNotEmpty()) {
                         Text(

@@ -150,6 +150,7 @@ fun ActiveRequestsView(
                 infoForPosition = position,
                 isActiveRequest = true,
                 isArchiveRequest = false,
+                isRejectRequest = false,
                 actionControl = { infoRequestState ->
                     if (infoRequestState.driverPhone.isNotEmpty()) {
                         Text(
