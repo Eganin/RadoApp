@@ -8,6 +8,7 @@ import kotlinx.coroutines.launch
 import models.ActiveAction
 import models.ActiveEvent
 import models.ActiveRequestsForMechanicItem
+import models.ActiveRequestsForObserverItem
 import models.ActiveViewState
 import other.BaseSharedViewModel
 import other.Position
@@ -24,6 +25,9 @@ class ActiveViewModel(private val position: Position) :
         })
 
     private val activeRequestsForMechanicRepository: ActiveRequestsForMechanicRepository =
+        Inject.instance()
+
+    private val activeRequestsForObserverRepository: ActiveRequestsForObserverRepository =
         Inject.instance()
 
     init {
@@ -78,6 +82,13 @@ class ActiveViewModel(private val position: Position) :
     }
 
     private fun getActiveRequestsByDate(date: String = "") {
+        when (position) {
+            Position.MECHANIC -> getActiveRequestsForMechanic(date = date)
+            else -> getActiveRequestsForObserver(date = date)
+        }
+    }
+
+    private fun getActiveRequestsForMechanic(date: String) {
         coroutineScope.launch {
             obtainEvent(viewEvent = ActiveEvent.StartLoading)
 
@@ -86,11 +97,31 @@ class ActiveViewModel(private val position: Position) :
             if (activeRequestsForMechanicItem is ActiveRequestsForMechanicItem.Success) {
                 log(tag = TAG) { "Active requests for mechanic by date: ${activeRequestsForMechanicItem.items}" }
                 viewState = viewState.copy(
-                    requests = activeRequestsForMechanicItem.items
+                    requestsForMechanic = activeRequestsForMechanicItem.items
                 )
             } else if (activeRequestsForMechanicItem is ActiveRequestsForMechanicItem.Error) {
                 log(tag = TAG) { "Active requests for mechanic is failure" }
                 obtainEvent(viewEvent = ActiveEvent.ErrorTextForRequestListChanged(value = activeRequestsForMechanicItem.message))
+            }
+
+            obtainEvent(viewEvent = ActiveEvent.EndLoading)
+        }
+    }
+
+    private fun getActiveRequestsForObserver(date: String) {
+        coroutineScope.launch {
+            obtainEvent(viewEvent = ActiveEvent.StartLoading)
+
+            val activeRequestsForObserverItem =
+                activeRequestsForObserverRepository.getRequestsByDate(date = date)
+            if (activeRequestsForObserverItem is ActiveRequestsForObserverItem.Success) {
+                log(tag = TAG) { "Active requests for observer by date: ${activeRequestsForObserverItem.items}" }
+                viewState = viewState.copy(
+                    requestsForObserver = activeRequestsForObserverItem.items
+                )
+            } else if (activeRequestsForObserverItem is ActiveRequestsForObserverItem.Error) {
+                log(tag = TAG) { "Active requests for mechanic is failure" }
+                obtainEvent(viewEvent = ActiveEvent.ErrorTextForRequestListChanged(value = activeRequestsForObserverItem.message))
             }
 
             obtainEvent(viewEvent = ActiveEvent.EndLoading)

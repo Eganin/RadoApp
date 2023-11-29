@@ -30,6 +30,7 @@ class ActiveRequestsScreen(private val position: Position) : Screen {
         ) {
             ActiveRequestsView(
                 state = state.value,
+                position=position,
                 modifier = Modifier.padding(bottom = 90.dp)
             ) { event ->
                 viewModel.obtainEvent(viewEvent = event)

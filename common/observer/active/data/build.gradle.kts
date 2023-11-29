@@ -8,7 +8,7 @@ kotlin{
     sourceSets{
         commonMain{
             dependencies{
-                implementation(project(":common:mechanic:active:api"))
+                implementation(project(":common:observer:active:api"))
                 implementation(project(":common:auth:data"))
                 implementation(project(":common:core"))
                 implementation(project(":common:core-utils"))

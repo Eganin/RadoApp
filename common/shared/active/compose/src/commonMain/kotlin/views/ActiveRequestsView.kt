@@ -44,6 +44,7 @@ import widgets.common.TextStickyHeader
 @Composable
 fun ActiveRequestsView(
     state: ActiveViewState,
+    position: Position,
     modifier: Modifier = Modifier,
     eventHandler: (ActiveEvent) -> Unit
 ) {
@@ -99,8 +100,8 @@ fun ActiveRequestsView(
         Spacer(modifier = Modifier.height(8.dp))
 
         if (state.errorTextForRequestList.isEmpty()) {
-            if (state.requests.isNotEmpty()) {
-                state.requests.forEach {
+            if (state.requestsForMechanic.isNotEmpty()) {
+                state.requestsForMechanic.forEach {
                     RequestCells(
                         firstText = it.typeVehicle,
                         secondText = it.numberVehicle,
@@ -112,6 +113,17 @@ fun ActiveRequestsView(
                             eventHandler.invoke(ActiveEvent.OpenDialogInfoRequest(requestId = it.id))
                         },
                         reissueRequestText = MainRes.string.archieve_request_title
+                    )
+                }
+            } else if (state.requestsForObserver.isNotEmpty()) {
+                state.requestsForObserver.forEach {
+                    RequestCells(
+                        firstText = datetimeStringToPrettyString(dateTime = it.datetime),
+                        secondText = it.mechanicName,
+                        isReissueRequest = false,
+                        onClick = {
+                            eventHandler.invoke(ActiveEvent.OpenDialogInfoRequest(requestId = it.id))
+                        }
                     )
                 }
             } else {
@@ -135,11 +147,24 @@ fun ActiveRequestsView(
             InfoRequestAlertDialog(
                 onDismiss = { eventHandler.invoke(ActiveEvent.CloseInfoDialog) },
                 requestId = state.requestIdForInfo,
-                infoForPosition = Position.MECHANIC,
+                infoForPosition = position,
                 isActiveRequest = true,
                 isArchiveRequest = false,
                 actionControl = { infoRequestState ->
                     if (infoRequestState.driverPhone.isNotEmpty()) {
+                        Text(
+                            text = MainRes.string.contact_a_driver + infoRequestState.driverPhone,
+                            fontSize = 12.sp,
+                            color = Theme.colors.primaryTextColor,
+                            textAlign = TextAlign.Start,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+
+                        Spacer(modifier = Modifier.height(16.dp))
+                    }
+
+                    if (infoRequestState.mechanicPhone.isNotEmpty() && position==Position.OBSERVER) {
                         Text(
                             text = MainRes.string.contact_a_mechanic + infoRequestState.mechanicPhone,
                             fontSize = 12.sp,
