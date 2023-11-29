@@ -7,16 +7,19 @@ kotlin{
     sourceSets{
         commonMain{
             dependencies {
+                implementation(project(":common:core"))
                 implementation(project(":common:core-compose"))
                 implementation(project(":common:core-utils"))
-                implementation(project(":common:core"))
-                implementation(project(":common:shared:archive:compose"))
-                implementation(project(":common:shared:active:compose"))
-                implementation(project(":common:shared:reject:compose"))
+                implementation(project(":common:shared:reject:presentation"))
+
                 implementation(Dependencies.Navigation.Voyager.navigator)
-                implementation(Dependencies.Navigation.Voyager.tabNavigator)
                 implementation(Dependencies.Navigation.MokoMVVM.core)
+
+                implementation(Dependencies.Resources.Libres.libresCompose)
+                implementation(Dependencies.Resources.Image.composeImageLoader)
                 implementation(Dependencies.Resources.ComposeIcons.composeIconsFeatherIcons)
+
+                implementation(Dependencies.Other.FilePicker.core)
             }
         }
     }

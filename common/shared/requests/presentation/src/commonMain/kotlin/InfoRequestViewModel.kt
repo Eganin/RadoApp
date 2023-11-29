@@ -114,6 +114,7 @@ class InfoRequestViewModel :
                 val info = fullRequestItem.request
                 val (isTractor, isTrailer) = info.vehicleType.toVehicleType()
                 log(tag = "IMAGES") { info.images.toString() }
+                log(tag = "VIDEOS") { info.videos.toString() }
                 viewState = viewState.copy(
                     numberVehicle = info.vehicleNumber,
                     isSelectedTractor = isTractor,
