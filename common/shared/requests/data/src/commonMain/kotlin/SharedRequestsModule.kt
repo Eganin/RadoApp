@@ -47,6 +47,13 @@ val sharedRequestsModule = DI.Module(name = "sharedRequestsModule") {
         )
     }
 
+    bind<RejectRequestsRepository>() with singleton {
+        RejectRequestsRepositoryImpl(
+            remoteDataSource = instance(),
+            mapper = instance()
+        )
+    }
+
     bind<OperationsOnRequestsRepository>() with singleton {
         OperationsOnRequestsRepositoryImpl(
             remoteDataSource = instance(),

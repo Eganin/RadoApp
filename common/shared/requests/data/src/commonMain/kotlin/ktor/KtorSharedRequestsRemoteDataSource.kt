@@ -55,6 +55,14 @@ internal class KtorSharedRequestsRemoteDataSource(
         }.body()
     }
 
+    suspend fun fetchRejectRequestInfo(requestId:Int):FullRequestResponse{
+        return httpClient.get{
+            url{
+                path("request/reject/$requestId")
+            }
+        }.body()
+    }
+
     suspend fun updateRecreateRequest(
         requestId: Int,
         driverId: Int,
