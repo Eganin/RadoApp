@@ -28,6 +28,7 @@ object PlatformSDK {
                 driverActiveModule,
                 driverArchiveModule,
                 sharedRequestsModule,
+                sharedRejectModule,
                 requestsMechanicModule,
                 mechanicActiveModule,
                 mechanicArchiveModule,
