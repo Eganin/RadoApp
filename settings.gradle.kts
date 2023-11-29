@@ -50,8 +50,6 @@ include(":common:main:observer")
 
 include(":common:observer:active:api")
 include(":common:observer:active:data")
-include(":common:observer:active:presentation")
-include(":common:observer:active:compose")
 
 include(":common:observer:archive:api")
 include(":common:observer:archive:data")

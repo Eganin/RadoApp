@@ -8,6 +8,7 @@ kotlin{
         commonMain{
             dependencies {
                 api(project(":common:mechanic:active:api"))
+                api(project(":common:observer:active:api"))
                 api(project(":common:shared:requests:api"))
                 implementation(project(":common:core"))
 
