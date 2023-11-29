@@ -5,6 +5,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import models.FullRejectRequestItem
 import models.FullRequestItem
 import models.UnconfirmedRequestInfoItem
 import models.create.toVehicleType
@@ -55,6 +56,8 @@ class InfoRequestViewModel :
         isRejectRequest: Boolean
     ) {
         when {
+            isRejectRequest -> getInfoForRejectedRequest(requestId=requestId)
+
             !isActiveRequest && !isArchiveRequest && !isRejectRequest -> getInfoForUnconfirmedRequest(
                 requestId = requestId
             )
@@ -62,10 +65,37 @@ class InfoRequestViewModel :
             else -> {
                 getInfoForActiveOrArchiveRequest(
                     requestId = requestId,
-                    isArchive = isArchiveRequest,
-                    isReject = isRejectRequest
+                    isArchive = isArchiveRequest
                 )
             }
+        }
+    }
+
+    private fun getInfoForRejectedRequest(requestId: Int) {
+        coroutineScope.launch {
+            changeLoading()
+
+            val rejectRequestItem =
+                rejectRequestsRepository.getRejectRequestInfo(requestId = requestId)
+
+            if (rejectRequestItem is FullRejectRequestItem.Success) {
+                val request = rejectRequestItem.request
+                val (isTractor, isTrailer) = request.typeVehicle.toVehicleType()
+                viewState = viewState.copy(
+                    isSelectedTractor = isTractor,
+                    isSelectedTrailer = isTrailer,
+                    numberVehicle = request.numberVehicle,
+                    faultDescription = request.faultDescription,
+                    images = request.images,
+                    videos = request.videos
+                )
+            } else if (rejectRequestItem is FullRejectRequestItem.Error) {
+                viewState = viewState.copy(
+                    errorTitleMessage = rejectRequestItem.message
+                )
+            }
+
+            changeLoading()
         }
     }
 
@@ -100,14 +130,12 @@ class InfoRequestViewModel :
 
     private fun getInfoForActiveOrArchiveRequest(
         requestId: Int,
-        isArchive: Boolean,
-        isReject: Boolean
+        isArchive: Boolean
     ) {
         coroutineScope.launch {
             changeLoading()
             val fullRequestItem =
                 if (isArchive) archiveRequestsRepository.getArchiveRequestInfo(requestId = requestId)
-                else if (isReject) rejectRequestsRepository.getRejectRequestInfo(requestId = requestId)
                 else activeRequestsRepository.getActiveRequestInfo(requestId = requestId)
             if (fullRequestItem is FullRequestItem.Success) {
                 log(tag = TAG) { "Get info for request ${fullRequestItem.request}" }

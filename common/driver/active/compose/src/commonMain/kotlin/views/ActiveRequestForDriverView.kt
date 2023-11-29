@@ -189,6 +189,7 @@ fun ActiveRequestsForDriverView(
         if (state.showRecreateDialog) {
             RecreateRequestAlertDialog(
                 requestId = state.requestIdForInfo,
+                isRejectRequest = false,
                 onDismiss = { eventHandler.invoke(DriverActiveEvent.CloseRecreateDialog) },
                 onExit = { eventHandler.invoke(DriverActiveEvent.CloseRecreateDialog) }
             )

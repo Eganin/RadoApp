@@ -164,6 +164,7 @@ fun RejectRequestsView(
         if (state.showRecreateDialog) {
             RecreateRequestAlertDialog(
                 requestId = state.requestIdForInfo,
+                isRejectRequest = true,
                 onDismiss = { eventHandler.invoke(RejectEvent.CloseRecreateDialog) },
                 onExit = { eventHandler.invoke(RejectEvent.CloseRecreateDialog) }
             )

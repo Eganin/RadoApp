@@ -44,14 +44,20 @@ class RejectRequestViewModel(private val position: Position) :
                 requestId = viewEvent.requestId
             )
 
-            is RejectEvent.CloseRecreateDialog -> obtainShowRecreateDialog(showRecreateDialog = false)
+            is RejectEvent.CloseRecreateDialog -> {
+                obtainShowRecreateDialog(showRecreateDialog = false)
+                obtainEvent(viewEvent = RejectEvent.PullRefresh)
+            }
 
             is RejectEvent.OpenInfoDialog -> obtainShowInfoDialog(
                 showInfoDialog = true,
                 requestId = viewEvent.requestId
             )
 
-            is RejectEvent.CloseInfoDialog -> obtainShowInfoDialog(showInfoDialog = false)
+            is RejectEvent.CloseInfoDialog -> {
+                obtainShowInfoDialog(showInfoDialog = false)
+                obtainEvent(viewEvent = RejectEvent.PullRefresh)
+            }
         }
     }
 

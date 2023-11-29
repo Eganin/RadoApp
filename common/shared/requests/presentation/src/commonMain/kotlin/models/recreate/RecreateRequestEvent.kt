@@ -4,6 +4,8 @@ sealed class RecreateRequestEvent {
 
     data class GetInfoForOldUnconfirmedRequest(val requestId: Int) : RecreateRequestEvent()
 
+    data class GetInfoForOldRejectRequest(val requestId: Int) : RecreateRequestEvent()
+
     data object RecreateRequest : RecreateRequestEvent()
 
     data object SelectedTypeVehicleTractor : RecreateRequestEvent()
