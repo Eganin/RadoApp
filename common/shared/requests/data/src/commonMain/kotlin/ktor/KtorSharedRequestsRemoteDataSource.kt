@@ -7,6 +7,7 @@ import io.ktor.client.request.put
 import io.ktor.client.request.setBody
 import io.ktor.http.path
 import ktor.models.RecreateRequest
+import models.FullRejectRequestResponse
 import models.FullRequestResponse
 import models.FullUnconfirmedRequestResponse
 import models.RecreateRequestResponse
@@ -55,7 +56,7 @@ internal class KtorSharedRequestsRemoteDataSource(
         }.body()
     }
 
-    suspend fun fetchRejectRequestInfo(requestId:Int):FullRequestResponse{
+    suspend fun fetchRejectRequestInfo(requestId:Int):FullRejectRequestResponse{
         return httpClient.get{
             url{
                 path("request/reject/$requestId")

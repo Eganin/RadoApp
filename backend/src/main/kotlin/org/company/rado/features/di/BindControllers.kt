@@ -61,8 +61,7 @@ fun DI.MainBuilder.bindControllers() {
 
     bind<RejectRequestController>() with singleton {
         RejectRequestController(
-            rejectRequestService = instance(),
-            requestService = instance()
+            rejectRequestService = instance()
         )
     }
 

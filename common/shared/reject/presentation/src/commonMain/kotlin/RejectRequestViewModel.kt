@@ -45,6 +45,13 @@ class RejectRequestViewModel(private val position: Position) :
             )
 
             is RejectEvent.CloseRecreateDialog -> obtainShowRecreateDialog(showRecreateDialog = false)
+
+            is RejectEvent.OpenInfoDialog -> obtainShowInfoDialog(
+                showInfoDialog = true,
+                requestId = viewEvent.requestId
+            )
+
+            is RejectEvent.CloseInfoDialog -> obtainShowInfoDialog(showInfoDialog = false)
         }
     }
 
@@ -70,6 +77,13 @@ class RejectRequestViewModel(private val position: Position) :
 
     private fun obtainShowRecreateDialog(showRecreateDialog: Boolean, requestId: Int? = null) {
         viewState = viewState.copy(showRecreateDialog = showRecreateDialog)
+        requestId?.let {
+            viewState = viewState.copy(requestIdForInfo = requestId)
+        }
+    }
+
+    private fun obtainShowInfoDialog(showInfoDialog: Boolean, requestId: Int? = null) {
+        viewState = viewState.copy(showInfoDialog = showInfoDialog)
         requestId?.let {
             viewState = viewState.copy(requestIdForInfo = requestId)
         }

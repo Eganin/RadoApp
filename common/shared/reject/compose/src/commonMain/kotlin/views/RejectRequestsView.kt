@@ -18,28 +18,28 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
-import models.ArchiveEvent
-import models.ArchiveViewState
+import models.RejectEvent
+import models.RejectRequestViewState
 import org.company.rado.core.MainRes
 import other.Position
 import theme.Theme
-import time.datetimeStringToPrettyString
 import views.create.RequestCells
 import views.info.InfoRequestAlertDialog
+import views.recreate.RecreateRequestAlertDialog
 import widgets.common.ActionButton
 import widgets.common.TextStickyHeader
 
 @Composable
-fun ArchiveRequestsView(
-    state: ArchiveViewState,
+fun RejectRequestsView(
+    state: RejectRequestViewState,
     position: Position,
     modifier: Modifier = Modifier,
-    eventHandler: (ArchiveEvent) -> Unit
+    eventHandler: (RejectEvent) -> Unit
 ) {
     //pull refresh every half minute
     LaunchedEffect(key1 = Unit) {
         while (true) {
-            eventHandler.invoke(ArchiveEvent.PullRefresh)
+            eventHandler.invoke(RejectEvent.PullRefresh)
             delay(30000L)
         }
     }
@@ -53,7 +53,7 @@ fun ArchiveRequestsView(
         ActionButton(
             text = MainRes.string.update_date_title,
             onClick = {
-                eventHandler.invoke(ArchiveEvent.PullRefresh)
+                eventHandler.invoke(RejectEvent.PullRefresh)
             },
             modifier = Modifier.fillMaxWidth()
         )
@@ -61,36 +61,17 @@ fun ArchiveRequestsView(
         Spacer(modifier = Modifier.height(16.dp))
 
         if (state.errorTextForRequestList.isEmpty()) {
-            if (state.requestsForMechanic.isNotEmpty()) {
-                state.requestsForMechanic.forEach {
+            if (state.requests.isNotEmpty()) {
+                state.requests.forEach {
                     RequestCells(
-                        firstText = datetimeStringToPrettyString(dateTime = it.datetime),
-                        secondText = it.numberVehicle,
-                        isReissueRequest = false,
-                        onClick = {
-                            eventHandler.invoke(ArchiveEvent.OpenDialogInfoRequest(requestId = it.id))
-                        }
-                    )
-                }
-            } else if (state.requestsForDriver.isNotEmpty()) {
-                state.requestsForDriver.forEach {
-                    RequestCells(
-                        firstText = datetimeStringToPrettyString(dateTime = it.datetime),
+                        firstText = it.numberVehicle,
                         secondText = it.mechanicName,
-                        isReissueRequest = false,
+                        isReissueRequest = true,
                         onClick = {
-                            eventHandler.invoke(ArchiveEvent.OpenDialogInfoRequest(requestId = it.id))
-                        }
-                    )
-                }
-            } else if (state.requestsForObserver.isNotEmpty()) {
-                state.requestsForObserver.forEach {
-                    RequestCells(
-                        firstText = datetimeStringToPrettyString(dateTime = it.datetime),
-                        secondText = it.mechanicName,
-                        isReissueRequest = false,
-                        onClick = {
-                            eventHandler.invoke(ArchiveEvent.OpenDialogInfoRequest(requestId = it.id))
+                            eventHandler.invoke(RejectEvent.OpenInfoDialog(requestId = it.id))
+                        },
+                        onReissueRequest = {
+                            eventHandler.invoke(RejectEvent.OpenRecreateDialog(requestId = it.id))
                         }
                     )
                 }
@@ -113,12 +94,12 @@ fun ArchiveRequestsView(
 
         if (state.showInfoDialog) {
             InfoRequestAlertDialog(
-                onDismiss = { eventHandler.invoke(ArchiveEvent.CloseInfoDialog) },
+                onDismiss = { eventHandler.invoke(RejectEvent.CloseInfoDialog) },
                 requestId = state.requestIdForInfo,
                 infoForPosition = position,
                 isActiveRequest = false,
-                isArchiveRequest = true,
-                isRejectRequest = false,
+                isArchiveRequest = false,
+                isRejectRequest = true,
                 actionControl = { infoRequestState ->
                     if (infoRequestState.driverPhone.isNotEmpty()) {
                         Text(
@@ -172,25 +153,19 @@ fun ArchiveRequestsView(
                         Spacer(modifier = Modifier.height(16.dp))
                     }
 
-                    if (infoRequestState.datetime.isNotEmpty()) {
-                        Text(
-                            text = MainRes.string.datetime_title + datetimeStringToPrettyString(
-                                dateTime = infoRequestState.datetime
-                            ),
-                            fontSize = 12.sp,
-                            color = Theme.colors.primaryTextColor,
-                            textAlign = TextAlign.Start,
-                            fontWeight = FontWeight.Bold,
-                            modifier = Modifier.fillMaxWidth()
-                        )
-                        Spacer(modifier = Modifier.height(16.dp))
-                    }
-
                     ActionButton(
                         text = MainRes.string.close_window_title,
                         modifier = Modifier.fillMaxWidth(),
-                        onClick = { eventHandler.invoke(ArchiveEvent.CloseInfoDialog) })
+                        onClick = { eventHandler.invoke(RejectEvent.CloseInfoDialog) })
                 }
+            )
+        }
+
+        if (state.showRecreateDialog) {
+            RecreateRequestAlertDialog(
+                requestId = state.requestIdForInfo,
+                onDismiss = { eventHandler.invoke(RejectEvent.CloseRecreateDialog) },
+                onExit = { eventHandler.invoke(RejectEvent.CloseRecreateDialog) }
             )
         }
     }

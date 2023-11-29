@@ -10,12 +10,12 @@ import cafe.adriel.voyager.core.screen.Screen
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 import other.Position
 import other.observeAsState
-import views.ArchiveRequestsView
+import views.RejectRequestsView
 
-class ArchiveRequestsScreen(private val position: Position) : Screen {
+class RejectRequestsScreen(private val position: Position) : Screen {
 
     private val viewModel =
-        viewModelFactory { ArchiveViewModel(position = position) }.createViewModel()
+        viewModelFactory { RejectRequestViewModel(position = position) }.createViewModel()
 
     @Composable
     override fun Content() {
@@ -29,7 +29,7 @@ class ArchiveRequestsScreen(private val position: Position) : Screen {
                 SnackbarHost(hostState = snackBarHostState)
             }
         ) {
-            ArchiveRequestsView(
+            RejectRequestsView(
                 state = state.value,
                 modifier = Modifier.padding(bottom = 90.dp),
                 position = position
