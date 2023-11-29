@@ -4,5 +4,5 @@ interface RejectRequestsRepositoryForDriverAndObserver {
 
     suspend fun getRejectRequestsForObserver():SmallRejectRequestItem
 
-    suspend fun getRejectRequestsForDriver(driverId:Int):SmallRejectRequestItem
+    suspend fun getRejectRequestsForDriver():SmallRejectRequestItem
 }

@@ -20,7 +20,7 @@ internal class RejectRequestsRepositoryForDriverAndObserverImpl(
         return smallRejectRequestItem
     }
 
-    override suspend fun getRejectRequestsForDriver(driverId: Int): SmallRejectRequestItem {
+    override suspend fun getRejectRequestsForDriver(): SmallRejectRequestItem {
         val smallRejectRequestItem = try {
             val userInfo = localDataSource.fetchLoginUserInfo()
             val items = remoteDataSource.getRejectRequestsForDriver(driverId = userInfo.userId)
