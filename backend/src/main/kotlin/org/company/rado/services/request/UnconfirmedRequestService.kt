@@ -42,7 +42,7 @@ class UnconfirmedRequestService(
 
         val vehicleDTO = vehicleRepository.findVehicle(vehicleId = requestDTO.vehicleId)
             ?: throw NotFoundException("Vehicle is not found")
-        val driverDTO = driverRepository.fundById(driverId = requestDTO.driverId)
+        val driverDTO = driverRepository.findById(driverId = requestDTO.driverId)
             ?: throw NotFoundException("Driver is not found")
         val images = imageRepository.findByRequestId(requestId = requestDTO.id)
         val videos = videoRepository.findVideoByRequestId(requestId=requestDTO.id)

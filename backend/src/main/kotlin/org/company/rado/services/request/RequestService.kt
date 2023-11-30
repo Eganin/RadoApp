@@ -103,13 +103,18 @@ class RequestService(
                     ?: throw NotFoundException("Request is not found")
             }
 
+            StatusRequest.REJECT->{
+                requestRepository.getRejectRequestById(requestId=requestId)
+                    ?: throw NotFoundException("Request is not found")
+            }
+
             else -> {
                 throw NotFoundException("Request is not found")
             }
         }
         val vehicleDTO = vehicleRepository.findVehicle(vehicleId = requestDTO.vehicleId)
             ?: throw NotFoundException("Vehicle is not found")
-        val driver = driverRepository.fundById(driverId = requestDTO.driverId)
+        val driver = driverRepository.findById(driverId = requestDTO.driverId)
             ?: throw NotFoundException("Driver is not found")
         val mechanic = mechanicRepository.findById(mechanicId = requestDTO.mechanicId!!)
             ?: throw NotFoundException("Mechanic is not found")

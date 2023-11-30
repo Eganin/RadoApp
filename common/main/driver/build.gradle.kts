@@ -12,6 +12,7 @@ kotlin{
                 implementation(project(":common:core"))
                 implementation(project(":common:driver:active:compose"))
                 implementation(project(":common:shared:archive:compose"))
+                implementation(project(":common:shared:reject:compose"))
                 implementation(Dependencies.Navigation.Voyager.navigator)
                 implementation(Dependencies.Navigation.Voyager.tabNavigator)
                 implementation(Dependencies.Navigation.MokoMVVM.core)

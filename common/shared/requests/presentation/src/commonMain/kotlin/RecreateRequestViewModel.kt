@@ -5,6 +5,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import models.FullRejectRequestItem
 import models.RecreateRequestItem
 import models.UnconfirmedRequestInfoItem
 import models.create.getVehicleType
@@ -28,12 +29,20 @@ class RecreateRequestViewModel :
 
     private val activeRequestsRepositoryForDriver: ActiveRequestsForDriverRepository =
         Inject.instance()
+
     private val unconfirmedRequestsRepository: UnconfirmedRequestsRepository = Inject.instance()
+
     private val operationsOnRequestsRepository: OperationsOnRequestsRepository = Inject.instance()
+
+    private val rejectRequestsRepository: RejectRequestsRepository = Inject.instance()
 
     override fun obtainEvent(viewEvent: RecreateRequestEvent) {
         when (viewEvent) {
             is RecreateRequestEvent.GetInfoForOldUnconfirmedRequest -> getInfoForOldUnconfirmedRequest(
+                requestId = viewEvent.requestId
+            )
+
+            is RecreateRequestEvent.GetInfoForOldRejectRequest -> getInfoForOldRejectRequest(
                 requestId = viewEvent.requestId
             )
 
@@ -90,11 +99,15 @@ class RecreateRequestViewModel :
                 isResource = true
             )
 
-            is RecreateRequestEvent.ShowDatePicker->obtainShowDatePicker(value = true)
+            is RecreateRequestEvent.ShowDatePicker -> obtainShowDatePicker(value = true)
 
-            is RecreateRequestEvent.CloseDatePicker->obtainShowDatePicker(value = false)
+            is RecreateRequestEvent.CloseDatePicker -> obtainShowDatePicker(value = false)
 
-            is RecreateRequestEvent.ArrivalDateChanged->obtainArrivalDate(arrivalDate = convertDateLongToString(date=viewEvent.arrivalDate))
+            is RecreateRequestEvent.ArrivalDateChanged -> obtainArrivalDate(
+                arrivalDate = convertDateLongToString(
+                    date = viewEvent.arrivalDate
+                )
+            )
         }
     }
 
@@ -187,6 +200,41 @@ class RecreateRequestViewModel :
                 }
             } else if (viewState.numberVehicle.isEmpty()) {
                 viewState = viewState.copy(notVehicleNumber = true)
+            }
+            obtainIsLoadingChange()
+        }
+    }
+
+    private fun getInfoForOldRejectRequest(requestId: Int) {
+        coroutineScope.launch {
+            obtainIsLoadingChange()
+            obtainRequestIdChange(requestId = requestId)
+            val rejectedRequestInfoItem =
+                rejectRequestsRepository.getRejectRequestInfo(requestId=requestId)
+            if (rejectedRequestInfoItem is FullRejectRequestItem.Success) {
+                log(tag = TAG) { "Get info for old rejected request ${rejectedRequestInfoItem.request}" }
+                val info = rejectedRequestInfoItem.request
+                val (isTractor, isTrailer) = info.typeVehicle.toVehicleType()
+                viewState = viewState.copy(
+                    isSelectedOldTractor = isTractor,
+                    isSelectedOldTrailer = isTrailer,
+                    oldNumberVehicle = info.numberVehicle,
+                    faultDescription = info.faultDescription,
+                    images = info.images,
+                    videos = info.videos,
+                    numberVehicle = info.numberVehicle
+                )
+                if (viewState.isSelectedOldTractor) {
+                    obtainIsSelectedTractor()
+                    obtainTractorIsExpandedChange()
+                }
+                if (viewState.isSelectedOldTrailer) {
+                    obtainIsSelectedTrailer()
+                    obtainTrailerIsExpandedChange()
+                }
+            } else if (rejectedRequestInfoItem is FullRejectRequestItem.Error) {
+                log(tag = TAG) { "get info for rejected request is failure" }
+                obtainShowFailureDialog(value = !viewState.showFailureDialog)
             }
             obtainIsLoadingChange()
         }
@@ -386,8 +434,8 @@ class RecreateRequestViewModel :
         viewState = viewState.copy(showFilePicker = !viewState.showFilePicker)
     }
 
-    private fun obtainShowDatePicker(value: Boolean){
-        viewState=viewState.copy(showDatePicker = value)
+    private fun obtainShowDatePicker(value: Boolean) {
+        viewState = viewState.copy(showDatePicker = value)
     }
 
     private companion object {
