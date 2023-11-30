@@ -12,6 +12,7 @@ kotlin{
                 implementation(project(":common:auth:data"))
                 implementation(project(":common:driver:active:data"))
                 implementation(project(":common:shared:requests:data"))
+                implementation(project(":common:shared:reject:data"))
                 implementation(project(":common:mechanic:requests:data"))
                 implementation(project(":common:mechanic:active:data"))
                 implementation(project(":common:mechanic:archive:data"))

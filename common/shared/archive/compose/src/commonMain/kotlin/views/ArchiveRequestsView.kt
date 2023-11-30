@@ -27,11 +27,13 @@ import time.datetimeStringToPrettyString
 import views.create.RequestCells
 import views.info.InfoRequestAlertDialog
 import widgets.common.ActionButton
+import widgets.common.CircularLoader
 import widgets.common.TextStickyHeader
 
 @Composable
 fun ArchiveRequestsView(
     state: ArchiveViewState,
+    position: Position,
     modifier: Modifier = Modifier,
     eventHandler: (ArchiveEvent) -> Unit
 ) {
@@ -58,6 +60,8 @@ fun ArchiveRequestsView(
         )
 
         Spacer(modifier = Modifier.height(16.dp))
+
+        CircularLoader(isLoading = state.isLoading)
 
         if (state.errorTextForRequestList.isEmpty()) {
             if (state.requestsForMechanic.isNotEmpty()) {
@@ -114,9 +118,10 @@ fun ArchiveRequestsView(
             InfoRequestAlertDialog(
                 onDismiss = { eventHandler.invoke(ArchiveEvent.CloseInfoDialog) },
                 requestId = state.requestIdForInfo,
-                infoForPosition = Position.MECHANIC,
+                infoForPosition = position,
                 isActiveRequest = false,
                 isArchiveRequest = true,
+                isRejectRequest = false,
                 actionControl = { infoRequestState ->
                     if (infoRequestState.driverPhone.isNotEmpty()) {
                         Text(

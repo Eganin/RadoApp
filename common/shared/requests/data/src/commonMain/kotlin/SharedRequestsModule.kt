@@ -1,6 +1,9 @@
 import ktor.KtorSharedRequestsRemoteDataSource
+import mapper.FullRejectRequestItemMapper
 import mapper.FullRequestItemMapper
 import mapper.UnconfirmedRequestInfoItemMapper
+import models.FullRejectRequestItem
+import models.FullRejectRequestResponse
 import models.FullRequestItem
 import models.FullRequestResponse
 import models.FullUnconfirmedRequestResponse
@@ -33,6 +36,10 @@ val sharedRequestsModule = DI.Module(name = "sharedRequestsModule") {
         FullRequestItemMapper()
     }
 
+    bind<Mapper<FullRejectRequestResponse, FullRejectRequestItem>>() with singleton {
+        FullRejectRequestItemMapper()
+    }
+
     bind<ActiveRequestsRepository>() with singleton {
         ActiveRequestsRepositoryImpl(
             remoteDataSource = instance(),
@@ -42,6 +49,13 @@ val sharedRequestsModule = DI.Module(name = "sharedRequestsModule") {
 
     bind<ArchiveRequestsRepository>() with singleton {
         ArchiveRequestsRepositoryImpl(
+            remoteDataSource = instance(),
+            mapper = instance()
+        )
+    }
+
+    bind<RejectRequestsRepository>() with singleton {
+        RejectRequestsRepositoryImpl(
             remoteDataSource = instance(),
             mapper = instance()
         )

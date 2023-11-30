@@ -189,6 +189,7 @@ fun ActiveRequestsForDriverView(
         if (state.showRecreateDialog) {
             RecreateRequestAlertDialog(
                 requestId = state.requestIdForInfo,
+                isRejectRequest = false,
                 onDismiss = { eventHandler.invoke(DriverActiveEvent.CloseRecreateDialog) },
                 onExit = { eventHandler.invoke(DriverActiveEvent.CloseRecreateDialog) }
             )
@@ -201,6 +202,7 @@ fun ActiveRequestsForDriverView(
                 infoForPosition = Position.DRIVER,
                 isActiveRequest = state.isActiveDialog,
                 isArchiveRequest = false,
+                isRejectRequest = false,
                 actionControl = { infoRequestState ->
                     if (infoRequestState.mechanicPhone.isNotEmpty()) {
                         Text(

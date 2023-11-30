@@ -5,6 +5,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import models.FullRejectRequestItem
 import models.FullRequestItem
 import models.UnconfirmedRequestInfoItem
 import models.create.toVehicleType
@@ -30,6 +31,8 @@ class InfoRequestViewModel :
 
     private val archiveRequestsRepository: ArchiveRequestsRepository = Inject.instance()
 
+    private val rejectRequestsRepository: RejectRequestsRepository = Inject.instance()
+
     override fun obtainEvent(viewEvent: InfoRequestEvent) {
         when (viewEvent) {
             is InfoRequestEvent.ImageRepairExpandedChanged -> obtainImageRepairExpandedChanged()
@@ -37,7 +40,8 @@ class InfoRequestViewModel :
                 requestId = viewEvent.requestId,
                 infoForPosition = viewEvent.infoForPosition,
                 isActiveRequest = viewEvent.isActiveRequest,
-                isArchiveRequest = viewEvent.isArchiveRequest
+                isArchiveRequest = viewEvent.isArchiveRequest,
+                isRejectRequest = viewEvent.isRejectRequest
             )
 
             is InfoRequestEvent.PhoneClick -> {}
@@ -48,10 +52,13 @@ class InfoRequestViewModel :
         requestId: Int,
         infoForPosition: Position,
         isActiveRequest: Boolean,
-        isArchiveRequest: Boolean
+        isArchiveRequest: Boolean,
+        isRejectRequest: Boolean
     ) {
         when {
-            !isActiveRequest && !isArchiveRequest -> getInfoForUnconfirmedRequest(
+            isRejectRequest -> getInfoForRejectedRequest(requestId=requestId)
+
+            !isActiveRequest && !isArchiveRequest && !isRejectRequest -> getInfoForUnconfirmedRequest(
                 requestId = requestId
             )
 
@@ -61,6 +68,34 @@ class InfoRequestViewModel :
                     isArchive = isArchiveRequest
                 )
             }
+        }
+    }
+
+    private fun getInfoForRejectedRequest(requestId: Int) {
+        coroutineScope.launch {
+            changeLoading()
+
+            val rejectRequestItem =
+                rejectRequestsRepository.getRejectRequestInfo(requestId = requestId)
+
+            if (rejectRequestItem is FullRejectRequestItem.Success) {
+                val request = rejectRequestItem.request
+                val (isTractor, isTrailer) = request.typeVehicle.toVehicleType()
+                viewState = viewState.copy(
+                    isSelectedTractor = isTractor,
+                    isSelectedTrailer = isTrailer,
+                    numberVehicle = request.numberVehicle,
+                    faultDescription = request.faultDescription,
+                    images = request.images,
+                    videos = request.videos
+                )
+            } else if (rejectRequestItem is FullRejectRequestItem.Error) {
+                viewState = viewState.copy(
+                    errorTitleMessage = rejectRequestItem.message
+                )
+            }
+
+            changeLoading()
         }
     }
 
@@ -93,17 +128,21 @@ class InfoRequestViewModel :
         }
     }
 
-    private fun getInfoForActiveOrArchiveRequest(requestId: Int, isArchive: Boolean) {
+    private fun getInfoForActiveOrArchiveRequest(
+        requestId: Int,
+        isArchive: Boolean
+    ) {
         coroutineScope.launch {
             changeLoading()
             val fullRequestItem =
-                if (!isArchive) activeRequestsRepository.getActiveRequestInfo(requestId = requestId)
-                else archiveRequestsRepository.getArchiveRequestInfo(requestId = requestId)
+                if (isArchive) archiveRequestsRepository.getArchiveRequestInfo(requestId = requestId)
+                else activeRequestsRepository.getActiveRequestInfo(requestId = requestId)
             if (fullRequestItem is FullRequestItem.Success) {
-                log(tag = TAG) { "Get info for active request ${fullRequestItem.request}" }
+                log(tag = TAG) { "Get info for request ${fullRequestItem.request}" }
                 val info = fullRequestItem.request
                 val (isTractor, isTrailer) = info.vehicleType.toVehicleType()
                 log(tag = "IMAGES") { info.images.toString() }
+                log(tag = "VIDEOS") { info.videos.toString() }
                 viewState = viewState.copy(
                     numberVehicle = info.vehicleNumber,
                     isSelectedTractor = isTractor,

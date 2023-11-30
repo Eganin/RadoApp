@@ -9,5 +9,6 @@ data class FullRejectRequest(
     val numberVehicle: String,
     val faultDescription: String = "",
     val driverId: Int,
-    val images: List<String>
+    val images: List<String>,
+    val videos:List<String>
 )

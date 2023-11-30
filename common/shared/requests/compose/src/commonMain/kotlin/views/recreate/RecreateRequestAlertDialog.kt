@@ -42,6 +42,7 @@ import widgets.common.CircularLoader
 @Composable
 fun RecreateRequestAlertDialog(
     requestId: Int,
+    isRejectRequest: Boolean,
     onDismiss: () -> Unit,
     onExit: () -> Unit,
     modifier: Modifier = Modifier
@@ -57,7 +58,9 @@ fun RecreateRequestAlertDialog(
 
     LaunchedEffect(key1 = Unit) {
         viewModel.obtainEvent(
-            viewEvent = RecreateRequestEvent.GetInfoForOldUnconfirmedRequest(
+            viewEvent = if (!isRejectRequest) RecreateRequestEvent.GetInfoForOldUnconfirmedRequest(
+                requestId = requestId
+            ) else RecreateRequestEvent.GetInfoForOldRejectRequest(
                 requestId = requestId
             )
         )

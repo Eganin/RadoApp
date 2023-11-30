@@ -64,7 +64,8 @@ fun DI.MainBuilder.bindServices() {
             requestRepository = instance(),
             vehicleRepository = instance(),
             mechanicRepository = instance(),
-            imageRepository = instance()
+            imageRepository = instance(),
+            videoRepository = instance()
         )
     }
 
