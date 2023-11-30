@@ -18,7 +18,7 @@ data class MechanicRequestsViewState(
     val date: Long = 0,
     val isLoading: Boolean = false,
     val mechanicComment:String="",
-    val repairOnBase:Boolean=false,
+    val repairOnBase:Boolean=true,
     val repairOnOtherPlace:Boolean=false,
     val isActiveInputFieldForStreet:Boolean=false,
     val streetForRepair:String=""

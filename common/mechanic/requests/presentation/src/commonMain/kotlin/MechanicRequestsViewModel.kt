@@ -67,7 +67,10 @@ class MechanicRequestsViewModel :
             is MechanicRequestsEvent.PullRefresh -> getUnconfirmedRequests()
             is MechanicRequestsEvent.ClearState -> clearState()
             is MechanicRequestsEvent.ShowRejectRequest -> obtainShowRejectDialog()
-            is MechanicRequestsEvent.SendRejectRequest -> sendRejectRequest()
+            is MechanicRequestsEvent.SendRejectRequest -> {
+                sendRejectRequest()
+                clearState()
+            }
             is MechanicRequestsEvent.CommentMechanicValueChange -> obtainCommentMechanic(
                 mechanicComment = viewEvent.commentMechanic
             )
@@ -82,7 +85,10 @@ class MechanicRequestsViewModel :
                 closeRejectDialog()
             }
 
-            is MechanicRequestsEvent.CloseMechanicRejectDialog -> obtainShowRejectDialog()
+            is MechanicRequestsEvent.CloseMechanicRejectDialog -> {
+                obtainShowRejectDialog()
+                clearState()
+            }
 
             is MechanicRequestsEvent.CheckRepairOnBase -> obtainRepairOnBase(isChecked = viewEvent.isChecked)
 
@@ -160,6 +166,10 @@ class MechanicRequestsViewModel :
             datetime = "",
             datetimeForServer = Pair("", ""),
             date = 0,
+            mechanicComment = "",
+            streetForRepair = "",
+            repairOnBase = true,
+            repairOnOtherPlace = false
         )
     }
 
