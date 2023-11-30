@@ -128,6 +128,7 @@ class MechanicRequestsViewModel :
                 unconfirmedRequestsRepository.getRequests(isDriver = false)
             if (unconfirmedRequestsForDriverItem is UnconfirmedRequestsItem.Success) {
                 log(tag = TAG) { "Unconfirmed requests" + unconfirmedRequestsForDriverItem.items.toString() }
+                obtainEvent(viewEvent = MechanicRequestsEvent.ErrorTextForRequestListChanged(""))
                 viewState = viewState.copy(
                     unconfirmedRequests = unconfirmedRequestsForDriverItem.items
                 )

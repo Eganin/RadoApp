@@ -96,6 +96,7 @@ class ActiveViewModel(private val position: Position) :
                 activeRequestsForMechanicRepository.getRequestsByDate(date = date)
             if (activeRequestsForMechanicItem is ActiveRequestsForMechanicItem.Success) {
                 log(tag = TAG) { "Active requests for mechanic by date: ${activeRequestsForMechanicItem.items}" }
+                obtainEvent(viewEvent = ActiveEvent.ErrorTextForRequestListChanged(value = ""))
                 viewState = viewState.copy(
                     requestsForMechanic = activeRequestsForMechanicItem.items
                 )
@@ -116,6 +117,7 @@ class ActiveViewModel(private val position: Position) :
                 activeRequestsForObserverRepository.getRequestsByDate(date = date)
             if (activeRequestsForObserverItem is ActiveRequestsForObserverItem.Success) {
                 log(tag = TAG) { "Active requests for observer by date: ${activeRequestsForObserverItem.items}" }
+                obtainEvent(viewEvent = ActiveEvent.ErrorTextForRequestListChanged(value = ""))
                 viewState = viewState.copy(
                     requestsForObserver = activeRequestsForObserverItem.items
                 )
