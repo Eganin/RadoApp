@@ -87,7 +87,8 @@ class InfoRequestViewModel :
                     numberVehicle = request.numberVehicle,
                     faultDescription = request.faultDescription,
                     images = request.images,
-                    videos = request.videos
+                    videos = request.videos,
+                    commentMechanic = request.commentMechanic
                 )
             } else if (rejectRequestItem is FullRejectRequestItem.Error) {
                 viewState = viewState.copy(

@@ -17,6 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import io.github.aakira.napier.log
 import kotlinx.coroutines.delay
 import models.RejectEvent
 import models.RejectRequestViewState
@@ -105,6 +106,7 @@ fun RejectRequestsView(
             isArchiveRequest = false,
             isRejectRequest = true,
             actionControl = { infoRequestState ->
+                log(tag="STATE") { infoRequestState.toString() }
                 if (infoRequestState.driverPhone.isNotEmpty()) {
                     Text(
                         text = MainRes.string.contact_a_driver + infoRequestState.driverPhone,
@@ -147,6 +149,19 @@ fun RejectRequestsView(
                 if (infoRequestState.mechanicName.isNotEmpty()) {
                     Text(
                         text = MainRes.string.mechanic_title + infoRequestState.mechanicName,
+                        fontSize = 12.sp,
+                        color = Theme.colors.primaryTextColor,
+                        textAlign = TextAlign.Start,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
+
+                if (infoRequestState.commentMechanic.isNotEmpty()) {
+                    Text(
+                        text = MainRes.string.comment_mechanic_title + infoRequestState.commentMechanic,
                         fontSize = 12.sp,
                         color = Theme.colors.primaryTextColor,
                         textAlign = TextAlign.Start,

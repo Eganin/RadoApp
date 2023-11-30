@@ -26,10 +26,10 @@ internal val ktorModule = DI.Module(name = "ktorModule") {
                 json(Inject.instance())
             }
 
-            install(HttpTimeout){
-                connectTimeoutMillis = 15000
-                requestTimeoutMillis = 30000
-            }
+//            install(HttpTimeout){
+//                connectTimeoutMillis = 15000
+//                requestTimeoutMillis = 30000
+//            }
 
             install(ContentEncoding) {
                 deflate(0.01F)

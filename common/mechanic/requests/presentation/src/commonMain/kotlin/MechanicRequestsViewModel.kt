@@ -69,7 +69,6 @@ class MechanicRequestsViewModel :
             is MechanicRequestsEvent.ShowRejectRequest -> obtainShowRejectDialog()
             is MechanicRequestsEvent.SendRejectRequest -> {
                 sendRejectRequest()
-                clearState()
             }
             is MechanicRequestsEvent.CommentMechanicValueChange -> obtainCommentMechanic(
                 mechanicComment = viewEvent.commentMechanic
@@ -116,6 +115,7 @@ class MechanicRequestsViewModel :
 
             //update requests list for mechanic
             getUnconfirmedRequests()
+            clearState()
 
             changeLoading()
         }
