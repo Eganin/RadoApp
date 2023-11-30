@@ -69,6 +69,7 @@ class RejectRequestViewModel(private val position: Position) :
                 if (position == Position.DRIVER) rejectRequestsRepositoryForDriverAndObserver.getRejectRequestsForDriver()
                 else rejectRequestsRepositoryForDriverAndObserver.getRejectRequestsForObserver()
 
+
             if (smallRejectRequestItem is SmallRejectRequestItem.Success) {
                 log(tag = TAG) { "Reject requests: ${smallRejectRequestItem.items}" }
                 viewState = viewState.copy(requests = smallRejectRequestItem.items)

@@ -27,6 +27,7 @@ import views.create.RequestCells
 import views.info.InfoRequestAlertDialog
 import views.recreate.RecreateRequestAlertDialog
 import widgets.common.ActionButton
+import widgets.common.CircularLoader
 import widgets.common.TextStickyHeader
 
 @Composable
@@ -60,6 +61,8 @@ fun RejectRequestsView(
 
         Spacer(modifier = Modifier.height(16.dp))
 
+        CircularLoader(isLoading = state.isLoading)
+
         if (state.errorTextForRequestList.isEmpty()) {
             if (state.requests.isNotEmpty()) {
                 state.requests.forEach {
@@ -91,83 +94,83 @@ fun RejectRequestsView(
                 fontWeight = FontWeight.Bold
             )
         }
+    }
 
-        if (state.showInfoDialog) {
-            InfoRequestAlertDialog(
-                onDismiss = { eventHandler.invoke(RejectEvent.CloseInfoDialog) },
-                requestId = state.requestIdForInfo,
-                infoForPosition = position,
-                isActiveRequest = false,
-                isArchiveRequest = false,
-                isRejectRequest = true,
-                actionControl = { infoRequestState ->
-                    if (infoRequestState.driverPhone.isNotEmpty()) {
-                        Text(
-                            text = MainRes.string.contact_a_driver + infoRequestState.driverPhone,
-                            fontSize = 12.sp,
-                            color = Theme.colors.primaryTextColor,
-                            textAlign = TextAlign.Start,
-                            fontWeight = FontWeight.Bold,
-                            modifier = Modifier.fillMaxWidth()
-                        )
+    if (state.showInfoDialog) {
+        InfoRequestAlertDialog(
+            onDismiss = { eventHandler.invoke(RejectEvent.CloseInfoDialog) },
+            requestId = state.requestIdForInfo,
+            infoForPosition = position,
+            isActiveRequest = false,
+            isArchiveRequest = false,
+            isRejectRequest = true,
+            actionControl = { infoRequestState ->
+                if (infoRequestState.driverPhone.isNotEmpty()) {
+                    Text(
+                        text = MainRes.string.contact_a_driver + infoRequestState.driverPhone,
+                        fontSize = 12.sp,
+                        color = Theme.colors.primaryTextColor,
+                        textAlign = TextAlign.Start,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.fillMaxWidth()
+                    )
 
-                        Spacer(modifier = Modifier.height(16.dp))
-                    }
-
-                    if (infoRequestState.driverName.isNotEmpty()) {
-                        Text(
-                            text = MainRes.string.driver_title + infoRequestState.driverName,
-                            fontSize = 12.sp,
-                            color = Theme.colors.primaryTextColor,
-                            textAlign = TextAlign.Start,
-                            fontWeight = FontWeight.Bold,
-                            modifier = Modifier.fillMaxWidth()
-                        )
-
-                        Spacer(modifier = Modifier.height(16.dp))
-                    }
-
-                    if (infoRequestState.mechanicPhone.isNotEmpty()) {
-                        Text(
-                            text = MainRes.string.contact_a_mechanic + infoRequestState.mechanicPhone,
-                            fontSize = 12.sp,
-                            color = Theme.colors.primaryTextColor,
-                            textAlign = TextAlign.Start,
-                            fontWeight = FontWeight.Bold,
-                            modifier = Modifier.fillMaxWidth()
-                        )
-
-                        Spacer(modifier = Modifier.height(16.dp))
-                    }
-
-                    if (infoRequestState.mechanicName.isNotEmpty()) {
-                        Text(
-                            text = MainRes.string.mechanic_title + infoRequestState.mechanicName,
-                            fontSize = 12.sp,
-                            color = Theme.colors.primaryTextColor,
-                            textAlign = TextAlign.Start,
-                            fontWeight = FontWeight.Bold,
-                            modifier = Modifier.fillMaxWidth()
-                        )
-
-                        Spacer(modifier = Modifier.height(16.dp))
-                    }
-
-                    ActionButton(
-                        text = MainRes.string.close_window_title,
-                        modifier = Modifier.fillMaxWidth(),
-                        onClick = { eventHandler.invoke(RejectEvent.CloseInfoDialog) })
+                    Spacer(modifier = Modifier.height(16.dp))
                 }
-            )
-        }
 
-        if (state.showRecreateDialog) {
-            RecreateRequestAlertDialog(
-                requestId = state.requestIdForInfo,
-                isRejectRequest = true,
-                onDismiss = { eventHandler.invoke(RejectEvent.CloseRecreateDialog) },
-                onExit = { eventHandler.invoke(RejectEvent.CloseRecreateDialog) }
-            )
-        }
+                if (infoRequestState.driverName.isNotEmpty()) {
+                    Text(
+                        text = MainRes.string.driver_title + infoRequestState.driverName,
+                        fontSize = 12.sp,
+                        color = Theme.colors.primaryTextColor,
+                        textAlign = TextAlign.Start,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
+
+                if (infoRequestState.mechanicPhone.isNotEmpty()) {
+                    Text(
+                        text = MainRes.string.contact_a_mechanic + infoRequestState.mechanicPhone,
+                        fontSize = 12.sp,
+                        color = Theme.colors.primaryTextColor,
+                        textAlign = TextAlign.Start,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
+
+                if (infoRequestState.mechanicName.isNotEmpty()) {
+                    Text(
+                        text = MainRes.string.mechanic_title + infoRequestState.mechanicName,
+                        fontSize = 12.sp,
+                        color = Theme.colors.primaryTextColor,
+                        textAlign = TextAlign.Start,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
+
+                ActionButton(
+                    text = MainRes.string.close_window_title,
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = { eventHandler.invoke(RejectEvent.CloseInfoDialog) })
+            }
+        )
+    }
+
+    if (state.showRecreateDialog) {
+        RecreateRequestAlertDialog(
+            requestId = state.requestIdForInfo,
+            isRejectRequest = true,
+            onDismiss = { eventHandler.invoke(RejectEvent.CloseRecreateDialog) },
+            onExit = { eventHandler.invoke(RejectEvent.CloseRecreateDialog) }
+        )
     }
 }

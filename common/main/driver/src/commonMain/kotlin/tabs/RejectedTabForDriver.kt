@@ -1,6 +1,6 @@
 package tabs
 
-import RejectRequestsScreen
+import RejectRequestsScreenForDriver
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
@@ -9,7 +9,6 @@ import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.X
-import other.Position
 
 object RejectedTabForDriver : Tab {
 
@@ -30,6 +29,6 @@ object RejectedTabForDriver : Tab {
 
     @Composable
     override fun Content() {
-        Navigator(RejectRequestsScreen(position = Position.DRIVER))
+        Navigator(RejectRequestsScreenForDriver)
     }
 }

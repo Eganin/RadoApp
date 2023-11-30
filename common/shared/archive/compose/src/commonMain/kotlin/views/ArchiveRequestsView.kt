@@ -27,6 +27,7 @@ import time.datetimeStringToPrettyString
 import views.create.RequestCells
 import views.info.InfoRequestAlertDialog
 import widgets.common.ActionButton
+import widgets.common.CircularLoader
 import widgets.common.TextStickyHeader
 
 @Composable
@@ -59,6 +60,8 @@ fun ArchiveRequestsView(
         )
 
         Spacer(modifier = Modifier.height(16.dp))
+
+        CircularLoader(isLoading = state.isLoading)
 
         if (state.errorTextForRequestList.isEmpty()) {
             if (state.requestsForMechanic.isNotEmpty()) {
