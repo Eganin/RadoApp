@@ -1,5 +1,6 @@
 package models.create
 
+import MediaTypePresentation
 import org.company.rado.core.MainRes
 
 data class CreateRequestViewState(
@@ -18,7 +19,8 @@ data class CreateRequestViewState(
     val isLoading: Boolean = false,
     val notChooseVehicle:Boolean=false,
     val arrivalDate:String="",
-    val showDatePicker:Boolean=false
+    val showDatePicker:Boolean=false,
+    val media: MutableList<MediaTypePresentation> = mutableListOf()
 )
 
 

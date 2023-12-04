@@ -21,6 +21,8 @@ kotlin{
                 implementation(Dependencies.Resources.ComposeIcons.composeIconsFeatherIcons)
 
                 implementation(Dependencies.Other.FilePicker.core)
+
+                implementation(Dependencies.Other.UUID.core)
             }
         }
 

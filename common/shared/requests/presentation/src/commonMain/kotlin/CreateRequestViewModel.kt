@@ -1,3 +1,4 @@
+import data.toBase64MIME
 import di.Inject
 import io.github.aakira.napier.log
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -62,17 +63,22 @@ class CreateRequestViewModel(
 
             is CreateRequestEvent.ImageRepairExpandedChanged -> obtainImageIsExpandedChange()
             is CreateRequestEvent.OnBackClick -> removeCacheResources()
-            is CreateRequestEvent.ArrivalDateChanged ->obtainArrivalDate(arrivalDate = convertDateLongToString(date=viewEvent.arrivalDate))
-            is CreateRequestEvent.ShowDatePicker->obtainShowDatePicker(value = true)
-            is CreateRequestEvent.CloseDatePicker->obtainShowDatePicker(value = false)
+            is CreateRequestEvent.ArrivalDateChanged -> obtainArrivalDate(
+                arrivalDate = convertDateLongToString(
+                    date = viewEvent.arrivalDate
+                )
+            )
+
+            is CreateRequestEvent.ShowDatePicker -> obtainShowDatePicker(value = true)
+            is CreateRequestEvent.CloseDatePicker -> obtainShowDatePicker(value = false)
         }
     }
 
-    fun cameraClicked(){
+    fun cameraClicked() {
         coroutineScope.launch {
             try {
                 mediaController.permissionsController.providePermission(permission = Permission.CAMERA)
-            }catch (e: Exception){
+            } catch (e: Exception) {
                 log(tag = TAG) { "Camera permission is failure" }
             }
 
@@ -84,16 +90,20 @@ class CreateRequestViewModel(
                 PermissionState.Granted -> {
                     try {
                         val image = mediaController.pickImage(MediaSource.CAMERA)
-//                        setState { state ->
-//                            state.copy(
-//                                media = state.media.apply {
-//                                    add(MediaType.BitmapType(image))
-//                                }, size = state.media.size
-//                            )
-//                        }
+                        saveResourceToStateList(
+                            resource = Triple(
+                                first = "tegssfsefsef.png",
+                                second = true,
+                                third = image.toByteArray()
+                            )
+                        )
+//                        viewState = viewState.copy(
+//                            media = viewState.media.apply {
+//                                add(MediaTypePresentation.BitmapType(image))
+//                            }
+//                        )
                     } catch (e: Exception) {
                         e.printStackTrace()
-                        log(tag = TAG) { "Pick image is failure" }
                     }
                 }
 
@@ -189,8 +199,8 @@ class CreateRequestViewModel(
         viewState = viewState.copy(arrivalDate = arrivalDate)
     }
 
-    private fun obtainShowDatePicker(value: Boolean){
-        viewState=viewState.copy(showDatePicker = value)
+    private fun obtainShowDatePicker(value: Boolean) {
+        viewState = viewState.copy(showDatePicker = value)
     }
 
     private fun obtainShowSuccessDialog() {

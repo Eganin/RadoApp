@@ -57,7 +57,6 @@ internal class ImagePicker(private val context: Context) {
 
     fun pickCameraImage(callback: (Result<android.graphics.Bitmap>) -> Unit) {
         val requestCode = codeCallbackMap.keys.maxOrNull() ?: 0
-        log(tag="IMAGE") { "OOOOOOOOO" }
 
         val outputUri = createPhotoUri()
         codeCallbackMap[requestCode] =
