@@ -1,4 +1,4 @@
-open class DeniedExpeption(
+open class DeniedException(
     val permission: Permission,
     message: String? = null
 ): Exception(message)
@@ -6,4 +6,4 @@ open class DeniedExpeption(
 class DeniedAlwaysException(
     permission: Permission,
     message: String?=null
-): DeniedExpeption(permission=permission,message=message)
+): DeniedException(permission=permission,message=message)

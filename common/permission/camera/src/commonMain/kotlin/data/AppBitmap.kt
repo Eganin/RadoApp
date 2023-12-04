@@ -9,7 +9,7 @@ expect class AppBitmap{
 
     fun toBase64WithCompress(maxSize:Int):String
 
-    fun toImageBitMap(): ImageBitmap
+    fun toImageBitmap(): ImageBitmap
 }
 
 private const val BASE64_IMAGE_MIME_PREFIX = "data:image/png;base64,"

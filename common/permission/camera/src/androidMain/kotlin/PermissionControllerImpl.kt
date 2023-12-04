@@ -1,16 +1,18 @@
+import android.Manifest
 import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Build
-import android.provider.Settings
+import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
+import data.ImageGallery
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import manager.GalleryPermissionManager
 import kotlin.coroutines.suspendCoroutine
 
 class PermissionControllerImpl(
     private val applicationContext: Context
-): PermissionController {
+) : PermissionController {
     private val mutex: Mutex = Mutex()
     private val permissionResolver = PermissionResolver(applicationContext)
     private val gallery: ImageGallery = GalleryPermissionManager.init(context = applicationContext)
@@ -67,16 +69,6 @@ class PermissionControllerImpl(
         else PermissionState.Denied
     }
 
-    override fun openAppSettings() {
-        val intent = Intent().apply {
-            action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-            data = Uri.fromParts("package", applicationContext.packageName, null)
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        }
-        applicationContext.startActivity(intent)
-    }
-
-
     override fun onDataReceived(
         requestCode: Int,
         permissions: Array<String?>,
@@ -90,7 +82,7 @@ class PermissionControllerImpl(
         return when (this) {
             Permission.CAMERA -> listOf(Manifest.permission.CAMERA)
             Permission.GALLERY -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                listOf(Manifest.permission.READ_MEDIA_IMAGES,Manifest.permission.READ_MEDIA_VIDEO)
+                listOf(Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_VIDEO)
             } else {
                 listOf(Manifest.permission.READ_EXTERNAL_STORAGE)
             }
