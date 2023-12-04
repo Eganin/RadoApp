@@ -74,6 +74,11 @@ object Dependencies {
             const val dash = "androidx.media3:media3-exoplayer-dash:$version"
             const val ui = "androidx.media3:media3-ui:$version"
         }
+
+        object ExifInteface{
+            private const val version = "1.3.6"
+            const val core = "androidx.exifinterface:exifinterface:$version"
+        }
     }
 
     object Desktop{
