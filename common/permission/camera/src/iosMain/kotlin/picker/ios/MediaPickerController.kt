@@ -1,10 +1,15 @@
 package picker.ios
 
+import Permission
 import PermissionController
 import data.AppBitmap
+import data.FileMedia
 import data.Media
+import kotlinx.cinterop.ExperimentalForeignApi
+import picker.AdaptivePresentationDelegateToContinuation
 import picker.DEFAULT_MAX_IMAGE_HEIGHT
 import picker.DEFAULT_MAX_IMAGE_WIDTH
+import picker.DocumentPickerDelegateToContinuation
 import picker.ImagePickerDelegateToContinuation
 import picker.MediaSource
 import platform.CoreServices.kUTTypeData
@@ -147,6 +152,7 @@ class MediaPickerController(
         return media
     }
 
+    @OptIn(ExperimentalForeignApi::class)
     internal companion object {
         val kVideoType = CFBridgingRelease(kUTTypeVideo) as String
         val kMovieType = CFBridgingRelease(kUTTypeMovie) as String

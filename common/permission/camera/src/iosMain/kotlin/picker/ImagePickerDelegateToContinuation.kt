@@ -5,6 +5,7 @@ import data.CanceledException
 import data.Media
 import data.MediaType
 import kotlinx.cinterop.ExperimentalForeignApi
+import picker.ios.MediaPickerController
 import platform.AVFoundation.AVAsset
 import platform.AVFoundation.AVAssetImageGenerator
 import platform.AVFoundation.AVURLAsset
