@@ -6,11 +6,8 @@ import PermissionControllerProtocol
 import PermissionDelegate
 import PermissionState
 import platform.AVFoundation.AVMediaTypeVideo
-import platform.Foundation.NSURL
-import platform.UIKit.UIApplication
-import platform.UIKit.UIApplicationOpenSettingsURLString
 
-class PermissionController : PermissionControllerProtocol {
+class PermissionControllerImpl : PermissionControllerProtocol {
     override suspend fun providePermission(permission: Permission) {
         return getDelegate(permission).providePermission()
     }

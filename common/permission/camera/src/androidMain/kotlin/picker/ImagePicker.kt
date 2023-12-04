@@ -10,6 +10,7 @@ import androidx.activity.ComponentActivity
 import androidx.core.content.FileProvider
 import data.BitmapUtils
 import data.CanceledException
+import io.github.aakira.napier.log
 import java.io.File
 import java.lang.ref.WeakReference
 
@@ -56,6 +57,7 @@ internal class ImagePicker(private val context: Context) {
 
     fun pickCameraImage(callback: (Result<android.graphics.Bitmap>) -> Unit) {
         val requestCode = codeCallbackMap.keys.maxOrNull() ?: 0
+        log(tag="IMAGE") { "OOOOOOOOO" }
 
         val outputUri = createPhotoUri()
         codeCallbackMap[requestCode] =

@@ -11,6 +11,7 @@ kotlin{
                 implementation(project(":common:core-compose"))
                 implementation(project(":common:core-utils"))
                 implementation(project(":common:shared:requests:presentation"))
+                implementation(project(":common:permission:camera"))
 
                 implementation(Dependencies.Navigation.Voyager.navigator)
                 implementation(Dependencies.Navigation.MokoMVVM.core)

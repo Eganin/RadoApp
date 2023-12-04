@@ -12,9 +12,13 @@ import models.create.CreateRequestViewState
 import models.create.getVehicleType
 import other.BaseSharedViewModel
 import other.WrapperForResponse
+import picker.LocalMediaController
+import picker.MediaSource
 import time.convertDateLongToString
 
-class CreateRequestViewModel :
+class CreateRequestViewModel(
+    private val mediaController: LocalMediaController
+) :
     BaseSharedViewModel<CreateRequestViewState, CreateRequestAction, CreateRequestEvent>(
         initialState = CreateRequestViewState()
     ) {
@@ -61,6 +65,46 @@ class CreateRequestViewModel :
             is CreateRequestEvent.ArrivalDateChanged ->obtainArrivalDate(arrivalDate = convertDateLongToString(date=viewEvent.arrivalDate))
             is CreateRequestEvent.ShowDatePicker->obtainShowDatePicker(value = true)
             is CreateRequestEvent.CloseDatePicker->obtainShowDatePicker(value = false)
+        }
+    }
+
+    fun cameraClicked(){
+        coroutineScope.launch {
+            try {
+                mediaController.permissionsController.providePermission(permission = Permission.CAMERA)
+            }catch (e: Exception){
+                log(tag = TAG) { "Camera permission is failure" }
+            }
+
+            when (mediaController.permissionsController.getPermissionState(Permission.CAMERA)) {
+                PermissionState.NotDetermined -> {
+
+                }
+
+                PermissionState.Granted -> {
+                    try {
+                        val image = mediaController.pickImage(MediaSource.CAMERA)
+//                        setState { state ->
+//                            state.copy(
+//                                media = state.media.apply {
+//                                    add(MediaType.BitmapType(image))
+//                                }, size = state.media.size
+//                            )
+//                        }
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        log(tag = TAG) { "Pick image is failure" }
+                    }
+                }
+
+                PermissionState.Denied -> {
+
+                }
+
+                PermissionState.DeniedAlways -> {
+
+                }
+            }
         }
     }
 
