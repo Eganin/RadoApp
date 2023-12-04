@@ -2,6 +2,7 @@ package data
 
 import androidx.compose.ui.graphics.ImageBitmap
 
+@Suppress("NO_ACTUAL_FOR_EXPECT")
 expect class AppBitmap{
     fun toByteArray(): ByteArray
 

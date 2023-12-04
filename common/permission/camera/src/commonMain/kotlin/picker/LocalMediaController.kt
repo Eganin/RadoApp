@@ -8,6 +8,7 @@ import data.Media
 internal const val DEFAULT_MAX_IMAGE_WIDTH = 1024
 internal const val DEFAULT_MAX_IMAGE_HEIGHT = 1024
 
+@Suppress("NO_ACTUAL_FOR_EXPECT")
 expect interface LocalMediaController {
     val permissionsController: PermissionController
 

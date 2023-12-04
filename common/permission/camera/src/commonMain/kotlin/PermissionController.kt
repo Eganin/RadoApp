@@ -1,3 +1,4 @@
+@Suppress("NO_ACTUAL_FOR_EXPECT")
 expect interface PermissionController {
 
     suspend fun providePermission(permission: Permission)
