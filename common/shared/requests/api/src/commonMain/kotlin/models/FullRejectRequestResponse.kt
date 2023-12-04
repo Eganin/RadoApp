@@ -15,6 +15,8 @@ data class FullRejectRequestResponse(
     val faultDescription: String = "",
     @SerialName("driverId")
     val driverId: Int,
+    @SerialName("commentMechanic")
+    val commentMechanic:String,
     @SerialName("images")
     val images: List<String>,
     @SerialName("videos")

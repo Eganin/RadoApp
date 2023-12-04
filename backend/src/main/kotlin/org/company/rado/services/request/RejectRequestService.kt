@@ -55,7 +55,8 @@ class RejectRequestService(
             faultDescription = request.faultDescription,
             images = images,
             videos=videos,
-            driverId = request.driverId
+            driverId = request.driverId,
+            commentMechanic = request.commentMechanic?:""
         )
     }
 }

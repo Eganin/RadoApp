@@ -27,9 +27,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -43,12 +45,14 @@ import platform.Platform
 import theme.Theme
 import widgets.common.ActionButton
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun AuthView(
     state: AuthViewState,
     modifier: Modifier = Modifier,
     eventHandler: (AuthEvent) -> Unit
 ) {
+    val keyboardController = LocalSoftwareKeyboardController.current
     Column(
         modifier = modifier.fillMaxSize().background(color = Theme.colors.primaryBackground)
             .padding(all = 16.dp)
@@ -183,7 +187,9 @@ fun AuthView(
                 )
             },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.clickable {
+                keyboardController?.hide()
+            }.fillMaxWidth(),
             maxLines = 1
         )
 

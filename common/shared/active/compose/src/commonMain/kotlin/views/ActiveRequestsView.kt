@@ -80,6 +80,17 @@ fun ActiveRequestsView(
             .padding(all = 16.dp)
             .verticalScroll(rememberScrollState())
     ) {
+        Text(
+            text = MainRes.string.active_requests_page_title,
+            fontSize = 16.sp,
+            color = Theme.colors.primaryTextColor,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.fillMaxWidth(),
+            textAlign = TextAlign.Center
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
         ActionButton(
             text = MainRes.string.update_date_title,
             onClick = {
@@ -192,12 +203,14 @@ fun ActiveRequestsView(
                         Spacer(modifier = Modifier.height(16.dp))
                     }
 
-                    ActionButton(
-                        text = MainRes.string.archieve_request_title,
-                        modifier = Modifier.fillMaxWidth(),
-                        onClick = { eventHandler.invoke(ActiveEvent.ArchieveRequest) })
+                    if (position == Position.MECHANIC){
+                        ActionButton(
+                            text = MainRes.string.archieve_request_title,
+                            modifier = Modifier.fillMaxWidth(),
+                            onClick = { eventHandler.invoke(ActiveEvent.ArchieveRequest) })
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                        Spacer(modifier = Modifier.height(16.dp))
+                    }
 
                     ActionButton(
                         text = MainRes.string.close_window_title,

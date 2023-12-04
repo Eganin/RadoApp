@@ -116,6 +116,7 @@ class DriverActiveViewModel :
             if (activeRequestsForDriverItem is ActiveRequestsForDriverItem.Success) {
                 log(tag = TAG) { "Active requests by date" + activeRequestsForDriverItem.items.toString() }
                 changeLoadingForActiveRequests()
+                obtainEvent(viewEvent = DriverActiveEvent.ErrorTextForRequestListChanged(value=""))
                 viewState = viewState.copy(
                     requests = activeRequestsForDriverItem.items
                 )
@@ -135,6 +136,7 @@ class DriverActiveViewModel :
             if (unconfirmedRequestsForDriverItem is UnconfirmedRequestsItem.Success) {
                 log(tag = TAG) { "Unconfirmed requests" + unconfirmedRequestsForDriverItem.items.toString() }
                 changeLoadingForUnconfirmedRequests()
+                obtainEvent(viewEvent = DriverActiveEvent.ErrorTextForRequestListChanged(value=""))
                 viewState = viewState.copy(
                     unconfirmedRequests = unconfirmedRequestsForDriverItem.items
                 )

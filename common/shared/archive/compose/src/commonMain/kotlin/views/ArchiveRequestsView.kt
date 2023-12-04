@@ -51,6 +51,18 @@ fun ArchiveRequestsView(
             .padding(all = 16.dp)
             .verticalScroll(rememberScrollState())
     ) {
+
+        Text(
+            text = MainRes.string.archive_requests_page_title,
+            fontSize = 16.sp,
+            color = Theme.colors.primaryTextColor,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.fillMaxWidth(),
+            textAlign = TextAlign.Center
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
         ActionButton(
             text = MainRes.string.update_date_title,
             onClick = {
