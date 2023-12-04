@@ -95,4 +95,8 @@
     <string name="repair_on_other_place_street_label">Место ремонта(улица)</string>
     <string name="driver_title">Водитель: </string>
     <string name="mechanic_title">Механик: </string>
+    <string name="comment_mechanic_title">Комментарий механика: </string>
+    <string name="active_requests_page_title">Страница активных заявок</string>
+    <string name="rejected_requests_page_title">Отмененные заявки</string>
+    <string name="archive_requests_page_title">Архив заявок</string>
 </resources>

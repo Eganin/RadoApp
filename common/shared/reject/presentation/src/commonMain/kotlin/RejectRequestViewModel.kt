@@ -72,6 +72,7 @@ class RejectRequestViewModel(private val position: Position) :
 
             if (smallRejectRequestItem is SmallRejectRequestItem.Success) {
                 log(tag = TAG) { "Reject requests: ${smallRejectRequestItem.items}" }
+                obtainEvent(viewEvent = RejectEvent.ErrorTextForRequestListChanged(""))
                 viewState = viewState.copy(requests = smallRejectRequestItem.items)
             } else if (smallRejectRequestItem is SmallRejectRequestItem.Error) {
                 log(tag = TAG) { "Reject requests id failure" }

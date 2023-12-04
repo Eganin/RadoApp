@@ -21,7 +21,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -39,12 +41,15 @@ import views.info.InfoRequestAlertDialog
 import views.widgets.DatePicker
 import widgets.common.ActionButton
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 internal fun RequestsMechanicView(
     state: MechanicRequestsViewState,
     modifier: Modifier = Modifier,
     eventHandler: (MechanicRequestsEvent) -> Unit
 ) {
+
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     LaunchedEffect(key1 = Unit) {
         while (true) {
@@ -214,6 +219,7 @@ internal fun RequestsMechanicView(
                     text = if (state.reopenDialog) MainRes.string.modify_time_title else MainRes.string.choose_time_title,
                     modifier = Modifier.fillMaxWidth(),
                     onClick = {
+                        keyboardController?.hide()
                         if (state.reopenDialog) {
                             eventHandler.invoke(MechanicRequestsEvent.ReopenDialogInfoRequest)
                             eventHandler.invoke(MechanicRequestsEvent.OpenDatePicker)

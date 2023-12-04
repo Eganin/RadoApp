@@ -11,8 +11,10 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
@@ -33,13 +35,14 @@ import views.widgets.DatePicker
 import widgets.common.ActionButton
 import widgets.common.CircularLoader
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun CreateRequestAlertDialog(
     onDismiss: () -> Unit,
     onExit: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-
+    val keyboardController = LocalSoftwareKeyboardController.current
     val viewModel = viewModelFactory { CreateRequestViewModel() }.createViewModel()
     val state = viewModel.viewStates().observeAsState()
     val action = viewModel.viewActions().observeAsState()
@@ -104,6 +107,7 @@ fun CreateRequestAlertDialog(
                         )
                     },
                     arrivalDateOnClick = {
+                        keyboardController?.hide()
                         viewModel.obtainEvent(viewEvent = CreateRequestEvent.ShowDatePicker)
                     }
                 )

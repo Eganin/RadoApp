@@ -67,7 +67,9 @@ class MechanicRequestsViewModel :
             is MechanicRequestsEvent.PullRefresh -> getUnconfirmedRequests()
             is MechanicRequestsEvent.ClearState -> clearState()
             is MechanicRequestsEvent.ShowRejectRequest -> obtainShowRejectDialog()
-            is MechanicRequestsEvent.SendRejectRequest -> sendRejectRequest()
+            is MechanicRequestsEvent.SendRejectRequest -> {
+                sendRejectRequest()
+            }
             is MechanicRequestsEvent.CommentMechanicValueChange -> obtainCommentMechanic(
                 mechanicComment = viewEvent.commentMechanic
             )
@@ -82,7 +84,10 @@ class MechanicRequestsViewModel :
                 closeRejectDialog()
             }
 
-            is MechanicRequestsEvent.CloseMechanicRejectDialog -> obtainShowRejectDialog()
+            is MechanicRequestsEvent.CloseMechanicRejectDialog -> {
+                obtainShowRejectDialog()
+                clearState()
+            }
 
             is MechanicRequestsEvent.CheckRepairOnBase -> obtainRepairOnBase(isChecked = viewEvent.isChecked)
 
@@ -110,6 +115,7 @@ class MechanicRequestsViewModel :
 
             //update requests list for mechanic
             getUnconfirmedRequests()
+            clearState()
 
             changeLoading()
         }
@@ -122,6 +128,7 @@ class MechanicRequestsViewModel :
                 unconfirmedRequestsRepository.getRequests(isDriver = false)
             if (unconfirmedRequestsForDriverItem is UnconfirmedRequestsItem.Success) {
                 log(tag = TAG) { "Unconfirmed requests" + unconfirmedRequestsForDriverItem.items.toString() }
+                obtainEvent(viewEvent = MechanicRequestsEvent.ErrorTextForRequestListChanged(""))
                 viewState = viewState.copy(
                     unconfirmedRequests = unconfirmedRequestsForDriverItem.items
                 )
@@ -160,6 +167,10 @@ class MechanicRequestsViewModel :
             datetime = "",
             datetimeForServer = Pair("", ""),
             date = 0,
+            mechanicComment = "",
+            streetForRepair = "",
+            repairOnBase = true,
+            repairOnOtherPlace = false
         )
     }
 

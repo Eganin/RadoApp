@@ -75,6 +75,7 @@ class ArchiveViewModel(private val position: Position) :
 
             if (archiveRequestsForObserverItem is ArchiveRequestsForObserverItem.Success) {
                 log(tag = TAG) { "Archive requests for driver: ${archiveRequestsForObserverItem.items}" }
+                obtainEvent(viewEvent = ArchiveEvent.ErrorTextForRequestListChanged(""))
                 viewState = viewState.copy(
                     requestsForObserver = archiveRequestsForObserverItem.items
                 )
@@ -97,6 +98,7 @@ class ArchiveViewModel(private val position: Position) :
 
             if (archiveRequestsForDriverItem is ArchiveRequestsForDriverItem.Success) {
                 log(tag = TAG) { "Archive requests for driver: ${archiveRequestsForDriverItem.items}" }
+                obtainEvent(viewEvent = ArchiveEvent.ErrorTextForRequestListChanged(""))
                 viewState = viewState.copy(
                     requestsForDriver = archiveRequestsForDriverItem.items
                 )
@@ -119,6 +121,7 @@ class ArchiveViewModel(private val position: Position) :
 
             if (archiveRequestsForMechanicItem is ArchiveRequestsForMechanicItem.Success) {
                 log(tag = TAG) { "Archive requests for mechanic: ${archiveRequestsForMechanicItem.items}" }
+                obtainEvent(viewEvent = ArchiveEvent.ErrorTextForRequestListChanged(""))
                 viewState = viewState.copy(
                     requestsForMechanic = archiveRequestsForMechanicItem.items
                 )
