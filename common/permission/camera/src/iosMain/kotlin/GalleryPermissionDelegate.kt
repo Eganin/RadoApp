@@ -1,3 +1,5 @@
+import data.ImageGallery
+import data.ImageGalleryImpl
 import platform.Photos.PHAuthorizationStatus
 import platform.Photos.PHAuthorizationStatusAuthorized
 import platform.Photos.PHAuthorizationStatusDenied

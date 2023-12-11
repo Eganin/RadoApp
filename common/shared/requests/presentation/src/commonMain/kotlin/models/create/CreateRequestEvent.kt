@@ -23,6 +23,8 @@ sealed class CreateRequestEvent {
 
     data object FilePickerVisibilityChanged : CreateRequestEvent()
 
+    data object CameraClick : CreateRequestEvent()
+
     data class ArrivalDateChanged(val arrivalDate:Long): CreateRequestEvent()
 
     data object ShowDatePicker: CreateRequestEvent()

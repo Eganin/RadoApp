@@ -1,4 +1,3 @@
-import data.toBase64MIME
 import di.Inject
 import io.github.aakira.napier.log
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -33,6 +32,7 @@ class CreateRequestViewModel(
     override fun obtainEvent(viewEvent: CreateRequestEvent) {
         when (viewEvent) {
             is CreateRequestEvent.CreateRequest -> createRequest()
+
             is CreateRequestEvent.SelectedTypeVehicleTractor -> {
                 obtainIsSelectedTractor()
                 obtainEvent(CreateRequestEvent.TractorIsExpandedChanged)
@@ -44,15 +44,21 @@ class CreateRequestViewModel(
             }
 
             is CreateRequestEvent.NumberVehicleChanged -> obtainNumberVehicleChange(numberVehicle = viewEvent.value)
+
             is CreateRequestEvent.FaultDescriptionChanged -> obtainFaultDescriptionChange(
                 faultDescription = viewEvent.value
             )
 
             is CreateRequestEvent.TractorIsExpandedChanged -> obtainTractorIsExpandedChange()
+
             is CreateRequestEvent.TrailerIsExpandedChanged -> obtainTrailerIsExpandedChange()
+
             is CreateRequestEvent.CloseSuccessDialog -> closeSuccessDialog()
+
             is CreateRequestEvent.CloseFailureDialog -> closeFailureDialog()
+
             is CreateRequestEvent.FilePickerVisibilityChanged -> obtainFilePickerVisibilityChange()
+
             is CreateRequestEvent.SetResource -> saveResourceToStateList(
                 resource = Triple(
                     first = viewEvent.filePath,
@@ -62,7 +68,9 @@ class CreateRequestViewModel(
             )
 
             is CreateRequestEvent.ImageRepairExpandedChanged -> obtainImageIsExpandedChange()
+
             is CreateRequestEvent.OnBackClick -> removeCacheResources()
+
             is CreateRequestEvent.ArrivalDateChanged -> obtainArrivalDate(
                 arrivalDate = convertDateLongToString(
                     date = viewEvent.arrivalDate
@@ -70,12 +78,15 @@ class CreateRequestViewModel(
             )
 
             is CreateRequestEvent.ShowDatePicker -> obtainShowDatePicker(value = true)
+
             is CreateRequestEvent.CloseDatePicker -> obtainShowDatePicker(value = false)
+
+            is CreateRequestEvent.CameraClick -> cameraClicked()
         }
     }
 
-    fun cameraClicked() {
-        coroutineScope.launch {
+    private fun cameraClicked() {
+        viewModelScope.launch {
             try {
                 mediaController.permissionsController.providePermission(permission = Permission.CAMERA)
             } catch (e: Exception) {
@@ -90,18 +101,13 @@ class CreateRequestViewModel(
                 PermissionState.Granted -> {
                     try {
                         val image = mediaController.pickImage(MediaSource.CAMERA)
-                        saveResourceToStateList(
-                            resource = Triple(
-                                first = "tegssfsefsef.png",
-                                second = true,
-                                third = image.toByteArray()
+                        obtainEvent(
+                            viewEvent = CreateRequestEvent.SetResource(
+                                filePath = "tegssfsefsef.png",
+                                isImage = true,
+                                imageByteArray = image.toByteArray()
                             )
                         )
-//                        viewState = viewState.copy(
-//                            media = viewState.media.apply {
-//                                add(MediaTypePresentation.BitmapType(image))
-//                            }
-//                        )
                     } catch (e: Exception) {
                         e.printStackTrace()
                     }

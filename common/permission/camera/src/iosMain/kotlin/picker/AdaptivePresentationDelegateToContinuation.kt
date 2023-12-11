@@ -1,5 +1,6 @@
 package picker
 
+import data.CanceledException
 import platform.UIKit.UIAdaptivePresentationControllerDelegateProtocol
 import platform.UIKit.UIPresentationController
 import platform.darwin.NSObject
