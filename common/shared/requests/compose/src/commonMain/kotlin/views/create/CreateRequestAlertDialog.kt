@@ -35,6 +35,7 @@ import views.widgets.AlertDialogChooseMachine
 import views.widgets.AlertDialogTextInputs
 import views.widgets.AlertDialogTopBar
 import views.widgets.DatePicker
+import views.widgets.PermissionDialog
 import widgets.common.ActionButton
 import widgets.common.CircularLoader
 
@@ -195,6 +196,35 @@ fun CreateRequestAlertDialog(
                 },
                 exitAction = {
                     viewModel.obtainEvent(viewEvent = CreateRequestEvent.CloseDatePicker)
+                }
+            )
+        }
+
+        if (state.value.cameraPermissionIsDenied) {
+            PermissionDialog(
+                firstText = MainRes.string.camera_permission_is_denied_title,
+                secondText = MainRes.string.camera_permission_is_denied_description,
+                onDismiss = {
+                    viewModel.obtainEvent(
+                        viewEvent = CreateRequestEvent.CameraPermissionDenied(
+                            value = false
+                        )
+                    )
+                },
+                onExit = {
+                    viewModel.obtainEvent(
+                        viewEvent = CreateRequestEvent.CameraPermissionDenied(
+                            value = false
+                        )
+                    )
+                },
+                successOnClick = {
+                    viewModel.obtainEvent(
+                        viewEvent = CreateRequestEvent.CameraPermissionDenied(
+                            value = false
+                        )
+                    )
+                    viewModel.obtainEvent(viewEvent = CreateRequestEvent.OpenAppSettings)
                 }
             )
         }

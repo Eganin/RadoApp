@@ -18,7 +18,8 @@ data class CreateRequestViewState(
     val isLoading: Boolean = false,
     val notChooseVehicle: Boolean = false,
     val arrivalDate: String = "",
-    val showDatePicker: Boolean = false
+    val showDatePicker: Boolean = false,
+    val cameraPermissionIsDenied: Boolean=false
 )
 
 

@@ -83,6 +83,10 @@ class CreateRequestViewModel(
             is CreateRequestEvent.CloseDatePicker -> obtainShowDatePicker(value = false)
 
             is CreateRequestEvent.CameraClick -> cameraClicked()
+
+            is CreateRequestEvent.CameraPermissionDenied -> obtainCameraPermissionIsDenied(value = viewEvent.value)
+
+            is CreateRequestEvent.OpenAppSettings -> openSettings()
         }
     }
 
@@ -95,12 +99,19 @@ class CreateRequestViewModel(
             }
 
             when (mediaController.permissionsController.getPermissionState(Permission.CAMERA)) {
-                PermissionState.NotDetermined -> {
-
-                }
+                PermissionState.NotDetermined -> obtainEvent(
+                    viewEvent = CreateRequestEvent.CameraPermissionDenied(
+                        value = true
+                    )
+                )
 
                 PermissionState.Granted -> {
                     try {
+                        obtainEvent(
+                            viewEvent = CreateRequestEvent.CameraPermissionDenied(
+                                value = false
+                            )
+                        )
                         val image = mediaController.pickImage(MediaSource.CAMERA)
                         obtainEvent(
                             viewEvent = CreateRequestEvent.SetResource(
@@ -114,13 +125,17 @@ class CreateRequestViewModel(
                     }
                 }
 
-                PermissionState.Denied -> {
+                PermissionState.Denied -> obtainEvent(
+                    viewEvent = CreateRequestEvent.CameraPermissionDenied(
+                        value = true
+                    )
+                )
 
-                }
-
-                PermissionState.DeniedAlways -> {
-
-                }
+                PermissionState.DeniedAlways -> obtainEvent(
+                    viewEvent = CreateRequestEvent.CameraPermissionDenied(
+                        value = true
+                    )
+                )
             }
         }
     }
@@ -185,6 +200,10 @@ class CreateRequestViewModel(
         }
     }
 
+    private fun openSettings(){
+        mediaController.permissionsController.openAppSettings()
+    }
+
     private fun removeCacheResources() = coroutineScope.launch {
         //remove cache images
         viewState.resources.forEach {
@@ -195,6 +214,10 @@ class CreateRequestViewModel(
 
     private fun removeRequest(requestId: Int) = coroutineScope.launch {
         activeRequestsRepository.deleteRequest(requestId = requestId)
+    }
+
+    private fun obtainCameraPermissionIsDenied(value: Boolean) {
+        viewState = viewState.copy(cameraPermissionIsDenied = value)
     }
 
     private fun obtainArrivalDate(arrivalDate: String) {

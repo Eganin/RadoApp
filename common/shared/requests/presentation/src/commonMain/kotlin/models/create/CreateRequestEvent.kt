@@ -38,4 +38,8 @@ sealed class CreateRequestEvent {
     ) : CreateRequestEvent()
 
     data object OnBackClick : CreateRequestEvent()
+
+    data class CameraPermissionDenied(val value: Boolean):CreateRequestEvent()
+
+    data object OpenAppSettings : CreateRequestEvent()
 }
