@@ -8,6 +8,8 @@ actual interface PermissionController {
 
     actual suspend fun getPermissionState(permission: Permission): PermissionState
 
+    actual fun openAppSettings()
+
 
     companion object {
         fun invoke(): PermissionController = PermissionControllerImpl()

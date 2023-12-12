@@ -6,6 +6,9 @@ import PermissionControllerProtocol
 import PermissionDelegate
 import PermissionState
 import platform.AVFoundation.AVMediaTypeVideo
+import platform.Foundation.NSURL
+import platform.UIKit.UIApplication
+import platform.UIKit.UIApplicationOpenSettingsURLString
 
 class PermissionControllerImpl : PermissionControllerProtocol {
     override suspend fun providePermission(permission: Permission) {
@@ -18,6 +21,11 @@ class PermissionControllerImpl : PermissionControllerProtocol {
 
     override suspend fun getPermissionState(permission: Permission): PermissionState {
         return getDelegate(permission).getPermissionState()
+    }
+
+    override fun openAppSettings() {
+        val settingsUrl: NSURL = NSURL.URLWithString(UIApplicationOpenSettingsURLString)!!
+        UIApplication.sharedApplication.openURL(settingsUrl)
     }
 
     private fun getDelegate(permission: Permission): PermissionDelegate {

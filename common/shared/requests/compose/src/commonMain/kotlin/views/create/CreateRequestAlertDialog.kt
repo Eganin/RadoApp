@@ -2,15 +2,12 @@ package views.create
 
 import CreateRequestViewModel
 import LocalMediaControllerProvider
-import MediaTypePresentation
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -19,8 +16,6 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
@@ -128,9 +123,9 @@ fun CreateRequestAlertDialog(
                     resourceIsExpanded = state.value.imageIsExpanded,
                     isRemoveImageAndVideo = false,
                     addResource = {
-                        if(isLargePlatform){
+                        if (isLargePlatform) {
                             viewModel.obtainEvent(viewEvent = CreateRequestEvent.FilePickerVisibilityChanged)
-                        }else{
+                        } else {
                             viewModel.obtainEvent(viewEvent = CreateRequestEvent.CameraClick)
                         }
                     },
@@ -141,34 +136,6 @@ fun CreateRequestAlertDialog(
                         viewModel.obtainEvent(viewEvent = CreateRequestEvent.ImageRepairExpandedChanged)
                     }
                 )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                state.value.media.forEach {
-                    when (it) {
-                        is MediaTypePresentation.BitmapType -> {
-                            Image(
-                                bitmap = it.bitmap.toImageBitmap(),
-                                contentDescription = null,
-                                modifier = Modifier.size(imageSize)
-                                    .clip(RoundedCornerShape(10.dp)),
-                                contentScale = ContentScale.Crop
-                            )
-                        }
-
-                        is MediaTypePresentation.PathType -> {
-                            it.media.preview?.toImageBitmap()?.let { it1 ->
-                                Image(
-                                    bitmap = it1,
-                                    contentDescription = null,
-                                    modifier = Modifier.size(imageSize)
-                                        .clip(RoundedCornerShape(10.dp)),
-                                    contentScale = ContentScale.Crop
-                                )
-                            }
-                        }
-                    }
-                }
 
                 Spacer(modifier = Modifier.height(16.dp))
 

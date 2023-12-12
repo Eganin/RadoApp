@@ -1,7 +1,10 @@
 import android.Manifest
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
+import android.provider.Settings
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import data.ImageGallery
@@ -75,6 +78,15 @@ class PermissionControllerImpl(
         grantResults: IntArray
     ) {
         permissionResolver.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
+
+    override fun openAppSettings() {
+        val intent = Intent().apply {
+            action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+            data = Uri.fromParts("package", applicationContext.packageName, null)
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        }
+        applicationContext.startActivity(intent)
     }
 
 

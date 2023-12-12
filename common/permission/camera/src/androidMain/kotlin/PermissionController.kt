@@ -6,6 +6,8 @@ actual interface PermissionController {
     actual suspend fun isPermissionGranted(permission: Permission): Boolean
     actual suspend fun getPermissionState(permission: Permission): PermissionState
 
+    actual fun openAppSettings()
+
     fun onDataReceived(
         requestCode: Int,
         permissions: Array<String?>,

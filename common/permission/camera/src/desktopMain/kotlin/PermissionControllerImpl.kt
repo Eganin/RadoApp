@@ -10,4 +10,8 @@ class PermissionControllerImpl : PermissionController {
     override suspend fun getPermissionState(permission: Permission): PermissionState {
         return PermissionState.Granted
     }
+
+    override fun openAppSettings() {
+        TODO("Not yet implemented")
+    }
 }
