@@ -11,6 +11,7 @@ kotlin{
                 implementation(project(":common:core"))
                 implementation(project(":common:core-utils"))
                 implementation(project(":common:permission:camera"))
+                implementation(project(":common:permission:phone"))
                 implementation(Dependencies.Navigation.Voyager.tabNavigator)
                 implementation(Dependencies.Resources.ComposeIcons.composeIconsFeatherIcons)
             }

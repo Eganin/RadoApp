@@ -1,5 +1,6 @@
 package org.company.rado.android
 
+import PhoneController
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -9,11 +10,17 @@ import picker.LocalMediaController
 import platform.Platform
 
 class MainActivity : ComponentActivity() {
-    private val localMediaController = LocalMediaController(context=this)
+    private val localMediaController = LocalMediaController(context = this)
+    private val phoneController = PhoneController(applicationContext = this)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            App(platform = Platform.Andorid,localMediaController=localMediaController)
+            App(
+                platform = Platform.Andorid,
+                localMediaController = localMediaController,
+                phoneController = phoneController
+            )
         }
     }
 

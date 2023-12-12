@@ -64,6 +64,7 @@ include(":common:shared:active:presentation")
 include(":common:shared:active:compose")
 
 include(":common:permission:camera")
+include(":common:permission:phone")
 
 pluginManagement {
     repositories {

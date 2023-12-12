@@ -12,6 +12,6 @@ class PermissionControllerImpl : PermissionController {
     }
 
     override fun openAppSettings() {
-        TODO("Not yet implemented")
+
     }
 }

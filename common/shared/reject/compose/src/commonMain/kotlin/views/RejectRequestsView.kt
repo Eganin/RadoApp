@@ -1,6 +1,8 @@
 package views
 
+import LocalPhoneControllerProvider
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,6 +15,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -38,6 +41,9 @@ fun RejectRequestsView(
     modifier: Modifier = Modifier,
     eventHandler: (RejectEvent) -> Unit
 ) {
+
+    val phoneController = LocalPhoneControllerProvider.current
+
     //pull refresh every half minute
     LaunchedEffect(key1 = Unit) {
         while (true) {
@@ -117,15 +123,17 @@ fun RejectRequestsView(
             isArchiveRequest = false,
             isRejectRequest = true,
             actionControl = { infoRequestState ->
-                log(tag="STATE") { infoRequestState.toString() }
+                log(tag = "STATE") { infoRequestState.toString() }
                 if (infoRequestState.driverPhone.isNotEmpty()) {
                     Text(
                         text = MainRes.string.contact_a_driver + infoRequestState.driverPhone,
                         fontSize = 12.sp,
-                        color = Theme.colors.primaryTextColor,
+                        color = Color.Blue,
                         textAlign = TextAlign.Start,
                         fontWeight = FontWeight.Bold,
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.clickable {
+                            phoneController.openDialerPhone(phoneNumber = infoRequestState.driverPhone)
+                        }.fillMaxWidth()
                     )
 
                     Spacer(modifier = Modifier.height(16.dp))
@@ -148,10 +156,12 @@ fun RejectRequestsView(
                     Text(
                         text = MainRes.string.contact_a_mechanic + infoRequestState.mechanicPhone,
                         fontSize = 12.sp,
-                        color = Theme.colors.primaryTextColor,
+                        color = Color.Blue,
                         textAlign = TextAlign.Start,
                         fontWeight = FontWeight.Bold,
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.clickable {
+                            phoneController.openDialerPhone(phoneNumber = infoRequestState.mechanicPhone)
+                        }.fillMaxWidth()
                     )
 
                     Spacer(modifier = Modifier.height(16.dp))

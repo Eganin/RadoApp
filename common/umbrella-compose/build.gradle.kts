@@ -15,6 +15,7 @@ kotlin {
                 implementation(project(":common:auth:compose"))
 
                 implementation(project(":common:permission:camera"))
+                implementation(project(":common:permission:phone"))
 
                 implementation(Dependencies.Navigation.MokoMVVM.core)
                 implementation(Dependencies.Navigation.MokoMVVM.flow)
