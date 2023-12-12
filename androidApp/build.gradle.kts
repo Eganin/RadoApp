@@ -39,5 +39,6 @@ dependencies {
     implementation(project(":common:core"))
     implementation(project(":common:umbrella-compose"))
     implementation(project(":common:permission:camera"))
+    implementation(project(":common:permission:phone"))
     implementation(Dependencies.Compose.Activity.activityCompose)
 }

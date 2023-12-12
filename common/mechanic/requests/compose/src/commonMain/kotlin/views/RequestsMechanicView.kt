@@ -1,6 +1,8 @@
 package views
 
+import LocalPhoneControllerProvider
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,6 +27,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -52,6 +55,7 @@ internal fun RequestsMechanicView(
     eventHandler: (MechanicRequestsEvent) -> Unit
 ) {
 
+    val phoneController = LocalPhoneControllerProvider.current
     val keyboardController = LocalSoftwareKeyboardController.current
 
     LaunchedEffect(key1 = Unit) {
@@ -114,10 +118,12 @@ internal fun RequestsMechanicView(
                     Text(
                         text = MainRes.string.contact_a_driver + infoRequestState.driverPhone,
                         fontSize = 12.sp,
-                        color = Theme.colors.primaryTextColor,
+                        color = Color.Blue,
                         textAlign = TextAlign.Start,
                         fontWeight = FontWeight.Bold,
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.clickable {
+                            phoneController.openDialerPhone(phoneNumber = infoRequestState.driverPhone)
+                        }.fillMaxWidth()
                     )
                 }
                 Spacer(modifier = Modifier.height(16.dp))

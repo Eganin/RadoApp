@@ -18,6 +18,10 @@ fun main() = application {
         onCloseRequest = ::exitApplication,
     ) {
         window.minimumSize = Dimension(350, 600)
-        App(platform = Platform.Desktop, localMediaController = LocalMediaController.invoke())
+        App(
+            platform = Platform.Desktop,
+            phoneController = PhoneController(),
+            localMediaController = LocalMediaController.invoke()
+        )
     }
 }
