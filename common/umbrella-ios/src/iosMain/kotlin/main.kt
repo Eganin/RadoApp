@@ -35,6 +35,12 @@ fun MainViewController(): UIViewController = ComposeUIViewController(
         )
     }
 
+    val phoneController by remember {
+        mutableStateOf(
+            PhoneController()
+        )
+    }
+
     LaunchedEffect(Unit) {
         if (viewController != null) {
             permissionsController.bind(viewController = viewController)
@@ -48,6 +54,10 @@ fun MainViewController(): UIViewController = ComposeUIViewController(
     Box(Modifier.fillMaxSize().onGloballyPositioned { coordinates ->
         size.value = coordinates.size
     }) {
-        App(platform = Platform.Ios, localMediaController = permissionsController)
+        App(
+            platform = Platform.Ios,
+            localMediaController = permissionsController,
+            phoneController = phoneController
+        )
     }
 }

@@ -12,6 +12,7 @@ kotlin{
                 implementation(project(":common:core"))
                 implementation(project(":common:core-utils"))
                 implementation(project(":common:permission:camera"))
+                implementation(project(":common:permission:phone"))
 
                 implementation(Dependencies.Navigation.MokoMVVM.core)
                 implementation(Dependencies.Navigation.MokoMVVM.flow)

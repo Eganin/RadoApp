@@ -2,6 +2,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.window.CanvasBasedWindow
 import navigation.App
 import org.jetbrains.skiko.wasm.onWasmReady
+import picker.LocalMediaController
 import platform.Platform
 import platform.PlatformConfiguration
 
@@ -12,7 +13,11 @@ fun main() {
             PlatformSDK.init(
                 platformConfiguration = PlatformConfiguration()
             )
-            App(platform = Platform.Web)
+            App(
+                platform = Platform.Desktop,
+                phoneController = PhoneController(),
+                localMediaController = LocalMediaController.invoke()
+            )
         }
     }
 }

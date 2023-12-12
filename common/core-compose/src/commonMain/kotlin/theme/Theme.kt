@@ -1,6 +1,8 @@
 package theme
 
 import LocalMediaControllerProvider
+import LocalPhoneControllerProvider
+import PhoneController
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import picker.LocalMediaController
@@ -14,15 +16,21 @@ object Theme {
 }
 
 @Composable
-fun AppTheme(platform: Platform, localMediaController: LocalMediaController?, content: @Composable () -> Unit) {
-    if(localMediaController != null){
+fun AppTheme(
+    platform: Platform,
+    localMediaController: LocalMediaController?,
+    phoneController: PhoneController?,
+    content: @Composable () -> Unit
+) {
+    if (localMediaController != null && phoneController!= null) {
         CompositionLocalProvider(
             LocalColorProvider provides lightPalette,
             LocalPlatform provides platform,
             LocalMediaControllerProvider provides localMediaController,
+            LocalPhoneControllerProvider provides phoneController,
             content = content
         )
-    }else{
+    } else {
         CompositionLocalProvider(
             LocalColorProvider provides lightPalette,
             LocalPlatform provides platform,
