@@ -15,6 +15,7 @@ kotlin{
 
                 implementation(Dependencies.Navigation.MokoMVVM.core)
                 implementation(Dependencies.Navigation.MokoMVVM.flow)
+                implementation(Dependencies.Other.UUID.core)
             }
         }
     }

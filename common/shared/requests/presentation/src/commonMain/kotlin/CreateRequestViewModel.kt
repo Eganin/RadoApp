@@ -1,3 +1,4 @@
+import com.benasher44.uuid.uuid4
 import di.Inject
 import io.github.aakira.napier.log
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -103,7 +104,7 @@ class CreateRequestViewModel(
                         val image = mediaController.pickImage(MediaSource.CAMERA)
                         obtainEvent(
                             viewEvent = CreateRequestEvent.SetResource(
-                                filePath = "tegssfsefsef.png",
+                                filePath = "${uuid4().mostSignificantBits}.png",
                                 isImage = true,
                                 imageByteArray = image.toByteArray()
                             )
@@ -152,7 +153,7 @@ class CreateRequestViewModel(
                     log(tag = TAG) { "Create request is success" }
                     saveResources(requestId = createRequestIdItem.requestId)
 
-                    removeCacheResources(requestId = createRequestIdItem.requestId)
+                    removeCacheResources()
 
                     obtainShowSuccessDialog()
                 } else if (createRequestIdItem is CreateRequestIdItem.Error) {
@@ -176,6 +177,7 @@ class CreateRequestViewModel(
                     resource = resource
                 )
                 if (response is WrapperForResponse.Failure) {
+                    log(tag = TAG) { "Remove request" }
                     removeRequest(requestId = requestId)
                     obtainShowFailureDialog(value = true)
                 }
@@ -183,16 +185,10 @@ class CreateRequestViewModel(
         }
     }
 
-    private fun removeCacheResources(requestId: Int? = null) = coroutineScope.launch {
+    private fun removeCacheResources() = coroutineScope.launch {
         //remove cache images
         viewState.resources.forEach {
-            val response = activeRequestsRepository.deleteResourceForCache(resourceName = it.first)
-            if (response is WrapperForResponse.Failure) {
-                requestId?.let {
-                    removeRequest(requestId = it)
-                }
-                obtainShowFailureDialog(value = true)
-            }
+            activeRequestsRepository.deleteResourceForCache(resourceName = it.first)
         }
         clearResourceList()
     }
