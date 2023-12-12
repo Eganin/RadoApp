@@ -63,6 +63,8 @@ include(":common:shared:archive:compose")
 include(":common:shared:active:presentation")
 include(":common:shared:active:compose")
 
+include(":common:permission:camera")
+
 pluginManagement {
     repositories {
         google()

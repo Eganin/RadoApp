@@ -16,6 +16,7 @@ kotlin {
                 implementation(project(":common:core"))
                 implementation(project(":common:umbrella-compose"))
                 implementation(compose.desktop.currentOs)
+                implementation(project(":common:permission:camera"))
             }
         }
     }

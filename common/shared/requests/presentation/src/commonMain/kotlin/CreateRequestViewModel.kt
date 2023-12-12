@@ -1,3 +1,4 @@
+import com.benasher44.uuid.uuid4
 import di.Inject
 import io.github.aakira.napier.log
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -12,9 +13,13 @@ import models.create.CreateRequestViewState
 import models.create.getVehicleType
 import other.BaseSharedViewModel
 import other.WrapperForResponse
+import picker.LocalMediaController
+import picker.MediaSource
 import time.convertDateLongToString
 
-class CreateRequestViewModel :
+class CreateRequestViewModel(
+    private val mediaController: LocalMediaController
+) :
     BaseSharedViewModel<CreateRequestViewState, CreateRequestAction, CreateRequestEvent>(
         initialState = CreateRequestViewState()
     ) {
@@ -28,6 +33,7 @@ class CreateRequestViewModel :
     override fun obtainEvent(viewEvent: CreateRequestEvent) {
         when (viewEvent) {
             is CreateRequestEvent.CreateRequest -> createRequest()
+
             is CreateRequestEvent.SelectedTypeVehicleTractor -> {
                 obtainIsSelectedTractor()
                 obtainEvent(CreateRequestEvent.TractorIsExpandedChanged)
@@ -39,15 +45,21 @@ class CreateRequestViewModel :
             }
 
             is CreateRequestEvent.NumberVehicleChanged -> obtainNumberVehicleChange(numberVehicle = viewEvent.value)
+
             is CreateRequestEvent.FaultDescriptionChanged -> obtainFaultDescriptionChange(
                 faultDescription = viewEvent.value
             )
 
             is CreateRequestEvent.TractorIsExpandedChanged -> obtainTractorIsExpandedChange()
+
             is CreateRequestEvent.TrailerIsExpandedChanged -> obtainTrailerIsExpandedChange()
+
             is CreateRequestEvent.CloseSuccessDialog -> closeSuccessDialog()
+
             is CreateRequestEvent.CloseFailureDialog -> closeFailureDialog()
+
             is CreateRequestEvent.FilePickerVisibilityChanged -> obtainFilePickerVisibilityChange()
+
             is CreateRequestEvent.SetResource -> saveResourceToStateList(
                 resource = Triple(
                     first = viewEvent.filePath,
@@ -57,10 +69,74 @@ class CreateRequestViewModel :
             )
 
             is CreateRequestEvent.ImageRepairExpandedChanged -> obtainImageIsExpandedChange()
+
             is CreateRequestEvent.OnBackClick -> removeCacheResources()
-            is CreateRequestEvent.ArrivalDateChanged ->obtainArrivalDate(arrivalDate = convertDateLongToString(date=viewEvent.arrivalDate))
-            is CreateRequestEvent.ShowDatePicker->obtainShowDatePicker(value = true)
-            is CreateRequestEvent.CloseDatePicker->obtainShowDatePicker(value = false)
+
+            is CreateRequestEvent.ArrivalDateChanged -> obtainArrivalDate(
+                arrivalDate = convertDateLongToString(
+                    date = viewEvent.arrivalDate
+                )
+            )
+
+            is CreateRequestEvent.ShowDatePicker -> obtainShowDatePicker(value = true)
+
+            is CreateRequestEvent.CloseDatePicker -> obtainShowDatePicker(value = false)
+
+            is CreateRequestEvent.CameraClick -> cameraClicked()
+
+            is CreateRequestEvent.CameraPermissionDenied -> obtainCameraPermissionIsDenied(value = viewEvent.value)
+
+            is CreateRequestEvent.OpenAppSettings -> openSettings()
+        }
+    }
+
+    private fun cameraClicked() {
+        viewModelScope.launch {
+            try {
+                mediaController.permissionsController.providePermission(permission = Permission.CAMERA)
+            } catch (e: Exception) {
+                log(tag = TAG) { "Camera permission is failure" }
+            }
+
+            when (mediaController.permissionsController.getPermissionState(Permission.CAMERA)) {
+                PermissionState.NotDetermined -> obtainEvent(
+                    viewEvent = CreateRequestEvent.CameraPermissionDenied(
+                        value = true
+                    )
+                )
+
+                PermissionState.Granted -> {
+                    try {
+                        obtainEvent(
+                            viewEvent = CreateRequestEvent.CameraPermissionDenied(
+                                value = false
+                            )
+                        )
+                        val image = mediaController.pickImage(MediaSource.CAMERA)
+                        obtainEvent(
+                            viewEvent = CreateRequestEvent.SetResource(
+                                filePath = "${uuid4().mostSignificantBits}.png",
+                                isImage = true,
+                                imageByteArray = image.toByteArray()
+                            )
+                        )
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
+
+                PermissionState.Denied -> obtainEvent(
+                    viewEvent = CreateRequestEvent.CameraPermissionDenied(
+                        value = true
+                    )
+                )
+
+                PermissionState.DeniedAlways -> obtainEvent(
+                    viewEvent = CreateRequestEvent.CameraPermissionDenied(
+                        value = true
+                    )
+                )
+            }
         }
     }
 
@@ -92,7 +168,7 @@ class CreateRequestViewModel :
                     log(tag = TAG) { "Create request is success" }
                     saveResources(requestId = createRequestIdItem.requestId)
 
-                    removeCacheResources(requestId = createRequestIdItem.requestId)
+                    removeCacheResources()
 
                     obtainShowSuccessDialog()
                 } else if (createRequestIdItem is CreateRequestIdItem.Error) {
@@ -116,6 +192,7 @@ class CreateRequestViewModel :
                     resource = resource
                 )
                 if (response is WrapperForResponse.Failure) {
+                    log(tag = TAG) { "Remove request" }
                     removeRequest(requestId = requestId)
                     obtainShowFailureDialog(value = true)
                 }
@@ -123,16 +200,14 @@ class CreateRequestViewModel :
         }
     }
 
-    private fun removeCacheResources(requestId: Int? = null) = coroutineScope.launch {
+    private fun openSettings(){
+        mediaController.permissionsController.openAppSettings()
+    }
+
+    private fun removeCacheResources() = coroutineScope.launch {
         //remove cache images
         viewState.resources.forEach {
-            val response = activeRequestsRepository.deleteResourceForCache(resourceName = it.first)
-            if (response is WrapperForResponse.Failure) {
-                requestId?.let {
-                    removeRequest(requestId = it)
-                }
-                obtainShowFailureDialog(value = true)
-            }
+            activeRequestsRepository.deleteResourceForCache(resourceName = it.first)
         }
         clearResourceList()
     }
@@ -141,12 +216,16 @@ class CreateRequestViewModel :
         activeRequestsRepository.deleteRequest(requestId = requestId)
     }
 
+    private fun obtainCameraPermissionIsDenied(value: Boolean) {
+        viewState = viewState.copy(cameraPermissionIsDenied = value)
+    }
+
     private fun obtainArrivalDate(arrivalDate: String) {
         viewState = viewState.copy(arrivalDate = arrivalDate)
     }
 
-    private fun obtainShowDatePicker(value: Boolean){
-        viewState=viewState.copy(showDatePicker = value)
+    private fun obtainShowDatePicker(value: Boolean) {
+        viewState = viewState.copy(showDatePicker = value)
     }
 
     private fun obtainShowSuccessDialog() {

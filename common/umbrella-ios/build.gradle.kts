@@ -26,6 +26,7 @@ kotlin {
             dependencies {
                 implementation(project(":common:core"))
                 implementation(project(":common:umbrella-compose"))
+                implementation(project(":common:permission:camera"))
             }
         }
 
@@ -33,6 +34,7 @@ kotlin {
             dependencies {
                 api(project(":common:core"))
                 api(project(":common:umbrella-compose"))
+                api(project(":common:permission:camera"))
             }
         }
     }

@@ -23,6 +23,8 @@ sealed class CreateRequestEvent {
 
     data object FilePickerVisibilityChanged : CreateRequestEvent()
 
+    data object CameraClick : CreateRequestEvent()
+
     data class ArrivalDateChanged(val arrivalDate:Long): CreateRequestEvent()
 
     data object ShowDatePicker: CreateRequestEvent()
@@ -36,4 +38,8 @@ sealed class CreateRequestEvent {
     ) : CreateRequestEvent()
 
     data object OnBackClick : CreateRequestEvent()
+
+    data class CameraPermissionDenied(val value: Boolean):CreateRequestEvent()
+
+    data object OpenAppSettings : CreateRequestEvent()
 }
