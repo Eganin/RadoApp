@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -32,7 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -105,7 +106,11 @@ fun AuthView(
                 modifier = Modifier.onGloballyPositioned {
                     eventHandler.invoke(AuthEvent.ExposedMenuSizeChanged(value = it.size.toSize()))
                 },
-                maxLines = 1
+                maxLines = 1,
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                keyboardActions = KeyboardActions(
+                    onDone = { keyboardController?.hide() }
+                )
             )
 
             DropdownMenu(
@@ -166,7 +171,11 @@ fun AuthView(
                 },
                 label = { Text(text = title, color = Theme.colors.primaryTextColor) },
                 modifier = Modifier.fillMaxWidth(),
-                maxLines = 1
+                maxLines = 1,
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                keyboardActions = KeyboardActions(
+                    onDone = { keyboardController?.hide() }
+                )
             )
         }
 
@@ -186,11 +195,12 @@ fun AuthView(
                     color = Theme.colors.primaryTextColor
                 )
             },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
-            modifier = Modifier.clickable {
-                keyboardController?.hide()
-            }.fillMaxWidth(),
-            maxLines = 1
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+            modifier = Modifier.fillMaxWidth(),
+            maxLines = 1,
+            keyboardActions = KeyboardActions(
+                onDone = { keyboardController?.hide() }
+            )
         )
 
         Spacer(modifier = Modifier.height(8.dp))

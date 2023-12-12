@@ -4,12 +4,17 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import compose.icons.FeatherIcons
@@ -18,6 +23,7 @@ import org.company.rado.core.MainRes
 import theme.Theme
 import widgets.common.ActionButton
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 internal fun AlertDialogTextInputs(
     numberVehicle: String,
@@ -30,6 +36,7 @@ internal fun AlertDialogTextInputs(
     arrivalDateOnClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val keyboardController = LocalSoftwareKeyboardController.current
     OutlinedTextField(
         colors = OutlinedTextFieldDefaults.colors(
             focusedTextColor = Theme.colors.primaryTextColor,
@@ -59,7 +66,11 @@ internal fun AlertDialogTextInputs(
             )
         },
         modifier = modifier.fillMaxWidth(),
-        maxLines = 1
+        maxLines = 1,
+        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+        keyboardActions = KeyboardActions(
+            onDone = { keyboardController?.hide() }
+        )
     )
 
     Spacer(modifier = Modifier.height(16.dp))
@@ -80,7 +91,11 @@ internal fun AlertDialogTextInputs(
             )
         },
         modifier = modifier.fillMaxWidth(),
-        maxLines = 20
+        maxLines = 20,
+        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+        keyboardActions = KeyboardActions(
+            onDone = { keyboardController?.hide() }
+        )
     )
 
     Spacer(modifier = Modifier.height(16.dp))
