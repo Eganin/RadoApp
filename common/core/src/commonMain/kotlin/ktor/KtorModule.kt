@@ -26,10 +26,10 @@ internal val ktorModule = DI.Module(name = "ktorModule") {
                 json(Inject.instance())
             }
 
-//            install(HttpTimeout){
-//                connectTimeoutMillis = 15000
-//                requestTimeoutMillis = 30000
-//            }
+            install(HttpTimeout){
+                connectTimeoutMillis = 15000
+                requestTimeoutMillis = 30000
+            }
 
             install(ContentEncoding) {
                 deflate(0.01F)
@@ -37,7 +37,6 @@ internal val ktorModule = DI.Module(name = "ktorModule") {
 
             defaultRequest {
                 url(BASE_URL)
-                //url("http://127.0.0.1:8080")
                 header("Content-Type", "application/json; charset=UTF-8")
             }
         }
