@@ -3,6 +3,7 @@ import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import navigation.App
+import picker.LocalMediaController
 import platform.Platform
 import platform.PlatformConfiguration
 import java.awt.Dimension
@@ -17,6 +18,6 @@ fun main() = application {
         onCloseRequest = ::exitApplication,
     ) {
         window.minimumSize = Dimension(350, 600)
-        App(platform = Platform.Desktop)
+        App(platform = Platform.Desktop, localMediaController = LocalMediaController.invoke())
     }
 }

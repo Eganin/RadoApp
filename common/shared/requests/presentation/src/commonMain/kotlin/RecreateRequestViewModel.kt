@@ -1,3 +1,4 @@
+import com.benasher44.uuid.uuid4
 import di.Inject
 import io.github.aakira.napier.log
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -15,9 +16,13 @@ import models.recreate.RecreateRequestEvent
 import models.recreate.RecreateRequestViewState
 import other.BaseSharedViewModel
 import other.WrapperForResponse
+import picker.LocalMediaController
+import picker.MediaSource
 import time.convertDateLongToString
 
-class RecreateRequestViewModel :
+class RecreateRequestViewModel(
+    private val mediaController: LocalMediaController
+) :
     BaseSharedViewModel<RecreateRequestViewState, RecreateRequestAction, RecreateRequestEvent>(
         initialState = RecreateRequestViewState()
     ) {
@@ -59,16 +64,23 @@ class RecreateRequestViewModel :
             }
 
             is RecreateRequestEvent.NumberVehicleChanged -> obtainNumberVehicleChange(numberVehicle = viewEvent.value)
+
             is RecreateRequestEvent.FaultDescriptionChanged -> obtainFaultDescriptionChange(
                 faultDescription = viewEvent.value
             )
 
             is RecreateRequestEvent.TrailerIsExpandedChanged -> obtainTrailerIsExpandedChange()
+
             is RecreateRequestEvent.TractorIsExpandedChanged -> obtainTractorIsExpandedChange()
+
             is RecreateRequestEvent.ImageRepairExpandedChanged -> obtainImageIsExpandedChange()
+
             is RecreateRequestEvent.CloseSuccessDialog -> closeSuccessDialog()
+
             is RecreateRequestEvent.CloseFailureDialog -> closeFailureDialog()
+
             is RecreateRequestEvent.FilePickerVisibilityChanged -> obtainFilePickerVisibilityChange()
+
             is RecreateRequestEvent.SetResource -> saveResourceToStateList(
                 resource = Triple(
                     first = viewEvent.filePath,
@@ -78,7 +90,9 @@ class RecreateRequestViewModel :
             )
 
             is RecreateRequestEvent.OnBackClick -> removeCacheResources()
+
             is RecreateRequestEvent.DeleteRequest -> removeRequestWrapper(requestId = viewState.requestId)
+
             is RecreateRequestEvent.RemoveImage -> removeImage(
                 imagePath = viewEvent.imagePath,
                 isResource = false
@@ -108,6 +122,63 @@ class RecreateRequestViewModel :
                     date = viewEvent.arrivalDate
                 )
             )
+
+            is RecreateRequestEvent.CameraClick -> cameraClicked()
+
+            is RecreateRequestEvent.CameraPermissionDenied -> obtainCameraPermissionIsDenied(value = viewEvent.value)
+
+            is RecreateRequestEvent.OpenAppSettings -> openSettings()
+        }
+    }
+
+
+    private fun cameraClicked() {
+        viewModelScope.launch {
+            try {
+                mediaController.permissionsController.providePermission(permission = Permission.CAMERA)
+            } catch (e: Exception) {
+                log(tag = TAG) { "Camera permission is failure" }
+            }
+
+            when (mediaController.permissionsController.getPermissionState(Permission.CAMERA)) {
+                PermissionState.NotDetermined -> obtainEvent(
+                    viewEvent = RecreateRequestEvent.CameraPermissionDenied(
+                        value = true
+                    )
+                )
+
+                PermissionState.Granted -> {
+                    try {
+                        obtainEvent(
+                            viewEvent = RecreateRequestEvent.CameraPermissionDenied(
+                                value = false
+                            )
+                        )
+                        val image = mediaController.pickImage(MediaSource.CAMERA)
+                        obtainEvent(
+                            viewEvent = RecreateRequestEvent.SetResource(
+                                filePath = "${uuid4().mostSignificantBits}.png",
+                                isImage = true,
+                                imageByteArray = image.toByteArray()
+                            )
+                        )
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
+
+                PermissionState.Denied -> obtainEvent(
+                    viewEvent = RecreateRequestEvent.CameraPermissionDenied(
+                        value = true
+                    )
+                )
+
+                PermissionState.DeniedAlways -> obtainEvent(
+                    viewEvent = RecreateRequestEvent.CameraPermissionDenied(
+                        value = true
+                    )
+                )
+            }
         }
     }
 
@@ -210,7 +281,7 @@ class RecreateRequestViewModel :
             obtainIsLoadingChange()
             obtainRequestIdChange(requestId = requestId)
             val rejectedRequestInfoItem =
-                rejectRequestsRepository.getRejectRequestInfo(requestId=requestId)
+                rejectRequestsRepository.getRejectRequestInfo(requestId = requestId)
             if (rejectedRequestInfoItem is FullRejectRequestItem.Success) {
                 log(tag = TAG) { "Get info for old rejected request ${rejectedRequestInfoItem.request}" }
                 val info = rejectedRequestInfoItem.request
@@ -343,6 +414,14 @@ class RecreateRequestViewModel :
             }
         }
         clearResourceList()
+    }
+
+    private fun openSettings() {
+        mediaController.permissionsController.openAppSettings()
+    }
+
+    private fun obtainCameraPermissionIsDenied(value: Boolean) {
+        viewState = viewState.copy(cameraPermissionIsDenied = value)
     }
 
     private fun clearResourceList() {

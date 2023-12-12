@@ -50,4 +50,10 @@ sealed class RecreateRequestEvent {
     data object ShowDatePicker : RecreateRequestEvent()
 
     data object CloseDatePicker : RecreateRequestEvent()
+
+    data class CameraPermissionDenied(val value: Boolean) : RecreateRequestEvent()
+
+    data object OpenAppSettings : RecreateRequestEvent()
+
+    data object CameraClick : RecreateRequestEvent()
 }

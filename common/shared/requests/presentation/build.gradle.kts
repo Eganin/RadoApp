@@ -11,9 +11,11 @@ kotlin{
                 api(project(":common:shared:requests:api"))
                 implementation(project(":common:core"))
                 implementation(project(":common:core-utils"))
+                implementation(project(":common:permission:camera"))
 
                 implementation(Dependencies.Navigation.MokoMVVM.core)
                 implementation(Dependencies.Navigation.MokoMVVM.flow)
+                implementation(Dependencies.Other.UUID.core)
             }
         }
     }

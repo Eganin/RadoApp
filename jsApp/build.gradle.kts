@@ -15,6 +15,7 @@ kotlin {
             dependencies {
                 implementation(project(":common:core"))
                 implementation(project(":common:umbrella-compose"))
+                implementation(project(":common:permission:camera"))
             }
         }
     }

@@ -1,9 +1,12 @@
 package views.create
 
 import CreateRequestViewModel
+import LocalMediaControllerProvider
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -32,6 +35,7 @@ import views.widgets.AlertDialogChooseMachine
 import views.widgets.AlertDialogTextInputs
 import views.widgets.AlertDialogTopBar
 import views.widgets.DatePicker
+import views.widgets.PermissionDialog
 import widgets.common.ActionButton
 import widgets.common.CircularLoader
 
@@ -43,7 +47,9 @@ fun CreateRequestAlertDialog(
     modifier: Modifier = Modifier
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
-    val viewModel = viewModelFactory { CreateRequestViewModel() }.createViewModel()
+    val mediaPickerController = LocalMediaControllerProvider.current
+    val viewModel =
+        viewModelFactory { CreateRequestViewModel(mediaController = mediaPickerController) }.createViewModel()
     val state = viewModel.viewStates().observeAsState()
     val action = viewModel.viewActions().observeAsState()
 
@@ -118,7 +124,11 @@ fun CreateRequestAlertDialog(
                     resourceIsExpanded = state.value.imageIsExpanded,
                     isRemoveImageAndVideo = false,
                     addResource = {
-                        viewModel.obtainEvent(viewEvent = CreateRequestEvent.FilePickerVisibilityChanged)
+                        if (isLargePlatform) {
+                            viewModel.obtainEvent(viewEvent = CreateRequestEvent.FilePickerVisibilityChanged)
+                        } else {
+                            viewModel.obtainEvent(viewEvent = CreateRequestEvent.CameraClick)
+                        }
                     },
                     imageOnClick = {
                         viewModel.obtainEvent(viewEvent = CreateRequestEvent.ImageRepairExpandedChanged)
@@ -127,6 +137,8 @@ fun CreateRequestAlertDialog(
                         viewModel.obtainEvent(viewEvent = CreateRequestEvent.ImageRepairExpandedChanged)
                     }
                 )
+
+                Spacer(modifier = Modifier.height(16.dp))
 
                 ActionButton(
                     text = MainRes.string.send_repair_request_title,
@@ -184,6 +196,35 @@ fun CreateRequestAlertDialog(
                 },
                 exitAction = {
                     viewModel.obtainEvent(viewEvent = CreateRequestEvent.CloseDatePicker)
+                }
+            )
+        }
+
+        if (state.value.cameraPermissionIsDenied) {
+            PermissionDialog(
+                firstText = MainRes.string.camera_permission_is_denied_title,
+                secondText = MainRes.string.camera_permission_is_denied_description,
+                onDismiss = {
+                    viewModel.obtainEvent(
+                        viewEvent = CreateRequestEvent.CameraPermissionDenied(
+                            value = false
+                        )
+                    )
+                },
+                onExit = {
+                    viewModel.obtainEvent(
+                        viewEvent = CreateRequestEvent.CameraPermissionDenied(
+                            value = false
+                        )
+                    )
+                },
+                successOnClick = {
+                    viewModel.obtainEvent(
+                        viewEvent = CreateRequestEvent.CameraPermissionDenied(
+                            value = false
+                        )
+                    )
+                    viewModel.obtainEvent(viewEvent = CreateRequestEvent.OpenAppSettings)
                 }
             )
         }
