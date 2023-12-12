@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.OutlinedTextField
@@ -16,7 +18,10 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -27,6 +32,7 @@ import platform.Platform
 import theme.Theme
 import widgets.common.TextStickyHeader
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 internal fun MechanicRejectDialog(
     mechanicComment: String,
@@ -35,6 +41,7 @@ internal fun MechanicRejectDialog(
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val keyboardController = LocalSoftwareKeyboardController.current
     val isLargePlatform =
         LocalPlatform.current == Platform.Web || LocalPlatform.current == Platform.Desktop
 
@@ -72,7 +79,11 @@ internal fun MechanicRejectDialog(
                         )
                     },
                     modifier = modifier.fillMaxWidth(),
-                    maxLines = 10
+                    maxLines = 10,
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                    keyboardActions = KeyboardActions(
+                        onDone = { keyboardController?.hide() }
+                    )
                 )
 
                 Row(
