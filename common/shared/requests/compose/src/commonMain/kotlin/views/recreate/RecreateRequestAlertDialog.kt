@@ -1,5 +1,6 @@
 package views.recreate
 
+import LocalMediaControllerProvider
 import RecreateRequestViewModel
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -38,6 +39,7 @@ import views.widgets.AlertDialogChooseMachine
 import views.widgets.AlertDialogTextInputs
 import views.widgets.AlertDialogTopBar
 import views.widgets.DatePicker
+import views.widgets.PermissionDialog
 import widgets.common.ActionButton
 import widgets.common.CircularLoader
 
@@ -51,7 +53,9 @@ fun RecreateRequestAlertDialog(
     modifier: Modifier = Modifier
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
-    val viewModel = viewModelFactory { RecreateRequestViewModel() }.createViewModel()
+    val mediaPickerController = LocalMediaControllerProvider.current
+    val viewModel =
+        viewModelFactory { RecreateRequestViewModel(mediaController = mediaPickerController) }.createViewModel()
     val state = viewModel.viewStates().observeAsState()
     val action = viewModel.viewActions().observeAsState()
 
@@ -138,7 +142,11 @@ fun RecreateRequestAlertDialog(
                     createdVideos = state.value.videos,
                     isRemoveImageAndVideo = true,
                     addResource = {
-                        viewModel.obtainEvent(viewEvent = RecreateRequestEvent.FilePickerVisibilityChanged)
+                        if (isLargePlatform) {
+                            viewModel.obtainEvent(viewEvent = RecreateRequestEvent.FilePickerVisibilityChanged)
+                        } else {
+                            viewModel.obtainEvent(viewEvent = RecreateRequestEvent.CameraClick)
+                        }
                     },
                     imageOnClick = {
                         viewModel.obtainEvent(viewEvent = RecreateRequestEvent.ImageRepairExpandedChanged)
@@ -233,6 +241,35 @@ fun RecreateRequestAlertDialog(
                 },
                 exitAction = {
                     viewModel.obtainEvent(viewEvent = RecreateRequestEvent.CloseDatePicker)
+                }
+            )
+        }
+
+        if (state.value.cameraPermissionIsDenied) {
+            PermissionDialog(
+                firstText = MainRes.string.camera_permission_is_denied_title,
+                secondText = MainRes.string.camera_permission_is_denied_description,
+                onDismiss = {
+                    viewModel.obtainEvent(
+                        viewEvent = RecreateRequestEvent.CameraPermissionDenied(
+                            value = false
+                        )
+                    )
+                },
+                onExit = {
+                    viewModel.obtainEvent(
+                        viewEvent = RecreateRequestEvent.CameraPermissionDenied(
+                            value = false
+                        )
+                    )
+                },
+                successOnClick = {
+                    viewModel.obtainEvent(
+                        viewEvent = RecreateRequestEvent.CameraPermissionDenied(
+                            value = false
+                        )
+                    )
+                    viewModel.obtainEvent(viewEvent = RecreateRequestEvent.OpenAppSettings)
                 }
             )
         }

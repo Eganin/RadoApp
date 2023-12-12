@@ -22,5 +22,6 @@ data class RecreateRequestViewState(
     val images: List<String> = emptyList(),
     val videos: List<String> = emptyList(),
     val notChooseVehicle:Boolean=false,
-    val arrivalDate:String=""
+    val arrivalDate:String="",
+    val cameraPermissionIsDenied: Boolean=false
 )
