@@ -20,5 +20,6 @@ data class FullRequest(
     val images: List<String>,
     val videos: List<String>,
     val arrivalDate:String="",
-    val streetRepair:String=""
+    val streetRepair:String="",
+    val testMigrate:String=""
 )

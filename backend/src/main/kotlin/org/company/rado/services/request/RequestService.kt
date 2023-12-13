@@ -137,7 +137,8 @@ class RequestService(
             images = images,
             videos = videos,
             arrivalDate = requestDTO.arrivalDate,
-            streetRepair = requestDTO.streetRepair
+            streetRepair = requestDTO.streetRepair,
+            testMigrate = requestDTO.testMigrate
         )
     }
 }
