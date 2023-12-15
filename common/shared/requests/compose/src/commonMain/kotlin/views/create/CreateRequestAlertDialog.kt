@@ -127,7 +127,8 @@ fun CreateRequestAlertDialog(
                         if (isLargePlatform) {
                             viewModel.obtainEvent(viewEvent = CreateRequestEvent.FilePickerVisibilityChanged)
                         } else {
-                            viewModel.obtainEvent(viewEvent = CreateRequestEvent.CameraClick)
+                            viewModel.pickVideo()
+                            //viewModel.obtainEvent(viewEvent = CreateRequestEvent.CameraClick)
                         }
                     },
                     imageOnClick = {

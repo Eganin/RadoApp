@@ -1,11 +1,17 @@
 package picker
 
+import MediaFactory
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
+import android.os.Environment
+import android.provider.MediaStore
 import androidx.activity.ComponentActivity
+import androidx.core.content.FileProvider
 import data.CanceledException
 import data.Media
+import java.io.File
 import java.lang.ref.WeakReference
 
 internal class MediaPicker(private val context: Context) {
@@ -28,7 +34,7 @@ internal class MediaPicker(private val context: Context) {
     fun pickVideo(callback: (Result<Media>) -> Unit) {
         val requestCode = codeCallbackMap.keys.maxOrNull() ?: 0
 
-        codeCallbackMap[requestCode] = CallbackData(callback)
+        codeCallbackMap[requestCode] = CallbackData.Default(callback)
 
         val intent = Intent().apply {
             type = "video/*"
@@ -41,7 +47,7 @@ internal class MediaPicker(private val context: Context) {
     fun pickMedia(callback: (Result<Media>) -> Unit) {
         val requestCode = codeCallbackMap.keys.maxOrNull() ?: 0
 
-        codeCallbackMap[requestCode] = CallbackData(callback)
+        codeCallbackMap[requestCode] = CallbackData.Default(callback)
 
         val intent = Intent().apply {
             type = "image/* video/*"
@@ -49,6 +55,28 @@ internal class MediaPicker(private val context: Context) {
             putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("video/*", "image/*"))
         }
         focusedActivity?.startActivityForResult(intent, requestCode)
+    }
+
+    fun pickCameraMedia(callback: (Result<Media>) -> Unit){
+        val requestCode = codeCallbackMap.keys.maxOrNull() ?: 0
+
+        val outputUri = createVideoUri()
+        codeCallbackMap[requestCode] = CallbackData.Camera(callback,outputUri)
+
+        val intent = Intent(MediaStore.ACTION_VIDEO_CAPTURE)
+            .putExtra(MediaStore.EXTRA_OUTPUT, outputUri)
+        focusedActivity?.startActivityForResult(intent, requestCode)
+    }
+
+    private fun createVideoUri(): Uri{
+        val filesDir = context.getExternalFilesDir(Environment.DIRECTORY_DCIM)
+        val tmpFile = File(filesDir,DEFAULT_FILE_NAME)
+
+        return FileProvider.getUriForFile(
+            context,
+            context.packageName + FILE_PROVIDER_SUFFIX,
+            tmpFile
+        )
     }
 
     fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -63,30 +91,47 @@ internal class MediaPicker(private val context: Context) {
             return
         }
 
-        processResult(callback, data)
+        when (callbackData) {
+            is CallbackData.Default -> {
+                val uri = data?.data
+                if (uri != null) {
+                    processResult(callback, uri)
+                } else {
+                    callback.invoke(Result.failure(IllegalArgumentException(data?.toString())))
+                }
+            }
+
+            is CallbackData.Camera -> {
+                processResult(callback, callbackData.outputUri)
+            }
+        }
     }
 
     @Suppress("ReturnCount")
     private fun processResult(
         callback: (Result<Media>) -> Unit,
-        intent: Intent?
+        uri: Uri
     ) {
-        val context = this.context
-        if (intent == null) {
-            callback(Result.failure(IllegalStateException("intent unavailable")))
-            return
-        }
-        val intentData = intent.data
-        if (intentData == null) {
-            callback(Result.failure(IllegalStateException("intentData unavailable")))
-            return
-        }
+        val contentResolver = focusedActivity?.contentResolver
 
         val result = kotlin.runCatching {
-            MediaFactory.create(context, intentData)
+            MediaFactory.createVideoMedia(contentResolver!!,uri)
         }
         callback.invoke(result)
     }
 
-    class CallbackData(val callback: (Result<Media>) -> Unit)
+    sealed class CallbackData(val callback: (Result<Media>) -> Unit) {
+        class Default(callback: (Result<Media>) -> Unit) :
+            CallbackData(callback)
+
+        class Camera(
+            callback: (Result<Media>) -> Unit,
+            val outputUri: Uri
+        ) : CallbackData(callback)
+    }
+
+    private companion object{
+        const val DEFAULT_FILE_NAME = "default.mp4"
+        private const val FILE_PROVIDER_SUFFIX = ".provider"
+    }
 }

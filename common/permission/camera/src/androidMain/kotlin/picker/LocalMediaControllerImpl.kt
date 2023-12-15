@@ -48,6 +48,16 @@ internal class LocalMediaControllerImpl(
         return AppBitmap(bitmap)
     }
 
+    override suspend fun pickVideo(): Media {
+        pickerType = PickerType.MEDIA
+        permissionsController.providePermission(Permission.CAMERA)
+
+        return suspendCoroutine { continuation ->
+            val action: (Result<Media>) -> Unit = { continuation.resumeWith(it) }
+            mediaPicker.pickCameraMedia(action)
+        }
+    }
+
     override suspend fun pickMedia(): Media {
         pickerType = PickerType.MEDIA
         permissionsController.providePermission(Permission.GALLERY)

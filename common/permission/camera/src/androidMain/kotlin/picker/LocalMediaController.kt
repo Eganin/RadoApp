@@ -14,6 +14,7 @@ actual interface LocalMediaController {
     actual suspend fun pickImage(source: MediaSource, maxWidth: Int, maxHeight: Int): AppBitmap
     actual suspend fun pickMedia(): Media
     actual suspend fun pickFiles(): FileMedia
+    actual suspend fun pickVideo():Media
     fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?)
 
     companion object {

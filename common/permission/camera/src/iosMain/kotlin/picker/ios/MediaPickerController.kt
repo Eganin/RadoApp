@@ -115,6 +115,10 @@ class MediaPickerController(
         return fileMedia
     }
 
+    override suspend fun pickVideo(): Media {
+        TODO("Not yet implemented")
+    }
+
     private fun MediaSource.requiredPermissions(): List<Permission> =
         when (this) {
             MediaSource.GALLERY -> listOf(Permission.GALLERY)

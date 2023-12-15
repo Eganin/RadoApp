@@ -140,6 +140,58 @@ class CreateRequestViewModel(
         }
     }
 
+    fun pickVideo(){
+        viewModelScope.launch {
+            try {
+                mediaController.permissionsController.providePermission(permission = Permission.CAMERA)
+            } catch (e: Exception) {
+                log(tag = TAG) { "Camera permission is failure" }
+            }
+
+            when (mediaController.permissionsController.getPermissionState(Permission.CAMERA)) {
+                PermissionState.NotDetermined -> obtainEvent(
+                    viewEvent = CreateRequestEvent.CameraPermissionDenied(
+                        value = true
+                    )
+                )
+
+                PermissionState.Granted -> {
+                    try {
+                        obtainEvent(
+                            viewEvent = CreateRequestEvent.CameraPermissionDenied(
+                                value = false
+                            )
+                        )
+                        val image = mediaController.pickVideo()
+                        obtainEvent(
+                            viewEvent = CreateRequestEvent.SetResource(
+                                filePath = "${uuid4().mostSignificantBits}.mp4",
+                                isImage = false,
+                                imageByteArray = image.preview.toByteArray()
+                            )
+                        )
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
+
+                PermissionState.Denied -> obtainEvent(
+                    viewEvent = CreateRequestEvent.CameraPermissionDenied(
+                        value = true
+                    )
+                )
+
+                PermissionState.DeniedAlways -> {
+                    obtainEvent(
+                        viewEvent = CreateRequestEvent.CameraPermissionDenied(
+                            value = true
+                        )
+                    )
+                }
+            }
+        }
+    }
+
     private fun createRequest() {
         coroutineScope.launch {
             viewState = viewState.copy(isLoading = !viewState.isLoading)

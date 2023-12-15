@@ -89,7 +89,7 @@ object MediaFactory {
     }
 
     @Suppress("ThrowsCount")
-    private fun createVideoMedia(
+    fun createVideoMedia(
         contentResolver: ContentResolver,
         uri: Uri
     ): Media {
