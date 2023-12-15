@@ -16,6 +16,7 @@ actual interface LocalMediaController {
 
     actual suspend fun pickMedia(): Media
     actual suspend fun pickFiles(): FileMedia
+    actual suspend fun pickVideo():Media
 
     companion object {
         fun invoke(): LocalMediaController = LocalMediaControllerImpl()
@@ -40,6 +41,10 @@ class LocalMediaControllerImpl : LocalMediaController {
     }
 
     override suspend fun pickFiles(): FileMedia {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun pickVideo(): Media {
         TODO("Not yet implemented")
     }
 

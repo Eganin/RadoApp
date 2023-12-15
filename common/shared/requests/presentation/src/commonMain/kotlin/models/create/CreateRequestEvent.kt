@@ -25,6 +25,8 @@ sealed class CreateRequestEvent {
 
     data object CameraClick : CreateRequestEvent()
 
+    data object VideoClick: CreateRequestEvent()
+
     data class ArrivalDateChanged(val arrivalDate:Long): CreateRequestEvent()
 
     data object ShowDatePicker: CreateRequestEvent()

@@ -28,12 +28,13 @@ compose.desktop {
         mainClass = "MainKt"
 
         nativeDistributions {
+            includeAllModules=true
             targetFormats(
                 TargetFormat.Dmg,
                 TargetFormat.Msi,
                 TargetFormat.Deb
             )
-            packageName = "org.company.rado.desktopApp"
+            packageName = "RadoApp"
             packageVersion = "1.0.0"
 
             linux {

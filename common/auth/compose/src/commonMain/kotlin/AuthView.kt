@@ -222,7 +222,7 @@ fun AuthView(
 
         ActionButton(
             text = MainRes.string.sign_in_button_title,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().padding(bottom = 200.dp),
             onClick = {
                 eventHandler.invoke(AuthEvent.RegisterClick)
             })

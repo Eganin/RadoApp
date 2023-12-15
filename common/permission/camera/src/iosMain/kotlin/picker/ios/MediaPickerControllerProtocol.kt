@@ -16,4 +16,5 @@ interface MediaPickerControllerProtocol {
     suspend fun pickImage(source: MediaSource, maxWidth: Int, maxHeight: Int): AppBitmap
     suspend fun pickMedia(): Media
     suspend fun pickFiles(): FileMedia
+    suspend fun pickVideo():Media
 }
