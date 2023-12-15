@@ -20,9 +20,13 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import compose.icons.FeatherIcons
+import compose.icons.feathericons.Aperture
 import compose.icons.feathericons.Plus
+import compose.icons.feathericons.Video
 import ktor.BASE_URL
 import org.company.rado.core.MainRes
+import platform.LocalPlatform
+import platform.Platform
 import theme.Theme
 import views.create.ImageCells
 import views.shared.videoplayer.VideoPlayerCell
@@ -32,7 +36,8 @@ internal fun AlertDialogChooseImageAndVideo(
     imageSize: Dp,
     resources: List<Triple<String, Boolean, ByteArray>>,
     resourceIsExpanded: Boolean,
-    addResource: () -> Unit,
+    addImageResource: () -> Unit,
+    addVideoResource: () ->Unit,
     imageOnClick: () -> Unit,
     videoOnClick: () -> Unit,
     createdImages: List<String> = emptyList(),
@@ -44,6 +49,8 @@ internal fun AlertDialogChooseImageAndVideo(
     removeImageFromResourceAction: (String) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
+    val isLargePlatform =
+        LocalPlatform.current == Platform.Web || LocalPlatform.current == Platform.Desktop
     Text(
         text = MainRes.string.image_fault_title,
         fontSize = 18.sp,
@@ -54,15 +61,41 @@ internal fun AlertDialogChooseImageAndVideo(
     Spacer(modifier = Modifier.height(16.dp))
 
     LazyRow(modifier = modifier.fillMaxWidth()) {
-        item {
-            Box(modifier = Modifier.clickable {
-                addResource.invoke()
-            }.size(imageSize).background(Theme.colors.primaryAction)) {
-                Icon(
-                    modifier = Modifier.fillMaxSize(),
-                    imageVector = FeatherIcons.Plus,
-                    contentDescription = null
-                )
+        if (!isLargePlatform){
+            item {
+                Box(modifier = Modifier.clickable {
+                    addImageResource.invoke()
+                }.size(imageSize).background(Theme.colors.primaryAction)) {
+                    Icon(
+                        modifier = Modifier.padding(16.dp).fillMaxSize(),
+                        imageVector = FeatherIcons.Aperture,
+                        contentDescription = null
+                    )
+                }
+            }
+
+            item {
+                Box(modifier = Modifier.clickable {
+                    addVideoResource.invoke()
+                }.padding(start=16.dp).size(imageSize).background(Theme.colors.primaryAction)) {
+                    Icon(
+                        modifier = Modifier.padding(16.dp).fillMaxSize(),
+                        imageVector = FeatherIcons.Video,
+                        contentDescription = null
+                    )
+                }
+            }
+        }else{
+            item {
+                Box(modifier = Modifier.clickable {
+                    addImageResource.invoke()
+                }.size(imageSize).background(Theme.colors.primaryAction)) {
+                    Icon(
+                        modifier = Modifier.fillMaxSize(),
+                        imageVector = FeatherIcons.Plus,
+                        contentDescription = null
+                    )
+                }
             }
         }
 

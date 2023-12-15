@@ -20,6 +20,7 @@ import platform.Foundation.CFBridgingRelease
 import platform.UIKit.UIDocumentPickerMode
 import platform.UIKit.UIDocumentPickerViewController
 import platform.UIKit.UIImagePickerController
+import platform.UIKit.UIImagePickerControllerCameraCaptureMode
 import platform.UIKit.UIImagePickerControllerSourceType
 import platform.UIKit.UIViewController
 import platform.UIKit.presentationController
@@ -116,7 +117,33 @@ class MediaPickerController(
     }
 
     override suspend fun pickVideo(): Media {
-        TODO("Not yet implemented")
+        permissionsController.providePermission(Permission.CAMERA)
+
+        val refs: MutableSet<Any> = mutableSetOf()
+        strongRefs.add(refs)
+        val media: Media = suspendCoroutine { continuation ->
+            val controller = UIImagePickerController()
+            controller.sourceType =
+                UIImagePickerControllerSourceType.UIImagePickerControllerSourceTypeCamera
+            controller.mediaTypes = listOf(kMovieType)
+            controller.cameraCaptureMode =
+                UIImagePickerControllerCameraCaptureMode.UIImagePickerControllerCameraCaptureModeVideo
+            controller.delegate = ImagePickerDelegateToContinuation(continuation).also {
+                refs.add(it)
+            }
+            getViewController().presentViewController(
+                controller,
+                animated = true,
+                completion = null
+            )
+            controller.presentationController?.delegate =
+                AdaptivePresentationDelegateToContinuation(continuation).also {
+                    refs.add(it)
+                }
+        }
+        strongRefs.remove(refs)
+        return media
+
     }
 
     private fun MediaSource.requiredPermissions(): List<Permission> =

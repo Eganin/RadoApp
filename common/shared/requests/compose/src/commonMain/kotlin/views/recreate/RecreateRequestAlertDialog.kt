@@ -141,11 +141,18 @@ fun RecreateRequestAlertDialog(
                     createdImages = state.value.images,
                     createdVideos = state.value.videos,
                     isRemoveImageAndVideo = true,
-                    addResource = {
+                    addImageResource = {
                         if (isLargePlatform) {
                             viewModel.obtainEvent(viewEvent = RecreateRequestEvent.FilePickerVisibilityChanged)
                         } else {
                             viewModel.obtainEvent(viewEvent = RecreateRequestEvent.CameraClick)
+                        }
+                    },
+                    addVideoResource = {
+                        if (isLargePlatform) {
+                            viewModel.obtainEvent(viewEvent = RecreateRequestEvent.FilePickerVisibilityChanged)
+                        } else {
+                            viewModel.obtainEvent(viewEvent = RecreateRequestEvent.VideoClick)
                         }
                     },
                     imageOnClick = {

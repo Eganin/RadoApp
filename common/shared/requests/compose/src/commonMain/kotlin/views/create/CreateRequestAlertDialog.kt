@@ -123,12 +123,18 @@ fun CreateRequestAlertDialog(
                     resources = state.value.resources,
                     resourceIsExpanded = state.value.imageIsExpanded,
                     isRemoveImageAndVideo = false,
-                    addResource = {
+                    addImageResource = {
                         if (isLargePlatform) {
                             viewModel.obtainEvent(viewEvent = CreateRequestEvent.FilePickerVisibilityChanged)
                         } else {
-                            viewModel.pickVideo()
-                            //viewModel.obtainEvent(viewEvent = CreateRequestEvent.CameraClick)
+                            viewModel.obtainEvent(viewEvent = CreateRequestEvent.CameraClick)
+                        }
+                    },
+                    addVideoResource = {
+                        if (isLargePlatform) {
+                            viewModel.obtainEvent(viewEvent = CreateRequestEvent.FilePickerVisibilityChanged)
+                        } else {
+                            viewModel.obtainEvent(viewEvent = CreateRequestEvent.VideoClick)
                         }
                     },
                     imageOnClick = {

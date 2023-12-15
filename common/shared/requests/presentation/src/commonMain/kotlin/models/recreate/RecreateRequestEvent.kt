@@ -56,4 +56,6 @@ sealed class RecreateRequestEvent {
     data object OpenAppSettings : RecreateRequestEvent()
 
     data object CameraClick : RecreateRequestEvent()
+
+    data object VideoClick : RecreateRequestEvent()
 }

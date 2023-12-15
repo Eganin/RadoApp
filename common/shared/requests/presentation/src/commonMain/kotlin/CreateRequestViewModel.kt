@@ -84,6 +84,8 @@ class CreateRequestViewModel(
 
             is CreateRequestEvent.CameraClick -> cameraClicked()
 
+            is CreateRequestEvent.VideoClick-> videoClicked()
+
             is CreateRequestEvent.CameraPermissionDenied -> obtainCameraPermissionIsDenied(value = viewEvent.value)
 
             is CreateRequestEvent.OpenAppSettings -> openSettings()
@@ -140,7 +142,7 @@ class CreateRequestViewModel(
         }
     }
 
-    fun pickVideo(){
+    private fun videoClicked(){
         viewModelScope.launch {
             try {
                 mediaController.permissionsController.providePermission(permission = Permission.CAMERA)
@@ -162,12 +164,12 @@ class CreateRequestViewModel(
                                 value = false
                             )
                         )
-                        val image = mediaController.pickVideo()
+                        val video = mediaController.pickVideo()
                         obtainEvent(
                             viewEvent = CreateRequestEvent.SetResource(
                                 filePath = "${uuid4().mostSignificantBits}.mp4",
                                 isImage = false,
-                                imageByteArray = image.preview.toByteArray()
+                                imageByteArray = video.preview.toByteArray()
                             )
                         )
                     } catch (e: Exception) {

@@ -125,6 +125,8 @@ class RecreateRequestViewModel(
 
             is RecreateRequestEvent.CameraClick -> cameraClicked()
 
+            is RecreateRequestEvent.VideoClick -> videoClicked()
+
             is RecreateRequestEvent.CameraPermissionDenied -> obtainCameraPermissionIsDenied(value = viewEvent.value)
 
             is RecreateRequestEvent.OpenAppSettings -> openSettings()
@@ -178,6 +180,58 @@ class RecreateRequestViewModel(
                         value = true
                     )
                 )
+            }
+        }
+    }
+
+    private fun videoClicked() {
+        viewModelScope.launch {
+            try {
+                mediaController.permissionsController.providePermission(permission = Permission.CAMERA)
+            } catch (e: Exception) {
+                log(tag = TAG) { "Camera permission is failure" }
+            }
+
+            when (mediaController.permissionsController.getPermissionState(Permission.CAMERA)) {
+                PermissionState.NotDetermined -> obtainEvent(
+                    viewEvent = RecreateRequestEvent.CameraPermissionDenied(
+                        value = true
+                    )
+                )
+
+                PermissionState.Granted -> {
+                    try {
+                        obtainEvent(
+                            viewEvent = RecreateRequestEvent.CameraPermissionDenied(
+                                value = false
+                            )
+                        )
+                        val video = mediaController.pickVideo()
+                        obtainEvent(
+                            viewEvent = RecreateRequestEvent.SetResource(
+                                filePath = "${uuid4().mostSignificantBits}.mp4",
+                                isImage = false,
+                                imageByteArray = video.preview.toByteArray()
+                            )
+                        )
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
+
+                PermissionState.Denied -> obtainEvent(
+                    viewEvent = RecreateRequestEvent.CameraPermissionDenied(
+                        value = true
+                    )
+                )
+
+                PermissionState.DeniedAlways -> {
+                    obtainEvent(
+                        viewEvent = RecreateRequestEvent.CameraPermissionDenied(
+                            value = true
+                        )
+                    )
+                }
             }
         }
     }
