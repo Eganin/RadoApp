@@ -170,7 +170,8 @@ class MechanicRequestsViewModel :
             mechanicComment = "",
             streetForRepair = "",
             repairOnBase = true,
-            repairOnOtherPlace = false
+            repairOnOtherPlace = false,
+            isActiveInputFieldForStreet=false
         )
     }
 
