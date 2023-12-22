@@ -36,7 +36,7 @@ internal class RemoteNotificationPermissionDelegate : PermissionDelegate {
         when (status) {
             UNAuthorizationStatusAuthorized -> return
             UNAuthorizationStatusNotDetermined -> {
-                val isSuccess = suspendCoroutine<Boolean> { continuation ->
+                val isSuccess = suspendCoroutine { continuation ->
                     UNUserNotificationCenter.currentNotificationCenter()
                         .requestAuthorizationWithOptions(
                             UNAuthorizationOptionSound

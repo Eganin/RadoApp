@@ -10,7 +10,6 @@ import androidx.activity.ComponentActivity
 import androidx.core.content.FileProvider
 import data.BitmapUtils
 import data.CanceledException
-import io.github.aakira.napier.log
 import java.io.File
 import java.lang.ref.WeakReference
 
@@ -18,7 +17,6 @@ internal class ImagePicker(private val context: Context) {
     private var activity: WeakReference<ComponentActivity>? = null
 
     private val codeCallbackMap = mutableMapOf<Int, CallbackData>()
-    private var photoFilePath: String? = null
     private val maxImageWidth
         get() =
             DEFAULT_MAX_IMAGE_WIDTH
@@ -39,22 +37,6 @@ internal class ImagePicker(private val context: Context) {
             }
         }
 
-
-    fun pickGalleryImage(callback: (Result<android.graphics.Bitmap>) -> Unit) {
-        val requestCode = codeCallbackMap.keys.sorted().lastOrNull() ?: 0
-
-        codeCallbackMap[requestCode] =
-            CallbackData.Gallery(
-                callback
-            )
-
-        val intent = Intent(
-            Intent.ACTION_PICK,
-            MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-        )
-        focusedActivity?.startActivityForResult(intent, requestCode)
-    }
-
     fun pickCameraImage(callback: (Result<android.graphics.Bitmap>) -> Unit) {
         val requestCode = codeCallbackMap.keys.maxOrNull() ?: 0
 
@@ -73,7 +55,6 @@ internal class ImagePicker(private val context: Context) {
     private fun createPhotoUri(): Uri {
         val filesDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
         val tmpFile = File(filesDir, DEFAULT_FILE_NAME)
-        photoFilePath = tmpFile.absolutePath
 
         return FileProvider.getUriForFile(
             context,
@@ -94,15 +75,6 @@ internal class ImagePicker(private val context: Context) {
         }
 
         when (callbackData) {
-            is CallbackData.Gallery -> {
-                val uri = data?.data
-                if (uri != null) {
-                    processResult(callback, uri)
-                } else {
-                    callback.invoke(Result.failure(IllegalArgumentException(data?.toString())))
-                }
-            }
-
             is CallbackData.Camera -> {
                 processResult(callback, callbackData.outputUri)
             }
@@ -144,8 +116,6 @@ internal class ImagePicker(private val context: Context) {
     }
 
     sealed class CallbackData(val callback: (Result<android.graphics.Bitmap>) -> Unit) {
-        class Gallery(callback: (Result<android.graphics.Bitmap>) -> Unit) :
-            CallbackData(callback)
 
         class Camera(
             callback: (Result<android.graphics.Bitmap>) -> Unit,
@@ -155,10 +125,6 @@ internal class ImagePicker(private val context: Context) {
 
     companion object {
         private const val DEFAULT_FILE_NAME = "image.png"
-        private const val PHOTO_FILE_PATH_KEY = "photoFilePath"
         private const val FILE_PROVIDER_SUFFIX = ".provider"
-
-        private const val ARG_IMG_MAX_WIDTH = "args_img_max_width"
-        private const val ARG_IMG_MAX_HEIGHT = "args_img_max_height"
     }
 }

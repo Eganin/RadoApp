@@ -2,7 +2,6 @@ package picker
 
 import PermissionController
 import data.AppBitmap
-import data.FileMedia
 import data.Media
 
 internal const val DEFAULT_MAX_IMAGE_WIDTH = 1024
@@ -13,7 +12,5 @@ expect interface LocalMediaController {
 
     suspend fun pickImage(source: MediaSource): AppBitmap
     suspend fun pickImage(source: MediaSource, maxWidth: Int, maxHeight: Int): AppBitmap
-    suspend fun pickMedia(): Media
-    suspend fun pickFiles(): FileMedia
     suspend fun pickVideo():Media
 }

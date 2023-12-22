@@ -54,17 +54,6 @@ object BitmapUtils {
         return result
     }
 
-    @Suppress("ForbiddenComment")
-    // TODO: unused
-    fun cloneRotated(bitmap: Bitmap, angle: Int): Bitmap {
-        if (angle != 0) {
-            val matrix = Matrix()
-            matrix.postRotate(angle.toFloat())
-            return Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
-        }
-        return bitmap
-    }
-
     fun getResizedBitmap(bitmap: Bitmap, maxSize: Int = DEFAULT_MAX_SIZE): Bitmap {
         var width = bitmap.width
         var height = bitmap.height
@@ -87,20 +76,6 @@ object BitmapUtils {
             inJustDecodeBounds = true
             BitmapFactory.decodeStream(inputStream, null, this)
         }
-    }
-
-    @Suppress("ForbiddenComment")
-    // TODO: unused
-    fun getBitmapForStream(
-        inputStream: InputStream,
-        sampleSize: Int
-    ): Bitmap? {
-        val bitmapOptions = BitmapFactory.Options().apply {
-            inJustDecodeBounds = false
-            inSampleSize = sampleSize
-        }
-
-        return BitmapFactory.decodeStream(inputStream, null, bitmapOptions)
     }
 
     fun calculateInSampleSize(

@@ -31,32 +31,6 @@ internal class MediaPicker(private val context: Context) {
             }
         }
 
-    fun pickVideo(callback: (Result<Media>) -> Unit) {
-        val requestCode = codeCallbackMap.keys.maxOrNull() ?: 0
-
-        codeCallbackMap[requestCode] = CallbackData.Default(callback)
-
-        val intent = Intent().apply {
-            type = "video/*"
-            action = Intent.ACTION_GET_CONTENT
-        }
-
-        focusedActivity?.startActivityForResult(intent, requestCode)
-    }
-
-    fun pickMedia(callback: (Result<Media>) -> Unit) {
-        val requestCode = codeCallbackMap.keys.maxOrNull() ?: 0
-
-        codeCallbackMap[requestCode] = CallbackData.Default(callback)
-
-        val intent = Intent().apply {
-            type = "image/* video/*"
-            action = Intent.ACTION_GET_CONTENT
-            putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("video/*", "image/*"))
-        }
-        focusedActivity?.startActivityForResult(intent, requestCode)
-    }
-
     fun pickCameraMedia(callback: (Result<Media>) -> Unit){
         val requestCode = codeCallbackMap.keys.maxOrNull() ?: 0
 
@@ -92,15 +66,6 @@ internal class MediaPicker(private val context: Context) {
         }
 
         when (callbackData) {
-            is CallbackData.Default -> {
-                val uri = data?.data
-                if (uri != null) {
-                    processResult(callback, uri)
-                } else {
-                    callback.invoke(Result.failure(IllegalArgumentException(data?.toString())))
-                }
-            }
-
             is CallbackData.Camera -> {
                 processResult(callback, callbackData.outputUri)
             }
@@ -114,16 +79,13 @@ internal class MediaPicker(private val context: Context) {
     ) {
         val contentResolver = focusedActivity?.contentResolver
 
-        val result = kotlin.runCatching {
+        val result = runCatching {
             MediaFactory.createVideoMedia(contentResolver!!,uri)
         }
         callback.invoke(result)
     }
 
     sealed class CallbackData(val callback: (Result<Media>) -> Unit) {
-        class Default(callback: (Result<Media>) -> Unit) :
-            CallbackData(callback)
-
         class Camera(
             callback: (Result<Media>) -> Unit,
             val outputUri: Uri
