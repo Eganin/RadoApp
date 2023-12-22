@@ -1,6 +1,5 @@
 package ios
 
-import GalleryPermissionDelegate
 import Permission
 import PermissionControllerProtocol
 import PermissionDelegate
@@ -32,7 +31,6 @@ class PermissionControllerImpl : PermissionControllerProtocol {
         return when (permission) {
             Permission.REMOTE_NOTIFICATION -> RemoteNotificationPermissionDelegate()
             Permission.CAMERA -> AVCapturePermissionDelegate(AVMediaTypeVideo, permission)
-            Permission.GALLERY -> GalleryPermissionDelegate()
             Permission.STORAGE, Permission.WRITE_STORAGE -> AlwaysGrantedPermissionDelegate()
         }
     }

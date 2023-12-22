@@ -2,7 +2,6 @@ package picker
 
 import PermissionController
 import data.AppBitmap
-import data.FileMedia
 import data.Media
 
 actual interface LocalMediaController {
@@ -13,9 +12,6 @@ actual interface LocalMediaController {
         maxWidth: Int,
         maxHeight: Int
     ): AppBitmap
-
-    actual suspend fun pickMedia(): Media
-    actual suspend fun pickFiles(): FileMedia
     actual suspend fun pickVideo():Media
 
     companion object {
@@ -33,14 +29,6 @@ class LocalMediaControllerImpl : LocalMediaController {
     }
 
     override suspend fun pickImage(source: MediaSource, maxWidth: Int, maxHeight: Int): AppBitmap {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun pickMedia(): Media {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun pickFiles(): FileMedia {
         TODO("Not yet implemented")
     }
 

@@ -7,10 +7,8 @@ import android.os.Build
 import android.provider.Settings
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
-import data.ImageGallery
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import manager.GalleryPermissionManager
 import kotlin.coroutines.suspendCoroutine
 
 class PermissionControllerImpl(
@@ -18,28 +16,16 @@ class PermissionControllerImpl(
 ) : PermissionController {
     private val mutex: Mutex = Mutex()
     private val permissionResolver = PermissionResolver(applicationContext)
-    private val gallery: ImageGallery = GalleryPermissionManager.init(context = applicationContext)
     override suspend fun providePermission(permission: Permission) {
         mutex.withLock {
             val platformPermission = permission.toPlatformPermission()
-            val result = suspendCoroutine { continuation ->
+            suspendCoroutine { continuation ->
                 permissionResolver.requestPermission(
                     permission,
                     platformPermission
                 ) { continuation.resumeWith(it) }
             }
-            /*result.takeIf { it }?.let {
-                processResult(permission)
-            }*/
         }
-    }
-
-    private fun processResult(permission: Permission) = when (permission) {
-        Permission.CAMERA -> gallery
-        Permission.GALLERY -> gallery
-        Permission.STORAGE -> gallery
-        Permission.WRITE_STORAGE -> gallery
-        Permission.REMOTE_NOTIFICATION -> gallery
     }
 
     override suspend fun isPermissionGranted(permission: Permission): Boolean {
@@ -93,12 +79,6 @@ class PermissionControllerImpl(
     private fun Permission.toPlatformPermission(): List<String> {
         return when (this) {
             Permission.CAMERA -> listOf(Manifest.permission.CAMERA)
-            Permission.GALLERY -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                listOf(Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_VIDEO)
-            } else {
-                listOf(Manifest.permission.READ_EXTERNAL_STORAGE)
-            }
-
             Permission.STORAGE -> listOf(Manifest.permission.READ_EXTERNAL_STORAGE)
             Permission.WRITE_STORAGE -> listOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
             Permission.REMOTE_NOTIFICATION -> {
