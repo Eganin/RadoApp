@@ -58,6 +58,7 @@ fun InfoRequestAlertDialog(
 
     val isLargePlatform =
         LocalPlatform.current == Platform.Web || LocalPlatform.current == Platform.Desktop
+    val isWeb = LocalPlatform.current == Platform.Web
     val imageSize =
         if (isLargePlatform) (LocalDensity.current.density.dp * 70) else (LocalDensity.current.density.dp * 25)
 
@@ -203,17 +204,19 @@ fun InfoRequestAlertDialog(
                             )
                         }
 
-                        items(state.value.videos) {
-                            VideoPlayerCell(
-                                size = imageSize,
-                                isExpanded = state.value.imageIsExpanded,
-                                url = it,
-                                modifier = Modifier.padding(start = 16.dp, bottom = 16.dp),
-                                eventHandler = {
-                                    viewModel.obtainEvent(viewEvent = InfoRequestEvent.ImageRepairExpandedChanged)
-                                },
-                                isRemove = false
-                            )
+                        if (!isWeb){
+                            items(state.value.videos) {
+                                VideoPlayerCell(
+                                    size = imageSize,
+                                    isExpanded = state.value.imageIsExpanded,
+                                    url = it,
+                                    modifier = Modifier.padding(start = 16.dp, bottom = 16.dp),
+                                    eventHandler = {
+                                        viewModel.obtainEvent(viewEvent = InfoRequestEvent.ImageRepairExpandedChanged)
+                                    },
+                                    isRemove = false
+                                )
+                            }
                         }
                     }
                 }

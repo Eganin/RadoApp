@@ -51,6 +51,9 @@ internal fun AlertDialogChooseImageAndVideo(
 ) {
     val isLargePlatform =
         LocalPlatform.current == Platform.Web || LocalPlatform.current == Platform.Desktop
+
+    val isWeb = LocalPlatform.current == Platform.Web
+
     Text(
         text = MainRes.string.image_fault_title,
         fontSize = 18.sp,
@@ -127,32 +130,34 @@ internal fun AlertDialogChooseImageAndVideo(
             )
         }
 
-        items(createdVideos) {
-            VideoPlayerCell(
-                size = imageSize,
-                isExpanded = resourceIsExpanded,
-                url = it,
-                modifier = Modifier.padding(start = 16.dp, bottom = 16.dp),
-                eventHandler = videoOnClick,
-                isRemove = isRemoveImageAndVideo,
-                onRemove = {
-                    removeVideoAction.invoke(it)
-                }
-            )
-        }
+        if (!isWeb){
+            items(createdVideos) {
+                VideoPlayerCell(
+                    size = imageSize,
+                    isExpanded = resourceIsExpanded,
+                    url = it,
+                    modifier = Modifier.padding(start = 16.dp, bottom = 16.dp),
+                    eventHandler = videoOnClick,
+                    isRemove = isRemoveImageAndVideo,
+                    onRemove = {
+                        removeVideoAction.invoke(it)
+                    }
+                )
+            }
 
-        items(resources.filter { !it.second }) {
-            VideoPlayerCell(
-                size = imageSize,
-                isExpanded = resourceIsExpanded,
-                url = "$BASE_URL/resources/videos/${it.first}",
-                modifier = Modifier.padding(start = 16.dp, bottom = 16.dp),
-                eventHandler = videoOnClick,
-                isRemove = isRemoveImageAndVideo,
-                onRemove = {
-                    removeVideoFromResourceAction.invoke(it.first)
-                }
-            )
+            items(resources.filter { !it.second }) {
+                VideoPlayerCell(
+                    size = imageSize,
+                    isExpanded = resourceIsExpanded,
+                    url = "$BASE_URL/resources/videos/${it.first}",
+                    modifier = Modifier.padding(start = 16.dp, bottom = 16.dp),
+                    eventHandler = videoOnClick,
+                    isRemove = isRemoveImageAndVideo,
+                    onRemove = {
+                        removeVideoFromResourceAction.invoke(it.first)
+                    }
+                )
+            }
         }
     }
 
