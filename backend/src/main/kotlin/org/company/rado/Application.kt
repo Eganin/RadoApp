@@ -49,7 +49,7 @@ fun Application.module() {
         System.getenv("DATABASE_CONNECTION_STRING"),
         System.getenv("POSTGRES_USER"),
         System.getenv("POSTGRES_PASSWORD")
-    ).load().migrate()
+    ).load().baseline()
     configureCompression()
     configureSerialization()
     configureException()
