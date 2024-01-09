@@ -15,9 +15,11 @@
 
     <application
             android:name=".RadoApp"
-            android:icon="@android:drawable/ic_menu_compass"
             android:label="Rado App"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme"
+            android:networkSecurityConfig="@xml/network_security_config"
+            android:icon="@mipmap/ic_launcher"
+            android:roundIcon="@mipmap/ic_launcher_round">
         <activity
                 android:name="org.company.rado.android.MainActivity"
                 android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"

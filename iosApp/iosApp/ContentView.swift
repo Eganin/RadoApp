@@ -28,7 +28,6 @@ struct ContentView: View {
         GeometryReader { geometry in
             VStack(spacing:0){
                 ComposeView()
-                    .ignoresSafeArea(.all)
             }
         }
     }
