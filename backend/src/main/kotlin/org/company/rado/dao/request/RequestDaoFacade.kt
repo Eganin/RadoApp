@@ -47,4 +47,12 @@ interface RequestDaoFacade {
     suspend fun getRejectRequestById(requestId: Int): RequestDTO?
 
     suspend fun deleteRequestById(requestId: Int): Boolean
+
+    suspend fun getAllActiveRequests():List<RequestDTO>
+
+    suspend fun getAllArchiveRequests():List<RequestDTO>
+
+    suspend fun getAllUnconfirmedRequests():List<RequestDTO>
+
+    suspend fun getAllRejectRequests():List<RequestDTO>
 }

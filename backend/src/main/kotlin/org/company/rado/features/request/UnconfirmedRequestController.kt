@@ -21,4 +21,8 @@ class UnconfirmedRequestController(
         val response = unconfirmedRequestService.getFullUnconfirmedRequest(requestId = requestId)
         call.respond(response)
     }
+
+    suspend fun getAllUnconfirmedRequests(call: ApplicationCall){
+        call.respond(unconfirmedRequestService.getAllUnconfirmedRequests())
+    }
 }

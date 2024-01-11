@@ -40,4 +40,8 @@ class RejectRequestController(
         val response = rejectRequestService.getRejectRequestById(requestId = requestId)
         call.respond(response)
     }
+
+    suspend fun getAllRejectRequests(call: ApplicationCall){
+        call.respond(rejectRequestService.getAllRejectRequestsIntegration())
+    }
 }

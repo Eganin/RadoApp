@@ -15,4 +15,6 @@ interface VehicleDaoFacade {
     suspend fun findVehicleForRecreateRequest(numberVehicle: String, typeVehicle: String): Int?
 
     suspend fun deleteVehicle(numberVehicle: String, typeVehicle: String): Boolean
+
+    suspend fun allVehicles(): List<VehicleDTO>
 }

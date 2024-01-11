@@ -61,4 +61,8 @@ class ActiveRequestController(
         val response = requestService.getFullRequest(requestId = requestId, requestType = StatusRequest.ACTIVE)
         call.respond(response)
     }
+
+    suspend fun getAllActiveRequests(call: ApplicationCall){
+        call.respond(activeRequestService.getAllActiveRequests())
+    }
 }

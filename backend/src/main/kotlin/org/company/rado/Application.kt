@@ -12,6 +12,7 @@ import org.company.rado.plugins.configurePartialContent
 import org.company.rado.plugins.configureResources
 import org.company.rado.plugins.configureRouting
 import org.company.rado.plugins.configureSerialization
+import org.company.rado.routes.integration.configureIntegration1CRouting
 import org.company.rado.routes.requests.configureActiveRequestRouting
 import org.company.rado.routes.requests.configureArchiveRequestRouting
 import org.company.rado.routes.requests.configureDeleteRequestRouting
@@ -74,5 +75,6 @@ fun Application.module() {
         configureDeleteVehiclesRouting()
         configureDeleteRequestRouting()
         configureResourcesRouting()
+        configureIntegration1CRouting()
     }
 }

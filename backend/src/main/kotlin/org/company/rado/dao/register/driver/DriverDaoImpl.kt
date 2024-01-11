@@ -10,6 +10,7 @@ import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 import org.company.rado.utils.Mapper
+import org.jetbrains.exposed.sql.selectAll
 
 class DriverDaoImpl(override val mapper: Mapper<UserDTO, ResultRow> = UserDTOMapperForDriver()) :
     DriverDaoFacade {
@@ -33,5 +34,9 @@ class DriverDaoImpl(override val mapper: Mapper<UserDTO, ResultRow> = UserDTOMap
 
     override suspend fun deleteDriver(username: String): Boolean = dbQuery {
         Drivers.deleteWhere { fullName eq username } !=0
+    }
+
+    override suspend fun allDrivers(): List<UserDTO> = dbQuery {
+        Drivers.selectAll().map { mapper.map(source = it) }
     }
 }

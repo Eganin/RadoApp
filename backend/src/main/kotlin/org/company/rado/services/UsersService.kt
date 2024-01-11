@@ -91,4 +91,16 @@ class UsersService(
     suspend fun removeObserver(fullName: String): Boolean {
         return observerRepository.deleteObserver(username = fullName)
     }
+
+    suspend fun allDrivers():List<UserDTO> {
+        return driverRepository.allDrivers()
+    }
+
+    suspend fun allMechanics():List<UserDTO>{
+        return mechanicRepository.allMechanics()
+    }
+
+    suspend fun allObservers():List<UserDTO>{
+        return observerRepository.allObservers()
+    }
 }

@@ -10,4 +10,5 @@ interface ObserverDaoFacade {
     suspend fun createObserver(observer: UserDTO):Int?
     suspend fun findByFullName(username:String): UserDTO?
     suspend fun deleteObserver(username: String): Boolean
+    suspend fun allObservers():List<UserDTO>
 }

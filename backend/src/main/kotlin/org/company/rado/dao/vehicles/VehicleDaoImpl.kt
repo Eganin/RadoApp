@@ -32,4 +32,8 @@ class VehicleDaoImpl(override val mapper: Mapper<VehicleDTO, ResultRow> = Vehicl
     override suspend fun deleteVehicle(numberVehicle: String, typeVehicle: String): Boolean = dbQuery {
         Vehicles.deleteWhere { (Vehicles.numberVehicle eq numberVehicle) and (Vehicles.typeVehicle eq typeVehicle) } != 0
     }
+
+    override suspend fun allVehicles(): List<VehicleDTO> = dbQuery {
+        Vehicles.selectAll().map { mapper.map(source = it) }
+    }
 }

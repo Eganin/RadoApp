@@ -10,6 +10,7 @@ import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 import org.company.rado.utils.Mapper
+import org.jetbrains.exposed.sql.selectAll
 
 class ObserverDaoImpl(override val mapper: Mapper<UserDTO, ResultRow> = UserDTOMapperForObserver()) :
     ObserverDaoFacade {
@@ -29,5 +30,9 @@ class ObserverDaoImpl(override val mapper: Mapper<UserDTO, ResultRow> = UserDTOM
 
     override suspend fun deleteObserver(username: String): Boolean = dbQuery {
         Observers.deleteWhere { fullName eq username } !=0
+    }
+
+    override suspend fun allObservers(): List<UserDTO> = dbQuery{
+        Observers.selectAll().map { mapper.map(source = it) }
     }
 }

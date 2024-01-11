@@ -11,4 +11,5 @@ interface DriverDaoFacade {
     suspend fun findByFullName(username:String): UserDTO?
     suspend fun findById(driverId: Int): UserDTO?
     suspend fun deleteDriver(username: String):Boolean
+    suspend fun allDrivers():List<UserDTO>
 }

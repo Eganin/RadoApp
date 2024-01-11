@@ -6,6 +6,7 @@ import org.company.rado.dao.register.mechanic.MechanicDaoFacade
 import org.company.rado.dao.request.RequestDaoFacade
 import org.company.rado.dao.vehicles.VehicleDaoFacade
 import org.company.rado.dao.videos.VideosDaoFacade
+import org.company.rado.models.requests.RequestDTO
 import org.company.rado.models.requests.reject.FullRejectRequest
 import org.company.rado.models.requests.reject.SmallRejectRequest
 
@@ -58,5 +59,9 @@ class RejectRequestService(
             driverId = request.driverId,
             commentMechanic = request.commentMechanic?:""
         )
+    }
+
+    suspend fun getAllRejectRequestsIntegration():List<RequestDTO>{
+        return requestRepository.getAllRejectRequests()
     }
 }

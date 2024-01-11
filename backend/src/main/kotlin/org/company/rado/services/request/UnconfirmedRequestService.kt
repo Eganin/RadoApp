@@ -6,6 +6,7 @@ import org.company.rado.dao.request.RequestDaoFacade
 import org.company.rado.dao.vehicles.VehicleDaoFacade
 import io.ktor.server.plugins.*
 import org.company.rado.dao.videos.VideosDaoFacade
+import org.company.rado.models.requests.RequestDTO
 import org.company.rado.models.requests.unconfirmed.FullUnconfirmedRequest
 import org.company.rado.models.requests.unconfirmed.SmallUnconfirmedRequest
 
@@ -59,5 +60,9 @@ class UnconfirmedRequestService(
             videos=videos,
             arrivalDate = requestDTO.arrivalDate
         )
+    }
+
+    suspend fun getAllUnconfirmedRequests():List<RequestDTO>{
+        return requestRepository.getAllUnconfirmedRequests()
     }
 }

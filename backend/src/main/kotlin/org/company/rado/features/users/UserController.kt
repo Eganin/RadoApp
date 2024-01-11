@@ -25,4 +25,19 @@ class UserController(
             call.respond(HttpStatusCode.BadRequest, message = "The user has not been deleted")
         }
     }
+
+    suspend fun allDrivers(call: ApplicationCall){
+        val drivers = usersService.allDrivers()
+        call.respond(drivers)
+    }
+
+    suspend fun allObservers(call: ApplicationCall){
+        val drivers = usersService.allObservers()
+        call.respond(drivers)
+    }
+
+    suspend fun allMechanics(call: ApplicationCall){
+        val drivers = usersService.allMechanics()
+        call.respond(drivers)
+    }
 }

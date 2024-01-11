@@ -4,6 +4,7 @@ import org.company.rado.dao.register.mechanic.MechanicDaoFacade
 import org.company.rado.dao.request.RequestDaoFacade
 import org.company.rado.dao.vehicles.VehicleDaoFacade
 import io.ktor.server.plugins.*
+import org.company.rado.models.requests.RequestDTO
 import org.company.rado.models.requests.active.SmallActiveRequestForDriver
 import org.company.rado.models.requests.active.SmallActiveRequestForMechanic
 import org.company.rado.models.requests.active.SmallActiveRequestForObserver
@@ -67,5 +68,9 @@ class ActiveRequestService(
                 datetime = it.date?.toDatetime(time = it.time ?: "")?:""
             )
         }
+    }
+
+    suspend fun getAllActiveRequests():List<RequestDTO>{
+        return requestRepository.getAllActiveRequests()
     }
 }

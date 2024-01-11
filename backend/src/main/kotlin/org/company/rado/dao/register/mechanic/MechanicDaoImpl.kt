@@ -4,12 +4,13 @@ import org.company.rado.dao.DatabaseFactory.dbQuery
 import org.company.rado.models.users.Mechanics
 import org.company.rado.models.users.UserDTO
 import org.company.rado.models.users.UserDTOMapperForMechanic
+import org.company.rado.utils.Mapper
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
-import org.company.rado.utils.Mapper
+import org.jetbrains.exposed.sql.selectAll
 
 class MechanicDaoImpl(override val mapper: Mapper<UserDTO, ResultRow> = UserDTOMapperForMechanic()) :
     MechanicDaoFacade {
@@ -24,7 +25,8 @@ class MechanicDaoImpl(override val mapper: Mapper<UserDTO, ResultRow> = UserDTOM
 
     override suspend fun findByFullName(username: String): UserDTO? = dbQuery {
         Mechanics
-            .select { Mechanics.fullName eq username }.map { mapper.map(source = it) }.singleOrNull()
+            .select { Mechanics.fullName eq username }.map { mapper.map(source = it) }
+            .singleOrNull()
     }
 
     override suspend fun findById(mechanicId: Int): UserDTO? = dbQuery {
@@ -34,5 +36,9 @@ class MechanicDaoImpl(override val mapper: Mapper<UserDTO, ResultRow> = UserDTOM
 
     override suspend fun deleteMechanic(username: String): Boolean = dbQuery {
         Mechanics.deleteWhere { fullName eq username } != 0
+    }
+
+    override suspend fun allMechanics(): List<UserDTO> = dbQuery {
+        Mechanics.selectAll().map { mapper.map(source = it) }
     }
 }

@@ -21,4 +21,8 @@ class VehicleController(
             call.respond(HttpStatusCode.BadRequest, message = "The vehicle has not been deleted")
         }
     }
+
+    suspend fun allVehicles(call: ApplicationCall){
+        call.respond(vehicleService.allVehicles())
+    }
 }

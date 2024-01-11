@@ -63,6 +63,22 @@ class RequestDaoImpl(override val requestDTOMapper: Mapper<RequestDTO, ResultRow
         resultDelete != 0
     }
 
+    override suspend fun getAllActiveRequests(): List<RequestDTO> = dbQuery {
+        Requests.select { Requests.statusRequest eq StatusRequest.ACTIVE.name }.map { requestDTOMapper.map(source = it) }
+    }
+
+    override suspend fun getAllArchiveRequests(): List<RequestDTO> = dbQuery {
+        Requests.select { Requests.statusRequest eq StatusRequest.ARCHIVE.name }.map { requestDTOMapper.map(source = it) }
+    }
+
+    override suspend fun getAllUnconfirmedRequests(): List<RequestDTO> = dbQuery{
+        Requests.select { Requests.statusRequest eq StatusRequest.UNCONFIRMED.name }.map { requestDTOMapper.map(source = it) }
+    }
+
+    override suspend fun getAllRejectRequests(): List<RequestDTO> = dbQuery {
+        Requests.select { Requests.statusRequest eq StatusRequest.REJECT.name }.map { requestDTOMapper.map(source = it) }
+    }
+
     override suspend fun confirmationRequest(
         requestId: Int,
         date: String,

@@ -11,4 +11,5 @@ interface MechanicDaoFacade {
     suspend fun findByFullName(username: String): UserDTO?
     suspend fun findById(mechanicId: Int): UserDTO?
     suspend fun deleteMechanic(username: String): Boolean
+    suspend fun allMechanics(): List<UserDTO>
 }

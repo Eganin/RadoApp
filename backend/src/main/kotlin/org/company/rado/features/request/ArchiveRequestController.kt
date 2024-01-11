@@ -39,4 +39,8 @@ class ArchiveRequestController(
         val response = requestService.getFullRequest(requestId = requestId, requestType = StatusRequest.ARCHIVE)
         call.respond(response)
     }
+
+    suspend fun getAllArchiveRequests(call: ApplicationCall){
+        call.respond(archiveRequestService.getAllArchiveRequests())
+    }
 }

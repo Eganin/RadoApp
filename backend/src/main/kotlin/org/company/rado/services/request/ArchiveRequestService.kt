@@ -4,6 +4,7 @@ import org.company.rado.dao.register.mechanic.MechanicDaoFacade
 import org.company.rado.dao.request.RequestDaoFacade
 import org.company.rado.dao.vehicles.VehicleDaoFacade
 import io.ktor.server.plugins.*
+import org.company.rado.models.requests.RequestDTO
 import org.company.rado.models.requests.archive.SmallArchiveRequest
 import org.company.rado.models.requests.archive.SmallArchiveRequestForMechanic
 import org.company.rado.utils.toDatetime
@@ -55,5 +56,9 @@ class ArchiveRequestService(
                 statusRepair = it.statusRepair ?: false
             )
         }
+    }
+
+    suspend fun getAllArchiveRequests():List<RequestDTO>{
+        return requestRepository.getAllArchiveRequests()
     }
 }
