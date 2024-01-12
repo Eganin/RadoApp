@@ -2,21 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-<key>NSAppTransportSecurity</key>
-    <dict>
-        <key>NSAllowsArbitraryLoads</key>
-        <true/>
-        <key>NSExceptionDomains</key>
-        <dict>
-            <key>yourdomain.com</key>
-            <dict>
-                <key>NSIncludesSubdomains</key>
-                <true/>
-                <key>NSThirdPartyExceptionRequiresForwardSecrecy</key>
-                <false/>
-            </dict>
-       </dict>
-  </dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>
@@ -35,14 +20,29 @@
 	<string>1</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+		<key>NSExceptionDomains</key>
+		<dict>
+			<key>yourdomain.com</key>
+			<dict>
+				<key>NSIncludesSubdomains</key>
+				<true/>
+				<key>NSThirdPartyExceptionRequiresForwardSecrecy</key>
+				<false/>
+			</dict>
+		</dict>
+	</dict>
 	<key>NSCameraUsageDescription</key>
-    <string>Разрешите доступ к камере, чтобы сделать снимок</string>
-    <key>NSMicrophoneUsageDescription</key>
-    <string>Need microphone access for uploading audio</string>
-    <key>NSPhotoLibraryAddUsageDescription</key>
-    <string>Allow access to your photo library to save the selected image</string>
-    <key>NSPhotoLibraryUsageDescription</key>
-    <string>Allow access to your photo library to select an image</string>
+	<string>Разрешите доступ к камере, чтобы сделать снимок</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Need microphone access for uploading audio</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Allow access to your photo library to save the selected image</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Allow access to your photo library to select an image</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
